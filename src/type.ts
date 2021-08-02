@@ -14,10 +14,9 @@ declare namespace statusChart {
         storeOutMessages: boolean;
         fwdInMessages: boolean;
         graphColors: graphColorsObject[],
-        // xaxisDiv: string;
-        xaxisDateformat: string;
-        xaxisStartDate: string;
-        xaxisEndDate: string;
+        dateformat: string;
+        startDate: string;
+        endDate: string;
         maxLineHeight: string;
     }
 

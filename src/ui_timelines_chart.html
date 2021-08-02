@@ -42,10 +42,9 @@
                 storeOutMessages: {value: true},
                 fwdInMessages: {value: true},
                 graphColors: {value:[{}]},
-                xaxisDiv: {value: ''},
-                xaxisDateformat: {value: ''},
-                xaxisStartDate: {value: ''},
-                xaxisEndDate: {value: ''},
+                dateformat: {value: ''},
+                startDate: {value: ''},
+                endDate: {value: ''},
                 maxLineHeight: {value: ''},
             },
             inputs:1,
@@ -179,32 +178,22 @@
     <!---------------------------------------------------------------------------->
     <!-- グラフ表示設定 -->
 	<div id="list-property">
-        <!-- X軸:DIVの設定 -->
-<!--
-        <div class="form-row">
-            <label for="node-input-xaxisDiv"><i class="fa fa-line-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.division.title"></span></label>
-            <select type="text" id="node-input-xaxisDiv">
-                <option value="default" data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.division.options.0" selected="selected"></option>
-                <option value="3600" data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.division.options.1"></option>
-            </select>
-        </div>
--->
 
         <!-- X軸:日時フォーマットの設定 -->
         <div class="form-row">
-            <label for="node-input-xaxisDateformat"><i class="fa fa-clock-o"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.dateTimeFormat.title"></span></label>
-            <input type="text" id="node-input-xaxisDateformat" placeholder="YYYY-MM-DD HH:mm:ss">
+            <label for="node-input-dateformat"><i class="fa fa-clock-o"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.dateTimeFormat.title"></span></label>
+            <input type="text" id="node-input-dateformat" placeholder="YYYY-MM-DD HH:mm:ss">
         </div>
 
         <!-- X軸:開始日時の設定 -->
         <div class="form-row">
-            <label for="node-input-xaxisStartDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.startDate.title"></span></label>
-            <input type="text" id="node-input-xaxisStartDate" placeholder="2021-01-01T00:00:00+09:00">
+            <label for="node-input-startDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.startDate.title"></span></label>
+            <input type="text" id="node-input-startDate" placeholder="2021-01-01T00:00:00+09:00">
         </div>
         <!-- X軸:終了日時の設定 -->
         <div class="form-row">
-            <label for="node-input-xaxisEndDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.endDate.title"></span></label>
-            <input type="text" id="node-input-xaxisEndDate"  placeholder="2021-01-01T00:00:00Z">
+            <label for="node-input-endDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.endDate.title"></span></label>
+            <input type="text" id="node-input-endDate"  placeholder="2021-01-01T00:00:00Z">
         </div>
 
         <!-- グラフ高さの設定 -->

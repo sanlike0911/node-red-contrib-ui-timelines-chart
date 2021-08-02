@@ -11,8 +11,6 @@ const nodeInit: NodeInitializer = (RED): void => {
     const DEFAULT_WIDGET_WIDTH: number = 6;
     const DEFAULT_WIDGET_HEIGHT: number = 8;
     const DEFAULT_STRING: string = '';
-    // const DEFAULT_VALUE: string = 'default';
-    // const LABEL_DEFAULT_XAXIS_DATETIME_FORMAT: string = 'YYYY-MM-DD HH:mm:ss';
 
     // Holds a reference to node-red-dashboard module.
     // Initialized at #1.
@@ -80,20 +78,10 @@ const nodeInit: NodeInitializer = (RED): void => {
         <\style>
         `;
 
-        // const _script = String.raw`
-        // <script id='script_${_config.uniqueId}'></script>
-        // `;
-
         return String.raw`
             ${_html}
             ${_css}
         `
-        // return String.raw`
-        //     ${_loadScripts}
-        //     ${_html}
-        //     ${_script}
-        //     ${_css}
-        // `
     }
 
     /**
@@ -239,28 +227,10 @@ const nodeInit: NodeInitializer = (RED): void => {
                                     .overviewDomain([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
                                     .zColorScale().range(${JSON.stringify(msg.graphItems.zColorScale.range)}).domain(${JSON.stringify(msg.graphItems.zColorScale.domain)})
                                 `;
-
-                                // scriptNew.onload = function () {
-                                //     try {
-                                //         console.log('gsap onload');
-                                //     } catch (error) {
-                                //         console.log(error);
-                                //     }
-                                // }
                                 document.body.appendChild(scriptNew);
                             }
                             return;
                         }
-
-                        // function loadStyle(_id: string, _path: string){
-                        //     console.log('loadStyle', _path);
-                        //     const _head = document.getElementsByTagName('head')[0];
-                        //     const _link = document.createElement('link');
-                        //     _link.rel = 'stylesheet';
-                        //     _link.id = _id;
-                        //     _link.href = _path;
-                        //     _head.appendChild(_script);
-                        // }
 
                         /**
                          * load script
@@ -270,7 +240,6 @@ const nodeInit: NodeInitializer = (RED): void => {
                          */
                         function loadScript(_id: string, _path: string) {
                             // console.log('loadscript', _path);
-                            // $scope.inited[_id] = false;
 
                             const _head = document.getElementsByTagName('head')[0];
                             const _script = document.createElement('script');
@@ -289,9 +258,8 @@ const nodeInit: NodeInitializer = (RED): void => {
                         }
 
                         $scope.init = function (config: statusChart.nodeConf) {
-                            // console.log('initController: init');
+                            // console.log('$scope.init');
                             $scope.config = config;
-                            // console.log($scope.config);
 
                             // timelines-chart
                             if (!document.getElementById('timelines-chart')) {
@@ -306,16 +274,10 @@ const nodeInit: NodeInitializer = (RED): void => {
                         }
 
                         $scope.$watch('msg', function (msg: statusChart.makeGraphBase) {
-                            // console.log('watch');
-                            // console.log(msg);
+                            // console.log('$scope.$watch');
                             if (!msg) {
                                 return
                             }
-                            // var id = 'level_mask_0_' + $scope.unique
-                            // var stripe = document.getElementById(id)
-                            // if (!$scope.inited || stripe == null) {
-                            //     $scope.waitingmessage = msg
-                            // }
                             if (msg.result === true) {
                                 update(msg)
                             }
@@ -359,23 +321,29 @@ const nodeInit: NodeInitializer = (RED): void => {
 
             // グラフ描画用データ
             let _graphData: statusChart.graphData[] = _msg.payload;
-
-            // 設定読込＆判定 ※※※※残作業エラー処理の作り込み※※※※
  
             // グラフ高さ
             const _maxLineHeight:string = _util.getSafeObject(_config.maxLineHeight, "60");
             // console.log(`_maxLineHeight: in:${_config.maxLineHeight} out:${_maxLineHeight}`);
-            /* 入力値判定処理：未実装 */
+            /* 入力値判定処理 */
+            if (!_util.isRegExp(_maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY))
+                throw new Error(`the "max line height: ${_maxLineHeight}" is a format error. `);
 
             // 設定：日時フォーマット(X軸)
-            const _xTickFormat:string = _util.getSafeObject(_config.xaxisDateformat, "YYYY-MM-DD HH:mm:ss");
-            // console.log(`_xTickFormat: in:${_config.xaxisDateformat} out:${_xTickFormat}`);
-            /* 入力値判定処理：未実装 */
+            const _xTickFormat:string = _util.getSafeObject(_config.dateformat, "YYYY-MM-DD HH:mm:ss");
+            // console.log(`_xTickFormat: in:${_config.dateformat} out:${_xTickFormat}`);
+            /* 入力値判定処理 */
+            if (!_util.isRegExp(_xTickFormat.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY))
+                throw new Error(`the "x tick format: ${_xTickFormat}" is a format error. `);
 
             // 設定：開始日時(X軸)
-            let _startDate:string = _util.getSafeObject(_config.xaxisStartDate, DEFAULT_STRING);
-            // console.log(`_startDate: in:${_config.xaxisStartDate} out:${_startDate}`);
-            if( DEFAULT_STRING === _startDate ) {
+            let _startDate:string = _util.getSafeObject(_config.startDate, DEFAULT_STRING);
+            // console.log(`_startDate: in:${_config.startDate} out:${_startDate}`);
+            if( DEFAULT_STRING !== _startDate ) {
+                /* 入力値判定処理 */
+                if (!_util.isRegExp(_startDate, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))
+                    throw new Error(`the "start date: ${_startDate}" is a format error. `);
+            } else {
                 let _min = "";
                 _graphData.forEach((_ele, _idx) => {
                     _ele.data.forEach((_ele, _idx) => {
@@ -385,14 +353,16 @@ const nodeInit: NodeInitializer = (RED): void => {
                 })
                 _startDate = _min;
                 // console.log(`update _startDate: ${_min}`);
-            } else {
-                if (!_util.isRegExp(_startDate, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY)) throw new Error(`"start date: ${_startDate}" is a datetime format error. `);
             }
 
             // 設定： 終了日時(X軸)
-            let _endDate:string = _util.getSafeObject(_config.xaxisEndDate, DEFAULT_STRING);
-            // console.log(`_endDate: in:${_config.xaxisEndDate} out:${_endDate}`);
-            if( DEFAULT_STRING === _endDate ) {
+            let _endDate:string = _util.getSafeObject(_config.endDate, DEFAULT_STRING);
+            // console.log(`_endDate: in:${_config.endDate} out:${_endDate}`);
+            if( DEFAULT_STRING !== _endDate ) {
+                /* 入力値判定処理 */
+                if (!_util.isRegExp(_endDate, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))
+                    throw new Error(`the "end date:  ${_endDate}" is a format error.`);
+            } else {
                 let _max = "";
                 _graphData.forEach((_ele, _idx) => {
                     _ele.data.forEach((_ele, _idx) => {
@@ -402,8 +372,6 @@ const nodeInit: NodeInitializer = (RED): void => {
                 });
                 _endDate = _max;
                 // console.log(`update _endDate: ${_max}`);
-            } else {
-                if (!_util.isRegExp(_endDate, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY)) throw new Error(`"end date:  ${_endDate}" is a datetime format error.`);
             }
 
             // 設定：グラフ凡例
