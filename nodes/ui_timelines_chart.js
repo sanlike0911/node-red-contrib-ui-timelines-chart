@@ -173,26 +173,30 @@ const nodeInit = (RED) => {
                             //     return;
                             // }
                             if (msg.graphItems !== undefined) {
-                                // element: div(timelines chart)
-                                const _eleDivChart = document.getElementById(msg.graphItems.id);
-                                if (_eleDivChart === null) {
+                                // get: parent div(timelines chart)
+                                const _parent = document.getElementById(msg.graphItems.id);
+                                if (_parent === null) {
                                     return;
                                 }
-                                _eleDivChart.innerHTML = "";
-                                // element: script(timelines chart)
-                                const _scriptOld = document.getElementById('script_' + msg.graphItems.id);
-                                if (_scriptOld !== null) {
-                                    _scriptOld.remove();
+                                while (_parent.lastChild) {
+                                    _parent.removeChild(_parent.lastChild);
                                 }
-                                const scriptNew = document.createElement('script');
-                                scriptNew.type = 'text/javascript';
-                                scriptNew.id = 'script_' + msg.graphItems.id;
-                                scriptNew.innerHTML = String.raw `
+                                // delete: char-tooltip
+                                let _chartTooltip = document.getElementsByClassName('chart-tooltip');
+                                console.log(_chartTooltip);
+                                if (_chartTooltip !== null) {
+                                    Array.from(_chartTooltip).forEach(_element => { console.log(_element); _element.remove(); });
+                                }
+                                // create: chart script
+                                const _childScript = document.createElement('script');
+                                _childScript.type = 'text/javascript';
+                                _childScript.id = 'script_' + msg.graphItems.id;
+                                _childScript.innerHTML = String.raw `
                                     TimelinesChart()(document.getElementById('${msg.graphItems.id}'))
                                     .data(${JSON.stringify(msg.graphItems.data)})
                                     .zScaleLabel('My Scale Units')
-                                    .width(${_eleDivChart.clientWidth})
-                                    // .maxHeight(${_eleDivChart.clientHeight})
+                                    .width(${_parent.clientWidth})
+                                    // .maxHeight(${_parent.clientHeight})
                                     .maxLineHeight(${msg.graphItems.maxLineHeight})
                                     .topMargin(60)
                                     .rightMargin(90)
@@ -209,7 +213,7 @@ const nodeInit = (RED) => {
                                     .overviewDomain([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
                                     .zColorScale().range(${JSON.stringify(msg.graphItems.zColorScale.range)}).domain(${JSON.stringify(msg.graphItems.zColorScale.domain)})
                                 `;
-                                document.body.appendChild(scriptNew);
+                                _parent.appendChild(_childScript);
                             }
                             return;
                         }
@@ -293,7 +297,6 @@ const nodeInit = (RED) => {
             _node.status({ fill: "blue", shape: "dot", text: "resources.message.connect" });
             // グラフ描画用データ
             let _graphData = _msg.payload;
-            // 設定読込＆判定 ※※※※残作業エラー処理の作り込み※※※※
             // グラフ高さ
             const _maxLineHeight = _util.getSafeObject(_config.maxLineHeight, "60");
             // console.log(`_maxLineHeight: in:${_config.maxLineHeight} out:${_maxLineHeight}`);
