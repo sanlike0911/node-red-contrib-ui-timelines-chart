@@ -1,0 +1,45 @@
+{
+    "resources": {
+        "paletteLabel": "状態チャート",
+        "nodeProperties" : {
+            "labels": {
+                "group": { "title":"グループ" },
+                "size": { "title":"サイズ" },
+                "label": { "title":"ラベル" },
+                "graphAxisSettings": {
+                    "xAxis": {
+                        "division": { 
+                            "title": "xAxis division",
+                            "options": [
+                                "default",
+                                "1 hour"
+                            ]
+                        },
+                        "dateTimeFormat": {
+                            "title": "xAxis dateTime format"
+                        },
+                        "startDate": { "title": "start date" },
+                        "endDate": { "title": "end date" },
+                        "maxLineHeight": { "title": "chart's height[px]" }
+                    }
+                },
+                "graphColorSettings": {
+                    "title":"legends",
+                    "add": "追加",
+                    "delete": "削除",
+                    "number": "No.",
+                    "statusColor": "color",
+                    "statusValue": "value"
+                },
+                "name": {"title":"名前"}
+            }
+        },
+        "message": {
+            "complete": "表示完了",
+            "connect": "処理中",
+            "error": "エラー発生",
+            "noGraphData": "表示データなし",
+            "errGraphSetting": "グラフ設定異常"
+        }    
+    }
+}

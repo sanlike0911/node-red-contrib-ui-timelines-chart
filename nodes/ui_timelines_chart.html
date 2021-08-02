@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<!--
+  Copyright JS Foundation and other contributors, http://js.foundation
+
+  Licensed under the Apache License, Version 2.0 (the "License");
+  you may not use this file except in compliance with the License.
+  You may obtain a copy of the License at
+
+  http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<script type="text/javascript">
+    function mk_conf(NAME) {
+        const conf = {
+            category: 'dashboard',
+            color: 'rgb( 63, 173, 181)',
+            defaults: {
+                // belonging dashboard group
+                group: {type: 'ui_group', required:true},
+                name: {value: ''},
+                order: {value: 0},
+                label: {value: NAME},
+                // width and height of widget
+                width: {
+                    value: 0,
+                    validate: function(v) {
+                        let valid = true
+                        let width = v||0;
+                        let currentGroup = $('#node-input-group').val()|| this.group;
+                        let groupNode = RED.nodes.node(currentGroup);
+                        valid = !groupNode || +width <= +groupNode.width;
+                        $("#node-input-size").toggleClass("input-error",!valid);
+                        return valid;
+                    }},
+                height: {value: 0},
+                storeOutMessages: {value: true},
+                fwdInMessages: {value: true},
+                graphColors: {value:[{}]},
+                xaxisDiv: {value: ''},
+                xaxisDateformat: {value: ''},
+                xaxisStartDate: {value: ''},
+                xaxisEndDate: {value: ''},
+                maxLineHeight: {value: ''},
+            },
+            inputs:1,
+            outputs:1,
+            align: "left",
+            icon: "icon.png",
+            paletteLabel: NAME,
+            label: function() {
+                return this.name || this._("resources.paletteLabel");
+            },
+            labelStyle: function () {
+                return this.name?"node_label_italic":"";
+            },
+            paletteLabel: function() {
+                return this._("resources.paletteLabel") || NAME;
+            },
+            oneditprepare: function() {
+                const node = this;
+                // use elementSizer to input common widget parameters
+                $("#node-input-size").elementSizer({
+                    width: "#node-input-width",
+                    height: "#node-input-height",
+                    group: "#node-input-group"
+                });
+
+                // Define editableList.
+                $("#node-input-editable-list-container").css('min-height','150px').css('min-width','350px').editableList({
+
+                    sortable: true,
+                    removable: true,
+                    height: 300,
+
+                    addItem: function(container,index,opt) {
+
+                        const lblStatusColor = node._("resources.nodeProperties.labels.graphColorSettings.statusColor");
+                        const lblStatusValue = node._("resources.nodeProperties.labels.graphColorSettings.statusValue");
+
+                        // html editableList
+                        const htmlEditableList =`
+                            <span style="display:inline-block;text-align:right; width:30px; padding-right:5px;">${index+1} :</span>
+                            <span style="">${lblStatusColor}:</span>
+                            <input type="color" class="statusColor" style="width:100px; display:inline-block; text-align:left; margin-right:15px;">
+                            <span style="">${lblStatusValue}:</span>
+                            <input type="text" class="statusValue" style="width:100px; display:inline-block; text-align:left; margin-right:15px;">
+                            `;
+
+                        const div = $('<div></div>').appendTo(container);
+                        $(htmlEditableList).appendTo(div);
+
+                        if(!opt.hasOwnProperty("statusColor")) {
+                            opt = {
+                                statusColor: "",
+                                statusValue: ""
+                            }
+                        };
+
+                        div.find(".statusColor").val(opt.statusColor);
+                        div.find(".statusValue").val(opt.statusValue);
+                    },
+                    sortItems: function(items) {
+                        items.each(function(i, elm){
+                            elm.find(".index").text((i + 1));
+                        });
+                    },
+                    removeItem: function(removeItems){
+                        let items = $('#node-input-editable-list-container').editableList("items");
+                        items.each(function(i, elm){
+                            elm.find(".index").text((i + 1));
+                        });
+                    },
+                });
+
+                for (let i = 0 ; i < node.graphColors.length ; i++) {
+                    const _graphColor = node.graphColors[i];
+                    $("#node-input-editable-list-container").editableList('addItem',_graphColor);
+                }
+
+            },
+            oneditsave: function() {
+                console.log("oneditsave");
+                const node = this;
+                const items = $("#node-input-editable-list-container").editableList('items');
+                node.graphColors = [];
+                items.each(function(i, e){
+                    node.graphColors.push({
+                        statusColor: e.find(".statusColor").val(),
+                        statusValue: e.find(".statusValue").val()
+                    });
+                });
+            },
+            oneditresize: function(size) {
+                console.log(`oneditresize size:${size}`);
+                const node = this;
+            }
+        };
+        return conf;
+    }
+    RED.nodes.registerType('ui_timelines_chart', mk_conf('status_chart'));
+</script>
+
+<script type="text/html" data-template-name="ui_timelines_chart">
+    <!-- ノード名 -->
+    <div class="form-row">
+        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="resources.nodeProperties.labels.name.title"></span></label>
+        <input type="text" id="node-input-name">
+    </div>
+    <!---------------------------------------------------------------------------->
+    <hr>
+    <!---------------------------------------------------------------------------->
+    <div id="list-property">
+        <!-- グループ -->
+        <div class="form-row" id="template-row-group">
+            <label for="node-input-group"><i class="fa fa-table"></i> <span data-i18n="resources.nodeProperties.labels.group.title"></span></label>
+            <input type="text" id="node-input-group">
+        </div>
+        <!-- 表示サイズ -->
+        <div class="form-row" id="template-row-size">
+            <label><i class="fa fa-object-group"></i> <span data-i18n="resources.nodeProperties.labels.size.title"></span></label>
+            <input type="hidden" id="node-input-width">
+            <input type="hidden" id="node-input-height">
+            <button class="editor-button" id="node-input-size"></button>
+        </div>
+        <!-- ラベル -->
+        <div class="form-row">
+            <label for="node-input-label"><i class="fa fa-i-cursor"></i> <span data-i18n="resources.nodeProperties.labels.label.title"></span></label>
+            <input type="text" id="node-input-label">
+        </div>
+    </div>
+    <!---------------------------------------------------------------------------->
+    <hr>
+    <!---------------------------------------------------------------------------->
+    <!-- グラフ表示設定 -->
+	<div id="list-property">
+        <!-- X軸:DIVの設定 -->
+<!--
+        <div class="form-row">
+            <label for="node-input-xaxisDiv"><i class="fa fa-line-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.division.title"></span></label>
+            <select type="text" id="node-input-xaxisDiv">
+                <option value="default" data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.division.options.0" selected="selected"></option>
+                <option value="3600" data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.division.options.1"></option>
+            </select>
+        </div>
+-->
+
+        <!-- X軸:日時フォーマットの設定 -->
+        <div class="form-row">
+            <label for="node-input-xaxisDateformat"><i class="fa fa-clock-o"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.dateTimeFormat.title"></span></label>
+            <input type="text" id="node-input-xaxisDateformat" placeholder="YYYY-MM-DD HH:mm:ss">
+        </div>
+
+        <!-- X軸:開始日時の設定 -->
+        <div class="form-row">
+            <label for="node-input-xaxisStartDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.startDate.title"></span></label>
+            <input type="text" id="node-input-xaxisStartDate" placeholder="2021-01-01T00:00:00+09:00">
+        </div>
+        <!-- X軸:終了日時の設定 -->
+        <div class="form-row">
+            <label for="node-input-xaxisEndDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.endDate.title"></span></label>
+            <input type="text" id="node-input-xaxisEndDate"  placeholder="2021-01-01T00:00:00Z">
+        </div>
+
+        <!-- グラフ高さの設定 -->
+        <div class="form-row">
+            <label for="node-input-maxLineHeight"><i class="fa fa-line-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.maxLineHeight.title"></span></label>
+            <input type="text" id="node-input-maxLineHeight" placeholder="60">
+        </div>
+        
+        <!-- グラフ表示色の設定 -->
+        <div class="form-row">
+            <label for="node-input-graph-colors" style="width: 150px;"><i class="fa fa-bar-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphColorSettings.title"></span></label>
+        </div>
+        <div class="form-row node-input-editable-list-container-row">
+            <ol id="node-input-editable-list-container"></ol>
+        </div>
+    </div>
+</script>

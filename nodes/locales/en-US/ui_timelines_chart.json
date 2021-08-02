@@ -1,0 +1,45 @@
+{
+    "resources": {
+        "paletteLabel": "Status Chart",
+        "nodeProperties": {
+            "labels": {
+                "group": {"title": "Group"},
+                "size": {"title": "Size"},
+                "label": {"title": "Label"},
+                "graphAxisSettings": {
+                    "xAxis": {
+                        "division": { 
+                            "title": "xAxis division",
+                            "options": [
+                                "default",
+                                "1 hour"
+                            ]
+                        },
+                        "dateTimeFormat": {
+                            "title": "xAxis dateTime format"
+                        },
+                        "startDate": { "title": "start date" },
+                        "endDate": { "title": "end date" },
+                        "maxLineHeight": { "title": "chart's height[px]" }
+                    }
+                },
+                "graphColorSettings": {                
+                    "title": "legends",
+                    "add": "add",
+                    "delete": "delete",
+                    "number": "No.",
+                    "statusColor": "color",
+                    "statusValue": "value"
+                },
+                "name": {"title": "name"}
+            }
+        },
+        "message": {
+            "complete": "Display complete",
+            "connect": "in process",
+            "error": "Error occurred",
+            "noGraphData": "No display data",
+            "errGraphSetting": "Error graph display setting"
+        }
+    }
+}
