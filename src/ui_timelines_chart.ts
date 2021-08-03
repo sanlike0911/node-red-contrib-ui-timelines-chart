@@ -180,61 +180,88 @@ const nodeInit: NodeInitializer = (RED): void => {
                          * update: chart
                          *
                          * @param {statusChart.makeGraphBase} msg
-                         * @returns
+                         * @returns {boolean}
                          */
-                        function update(msg: statusChart.makeGraphBase) {
+                        function update(msg: statusChart.makeGraphBase): boolean {
                             // console.log('update');
-                            // if( $scope.inited['timelines-chart'] !== true || $scope.inited['moment'] !== true ){
-                            //     console.log('script not loaded.');
-                            //     return;
-                            // }
+                            try {
+                                const CHART_TOOTIP_CLASSNAME = 'chart-tooltip';
 
-                            if( msg.graphItems !== undefined ) {
-                                // get: parent div(timelines chart)
-                                const _parent: HTMLElement | null = document.getElementById(msg.graphItems.id);
-                                if( _parent === null ){
-                                    return;
-                                }
-                                while(_parent.lastChild){
-                                    _parent.removeChild(_parent.lastChild);
-                                }
+                                // if( $scope.inited['timelines-chart'] !== true || $scope.inited['moment'] !== true ){
+                                //     console.log('script not loaded.');
+                                //     return;
+                                // }
 
-                                // delete: char-tooltip
-                                let _chartTooltip = document.getElementsByClassName('chart-tooltip');
-                                console.log(_chartTooltip);
-                                if( _chartTooltip !== null ){
-                                    Array.from(_chartTooltip).forEach( _element => { console.log(_element); _element.remove(); });
-                                }
+                                if( undefined !== msg.graphItems ) {
+                                    const _uniqueId = msg.graphItems.id;
+                                    let _chartTooltip: HTMLCollectionOf<Element>;
 
-                                // create: chart script
-                                const _childScript = document.createElement('script');
-                                _childScript.type = 'text/javascript'
-                                _childScript.id = 'script_' + msg.graphItems.id
-                                _childScript.innerHTML = String.raw`
-                                    TimelinesChart()(document.getElementById('${msg.graphItems.id}'))
-                                    .data(${JSON.stringify(msg.graphItems.data)})
-                                    .zScaleLabel('My Scale Units')
-                                    .width(${_parent.clientWidth})
-                                    // .maxHeight(${_parent.clientHeight})
-                                    .maxLineHeight(${msg.graphItems.maxLineHeight})
-                                    .topMargin(60)
-                                    .rightMargin(90)
-                                    .leftMargin(90)
-                                    .bottomMargin(40)
-                                    // .minSegmentDuration(100)
-                                    .xTickFormat(n => moment(n).format('${msg.graphItems.xTickFormat}'))
-                                    .timeFormat('%Y-%m-%d %H:%M:%S')
-                                    .zQualitative(true)
-                                    .enableOverview(true)
-                                    .enableAnimations(true)
-                                    // .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000)
-                                    .zoomX([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
-                                    .overviewDomain([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
-                                    .zColorScale().range(${JSON.stringify(msg.graphItems.zColorScale.range)}).domain(${JSON.stringify(msg.graphItems.zColorScale.domain)})
-                                `;
-                                _parent.appendChild(_childScript);
+                                    // get: parent div(timelines chart)
+                                    const _parent: HTMLElement | null = document.getElementById(_uniqueId);
+                                    if( null === _parent ){
+                                        return false;
+                                    }
+                                    while(_parent.lastChild){
+                                        _parent.removeChild(_parent.lastChild);
+                                    }
+
+                                    // remove: char-tooltip
+                                    _chartTooltip = document.getElementsByClassName(CHART_TOOTIP_CLASSNAME);
+                                    if( null !==_chartTooltip ){
+                                        let _idx = 0;
+                                        Array.from(_chartTooltip).forEach( _element => {
+                                            if( `${CHART_TOOTIP_CLASSNAME}-${_uniqueId}-${_idx}` === _element.id ){
+                                                _element.remove();
+                                                ++_idx;
+                                            }
+                                        });
+                                    }
+
+                                    // create: chart script
+                                    const _childScript = document.createElement('script');
+                                    _childScript.type = 'text/javascript'
+                                    _childScript.id = 'script_' + _uniqueId
+                                    _childScript.innerHTML = String.raw`
+                                        TimelinesChart()(document.getElementById('${_uniqueId}'))
+                                        .data(${JSON.stringify(msg.graphItems.data)})
+                                        .zScaleLabel('My Scale Units')
+                                        .width(${_parent.clientWidth})
+                                        // .maxHeight(${_parent.clientHeight})
+                                        .maxLineHeight(${msg.graphItems.maxLineHeight})
+                                        .topMargin(60)
+                                        .rightMargin(90)
+                                        .leftMargin(90)
+                                        .bottomMargin(40)
+                                        // .minSegmentDuration(100)
+                                        .xTickFormat(n => moment(n).format('${msg.graphItems.xTickFormat}'))
+                                        .timeFormat('%Y-%m-%d %H:%M:%S')
+                                        .zQualitative(true)
+                                        .enableOverview(true)
+                                        .enableAnimations(true)
+                                        // .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000)
+                                        .zoomX([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
+                                        .overviewDomain([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
+                                        .zColorScale().range(${JSON.stringify(msg.graphItems.zColorScale.range)}).domain(${JSON.stringify(msg.graphItems.zColorScale.domain)})
+                                    `;
+                                    _parent.appendChild(_childScript);
+
+                                    // set element-id: char-tooltip
+                                    _chartTooltip = document.getElementsByClassName(CHART_TOOTIP_CLASSNAME);
+                                    if( null !==_chartTooltip ){
+                                        let _idx = 0;
+                                        Array.from(_chartTooltip).forEach( _element => { 
+                                            if( "" === _element.id ){
+                                                _element.id=`${CHART_TOOTIP_CLASSNAME}-${_uniqueId}-${_idx}`;
+                                                ++_idx;
+                                            }
+                                        });
+                                    }
+                                }
+                                return true;
+                            } catch (error) {
+                                console.log(error);
+                                return false;
                             }
-                            return;
                         }
 
                         /**
