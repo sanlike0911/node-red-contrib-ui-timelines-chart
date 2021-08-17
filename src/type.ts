@@ -13,11 +13,15 @@ declare namespace statusChart {
         height: number;
         storeOutMessages: boolean;
         fwdInMessages: boolean;
-        graphColors: graphColorsObject[],
-        dateformat: string;
-        startDate: string;
-        endDate: string;
-        maxLineHeight: string;
+        graphColors: graphColorsObject[];
+        xTickFormat: string;
+        startDateTime: string;
+        endDateTime: string;
+        maxLineHeight: number;
+        enableAnimations: boolean;
+        enableDateMarker: boolean;
+        resetZoomLabelColor: string;
+        xAxisLabelsFontSize: number;
     }
 
     // グラフ凡例設定
@@ -44,21 +48,23 @@ declare namespace statusChart {
         domain: string[];
     }
 
-    // graph object
-    type graphObject = {
-        id: string;
-        data: graphData[];
+    // graph configs
+    type graphConfigsObject = {
         xTickFormat: string;
-        maxLineHeight: string;
-        startDate: string;
-        endDate: string;
+        maxLineHeight: number;
+        startDateTime: string;
+        endDateTime: string;
         zColorScale: zColorScaleObject;
+        enableAnimations: boolean;
+        enableDateMarker: boolean;
     }
 
     // base: graph object
     type makeGraphBase = {
         result: boolean;
-        graphItems: graphObject | undefined;
+        id: string;
+        data: graphData[];
+        configs: graphConfigsObject;
     }
 
     // input node 'msg' objects

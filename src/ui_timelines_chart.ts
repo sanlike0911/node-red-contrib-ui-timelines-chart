@@ -2,7 +2,7 @@ import { NodeInitializer, Node } from "node-red";
 import statusChart from "./type";
 import path from "path";
 import util from "./util";
-import moment from 'moment';
+// import moment from 'moment';
 // import TimelinesChart from 'timelines-chart';
 
 const nodeInit: NodeInitializer = (RED): void => {
@@ -10,7 +10,29 @@ const nodeInit: NodeInitializer = (RED): void => {
     // const parameters
     const DEFAULT_WIDGET_WIDTH: number = 6;
     const DEFAULT_WIDGET_HEIGHT: number = 8;
-    const DEFAULT_STRING: string = '';
+
+    const BLANK_STRING: string = '';
+    const DEFAULT_X_TICK_FORMAT = 'YYYY-MM-DD HH:mm:ss';
+    const DEFAULT_LINE_HEIGHT = 60;
+    const DEFALUT_ENABLE_ANIMATIONS = true;
+    const DEFALUT_ENABLE_DATE_MARKER = true;
+    const DEFALUT_RESET_ZOOM_LABEL_COLOR = "bule";
+    const DEFALUT_XAXIS_LABELS_FONT_SIZE = 16;
+
+    const DEFALUT_MAKE_GRAPH_BASE: statusChart.makeGraphBase = {
+        result: false,
+        id: "",
+        data: [],
+        configs: {
+            xTickFormat: DEFAULT_X_TICK_FORMAT,
+            maxLineHeight: DEFAULT_LINE_HEIGHT,
+            startDateTime: BLANK_STRING,
+            endDateTime: BLANK_STRING,
+            zColorScale: { range:[], domain:[] },
+            enableAnimations: DEFALUT_ENABLE_ANIMATIONS,
+            enableDateMarker: DEFALUT_ENABLE_DATE_MARKER
+        }
+    };
 
     // Holds a reference to node-red-dashboard module.
     // Initialized at #1.
@@ -20,14 +42,66 @@ const nodeInit: NodeInitializer = (RED): void => {
      *
      *
      * @param {Node} _node
-     * @param {statusChart.nodeConf} _conf
+     * @param {statusChart.nodeConf} _config
      * @returns
      */
-    function checkConfig(_node: Node, _conf: statusChart.nodeConf) {
-        if (!_conf || !_conf.hasOwnProperty("group")) {
+    function checkConfig(_node: Node, _config: statusChart.nodeConf) {
+        const _util: util = util.getInstance();
+
+        // group
+        if (!_config || !_config.hasOwnProperty("group")) {
             _node.error(RED._("ui_timelines_chart.error.no-group"));
             return false;
         }
+
+        // [xAxis]tick format
+        if (!_config.hasOwnProperty("xTickFormat")) _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
+        if (!_util.isRegExp(_config.xTickFormat.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY)) {
+            _node.warn(`The "x tick format: ${_config.xTickFormat}" is an incorrect.`);
+            _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
+            _node.warn(`Update "x tick format" with the default value "${_config.xTickFormat}".`);
+        }
+
+        // [xAxis]start date time
+        if (!_config.hasOwnProperty("startDateTime")) _config.startDateTime = BLANK_STRING;
+        if (BLANK_STRING !== _config.startDateTime && !_util.isRegExp(_config.startDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY)) {
+            _node.error(`The "start date: ${_config.startDateTime}" is an incorrect.`);
+            return false;
+        }
+
+        // [xAxis]end date time
+        if (!_config.hasOwnProperty("endDateTime")) _config.endDateTime = BLANK_STRING;
+        if (BLANK_STRING !== _config.endDateTime && !_util.isRegExp(_config.endDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY)) {
+            _node.error(`The "end date: ${_config.endDateTime}" is an incorrect.`);
+            return false;
+        }
+
+        //  [xAxis]labels font size
+        if (!_config.hasOwnProperty("xAxisLabelsFontSize")) _config.xAxisLabelsFontSize = DEFALUT_XAXIS_LABELS_FONT_SIZE;
+        if (!_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+            _node.warn(`The "x axis labels font size" is an incorrect.`);
+            _config.xAxisLabelsFontSize = DEFALUT_XAXIS_LABELS_FONT_SIZE;
+            _node.warn(`Update "x axis labels font size" with the default value "${_config.xAxisLabelsFontSize}".`);
+
+        }
+
+        //  reset zoom label color
+        if (!_config.hasOwnProperty("resetZoomLabelColor")) _config.resetZoomLabelColor = DEFALUT_RESET_ZOOM_LABEL_COLOR;
+
+        // [options]enable animations
+        if (!_config.hasOwnProperty("enableAnimations")) _config.enableAnimations = DEFALUT_ENABLE_ANIMATIONS;
+
+        // [options]enable date marker
+        if (!_config.hasOwnProperty("enableDateMarker")) _config.enableDateMarker = DEFALUT_ENABLE_DATE_MARKER;
+
+        // line height
+        if (!_config.hasOwnProperty("maxLineHeight")) _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
+        if (!_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+            _node.warn(`The "max line height" is an incorrect.`);
+            _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
+            _node.warn(`Update "max line height" with the default value "${_config.maxLineHeight}".`);
+        }
+
         return true;
     }
 
@@ -50,7 +124,7 @@ const nodeInit: NodeInitializer = (RED): void => {
      */
     function makeHTML(_config: statusChart.nodeConf): string {
         // debug
-        // console.log(`makeHTML id:${_config.uniqueId}`);
+        // console.log(`makeHTML id:${_config.graphItems.uniqueId}`);
         // debug
 
         const _configAsJson = JSON.stringify(_config);
@@ -72,9 +146,26 @@ const nodeInit: NodeInitializer = (RED): void => {
 
         const _css = String.raw`
         <style>
-            .container-${_config.uniqueId} { width:100%; padding: 0; margin: 0; font-size: 24px; }
-            .graph-title-${_config.uniqueId} { padding: 10px 0 10px 0; font-size:32px; /*background-color: rgba(180,180,180,0.2); border-radius: 5px; border: 1px solid rgb(70,70,70,0.17);*/ }
-            .timelines-chart .reset-zoom-btn { font-size: 16px !important; color: rgb(255, 255, 255) !important; }
+            .container-${_config.uniqueId} {
+                width:100%;
+                padding: 0;
+                margin: 0;
+                font-size: 24px;
+            }
+            .container-${_config.uniqueId} .graph-title-${_config.uniqueId} {
+                padding: 10px 0 10px 0;
+                font-size:32px;
+            }
+            .container-${_config.uniqueId} .timelines-chart .reset-zoom-btn {
+                font-size: 24px !important;
+                fill: ${_config.resetZoomLabelColor} !important;
+            }
+            .container-${_config.uniqueId} .timelines-chart .axises .x-axis text {
+                font-size: ${_config.xAxisLabelsFontSize}px !important;
+            }        
+            .container-${_config.uniqueId} .brusher .tick text {
+                font-size: ${_config.xAxisLabelsFontSize}px !important;
+            }
         <\style>
         `;
 
@@ -192,8 +283,8 @@ const nodeInit: NodeInitializer = (RED): void => {
                                 //     return;
                                 // }
 
-                                if( undefined !== msg.graphItems ) {
-                                    const _uniqueId = msg.graphItems.id;
+                                if( undefined !== msg ) {
+                                    const _uniqueId = msg.id;
                                     let _chartTooltip: HTMLCollectionOf<Element>;
 
                                     // get: parent div(timelines chart)
@@ -223,25 +314,25 @@ const nodeInit: NodeInitializer = (RED): void => {
                                     _childScript.id = 'script_' + _uniqueId
                                     _childScript.innerHTML = String.raw`
                                         TimelinesChart()(document.getElementById('${_uniqueId}'))
-                                        .data(${JSON.stringify(msg.graphItems.data)})
+                                        .data(${JSON.stringify(msg.data)})
                                         .zScaleLabel('My Scale Units')
                                         .width(${_parent.clientWidth})
                                         // .maxHeight(${_parent.clientHeight})
-                                        .maxLineHeight(${msg.graphItems.maxLineHeight})
+                                        .maxLineHeight(${msg.configs.maxLineHeight.toString()})
                                         .topMargin(60)
                                         .rightMargin(90)
                                         .leftMargin(90)
                                         .bottomMargin(40)
                                         // .minSegmentDuration(100)
-                                        .xTickFormat(n => moment(n).format('${msg.graphItems.xTickFormat}'))
+                                        .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
                                         .timeFormat('%Y-%m-%d %H:%M:%S')
                                         .zQualitative(true)
                                         .enableOverview(true)
-                                        .enableAnimations(true)
-                                        // .dateMarker(new Date() - 365 * 24 * 60 * 60 * 1000)
-                                        .zoomX([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
-                                        .overviewDomain([moment('${msg.graphItems.startDate}'), moment('${msg.graphItems.endDate}')])
-                                        .zColorScale().range(${JSON.stringify(msg.graphItems.zColorScale.range)}).domain(${JSON.stringify(msg.graphItems.zColorScale.domain)})
+                                        .enableAnimations(${msg.configs.enableAnimations})
+                                        .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
+                                        .zoomX([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                        .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                        .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
                                     `;
                                     _parent.appendChild(_childScript);
 
@@ -321,6 +412,8 @@ const nodeInit: NodeInitializer = (RED): void => {
                         })
                     }
                 });
+            } else {
+                throw new Error(`The "config" is incorrect.`);
             }
         }
         catch (_error) {
@@ -345,37 +438,17 @@ const nodeInit: NodeInitializer = (RED): void => {
      */
     function makeGraph(_node: Node, _config: statusChart.nodeConf, _msg: statusChart.inputNodeMsg): statusChart.makeGraphBase {
         try {
-            const _util: util = util.getInstance();
             // 処理結果
-            let _makeMsg: statusChart.makeGraphBase = { result: false, graphItems: undefined };
+            let _makeMsg: statusChart.makeGraphBase = DEFALUT_MAKE_GRAPH_BASE;
             // 処理開始
             _node.status({fill:"blue", shape:"dot", text:"resources.message.connect"});
 
             // グラフ描画用データ
-            let _graphData: statusChart.graphData[] = _msg.payload;
+            const _graphData: statusChart.graphData[] = _msg.payload;
  
-            // グラフ高さ
-            const _maxLineHeight:string = _util.getSafeObject(_config.maxLineHeight, "60");
-            // console.log(`_maxLineHeight: in:${_config.maxLineHeight} out:${_maxLineHeight}`);
-            /* 入力値判定処理 */
-            if (!_util.isRegExp(_maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY))
-                throw new Error(`the "max line height: ${_maxLineHeight}" is a format error. `);
-
-            // 設定：日時フォーマット(X軸)
-            const _xTickFormat:string = _util.getSafeObject(_config.dateformat, "YYYY-MM-DD HH:mm:ss");
-            // console.log(`_xTickFormat: in:${_config.dateformat} out:${_xTickFormat}`);
-            /* 入力値判定処理 */
-            if (!_util.isRegExp(_xTickFormat.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY))
-                throw new Error(`the "x tick format: ${_xTickFormat}" is a format error. `);
-
             // 設定：開始日時(X軸)
-            let _startDate:string = _util.getSafeObject(_config.startDate, DEFAULT_STRING);
-            // console.log(`_startDate: in:${_config.startDate} out:${_startDate}`);
-            if( DEFAULT_STRING !== _startDate ) {
-                /* 入力値判定処理 */
-                if (!_util.isRegExp(_startDate, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))
-                    throw new Error(`the "start date: ${_startDate}" is a format error. `);
-            } else {
+            let _startDateTime:string = _config.startDateTime;
+            if( BLANK_STRING === _startDateTime ){
                 let _min = "";
                 _graphData.forEach((_ele, _idx) => {
                     _ele.data.forEach((_ele, _idx) => {
@@ -383,18 +456,13 @@ const nodeInit: NodeInitializer = (RED): void => {
                         _min = (( "" === _min || _min > _temp) ? _temp : _min);
                     })
                 })
-                _startDate = _min;
-                // console.log(`update _startDate: ${_min}`);
+                _startDateTime = _min;
             }
+            // console.log(`_startDateTime: in:${_config.startDateTime} out:${_startDateTime}`);
 
             // 設定： 終了日時(X軸)
-            let _endDate:string = _util.getSafeObject(_config.endDate, DEFAULT_STRING);
-            // console.log(`_endDate: in:${_config.endDate} out:${_endDate}`);
-            if( DEFAULT_STRING !== _endDate ) {
-                /* 入力値判定処理 */
-                if (!_util.isRegExp(_endDate, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))
-                    throw new Error(`the "end date:  ${_endDate}" is a format error.`);
-            } else {
+            let _endDateTime:string = _config.endDateTime;
+            if( BLANK_STRING === _endDateTime ){
                 let _max = "";
                 _graphData.forEach((_ele, _idx) => {
                     _ele.data.forEach((_ele, _idx) => {
@@ -402,9 +470,9 @@ const nodeInit: NodeInitializer = (RED): void => {
                         _max = (( "" === _max || _max < _temp) ? _temp : _max);
                     });
                 });
-                _endDate = _max;
-                // console.log(`update _endDate: ${_max}`);
+                _endDateTime = _max;
             }
+            // console.log(`_endDateTime: in:${_config.endDateTime} out:${_endDateTime}`);
 
             // 設定：グラフ凡例
             let _zColorScale: statusChart.zColorScaleObject = { range:[], domain:[] };
@@ -418,14 +486,16 @@ const nodeInit: NodeInitializer = (RED): void => {
                 // データ格納処理
                 _makeMsg = {
                     result : true,
-                    graphItems: {
-                        id : _config.uniqueId,
-                        data : _graphData,
-                        xTickFormat: _xTickFormat,
-                        maxLineHeight: _maxLineHeight,
-                        startDate: _startDate,
-                        endDate: _endDate,
+                    id : _config.uniqueId,
+                    data : _graphData,
+                    configs:{
+                        xTickFormat: _config.xTickFormat,
+                        maxLineHeight: _config.maxLineHeight,
+                        startDateTime: _startDateTime,
+                        endDateTime: _endDateTime,
                         zColorScale: _zColorScale,
+                        enableAnimations: _config.enableAnimations,
+                        enableDateMarker: _config.enableDateMarker
                     }
                 };
                 _node.status({fill:"green", shape:"dot", text:"resources.message.complete"});
@@ -437,7 +507,7 @@ const nodeInit: NodeInitializer = (RED): void => {
         } catch (_error) {
             _node.status({fill:"red", shape:"ring", text:"resources.message.error"});
             _node.error(_error);
-            return { result: false, graphItems: undefined };
+            return DEFALUT_MAKE_GRAPH_BASE;
         }
     }
 

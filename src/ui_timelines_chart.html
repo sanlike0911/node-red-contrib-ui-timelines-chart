@@ -42,10 +42,14 @@
                 storeOutMessages: {value: true},
                 fwdInMessages: {value: true},
                 graphColors: {value:[{}]},
-                dateformat: {value: ''},
-                startDate: {value: ''},
-                endDate: {value: ''},
-                maxLineHeight: {value: ''},
+                xTickFormat: {value: ''},
+                startDateTime: {value: ''},
+                endDateTime: {value: ''},
+                maxLineHeight: {value: 0},
+                xAxisLabelsFontSize: {value: 0},
+                resetZoomLabelColor: {value: ''},
+                enableAnimations: {value: true},
+                enableDateMarker: {value: true},
             },
             inputs:1,
             outputs:1,
@@ -181,27 +185,60 @@
 
         <!-- X軸:日時フォーマットの設定 -->
         <div class="form-row">
-            <label for="node-input-dateformat"><i class="fa fa-clock-o"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.dateTimeFormat.title"></span></label>
-            <input type="text" id="node-input-dateformat" placeholder="YYYY-MM-DD HH:mm:ss">
+            <label for="node-input-xTickFormat"><i class="fa fa-clock-o"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.tickFormat.title"></span></label>
+            <input type="text" id="node-input-xTickFormat" placeholder="YYYY-MM-DD HH:mm:ss(default:YYYY-MM-DD HH:mm:ss)">
         </div>
 
         <!-- X軸:開始日時の設定 -->
         <div class="form-row">
-            <label for="node-input-startDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.startDate.title"></span></label>
-            <input type="text" id="node-input-startDate" placeholder="2021-01-01T00:00:00+09:00">
+            <label for="node-input-startDateTime"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.startDateTime.title"></span></label>
+            <input type="datetime-local" id="node-input-startDateTime" placeholder="(default:The oldest date and time of graph data)">
         </div>
         <!-- X軸:終了日時の設定 -->
         <div class="form-row">
-            <label for="node-input-endDate"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.endDate.title"></span></label>
-            <input type="text" id="node-input-endDate"  placeholder="2021-01-01T00:00:00Z">
+            <label for="node-input-endDateTime"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.endDateTime.title"></span></label>
+            <input type="datetime-local" id="node-input-endDateTime"  placeholder="(default:Latest date and time of graph data)">
+        </div>
+
+        <!-- X軸:フォントサイズ -->
+        <div class="form-row">
+            <label for="node-input-xAxisLabelsFontSize"><i class="fa fa-font"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.labelsFontSize.title"></span></label>
+            <input type="number" id="node-input-xAxisLabelsFontSize" min="0" max="64" placeholder="from 0 to 64(default:16)">
+        </div>
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
+        <!-- X軸:ズームリセットラベルカラー -->
+        <div class="form-row">
+            <label for="node-input-resetZoomLabelColor"><i class="fa fa-paint-brush"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.resetZoomLabelColor.title"></span></label>
+            <input type="color" id="node-input-resetZoomLabelColor" style="width:10%;" placeholder="(default:blue)">
         </div>
 
         <!-- グラフ高さの設定 -->
         <div class="form-row">
-            <label for="node-input-maxLineHeight"><i class="fa fa-line-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphAxisSettings.xAxis.maxLineHeight.title"></span></label>
-            <input type="text" id="node-input-maxLineHeight" placeholder="60">
+            <label for="node-input-maxLineHeight"><i class="fa fa-bar-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.maxLineHeight.title"></span></label>
+            <input type="number" id="node-input-maxLineHeight" min="1" max="255" placeholder="from 1 to 255(default:60)">
         </div>
-        
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
+        <!-- オプション設定 -->
+        <div class="form-row">
+            <label for="node-input-options" style="width: 150px;"><i class="fa fa-cogs"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.options.title"></span></label>
+        </div>
+        <!-- グラフアニメーションの設定 -->
+        <div class="form-row">
+            <span style="margin-left:30px;" data-i18n="resources.nodeProperties.labels.graphSettings.options.enableAnimations.title"></span>: 
+            <input type="checkbox" id="node-input-enableAnimations" style="display: inline-block; width: auto; vertical-align: top;" checked>
+        </div>
+        <!-- 現在時刻マーカー線の設定 -->
+        <div class="form-row">
+            <span style="margin-left:30px;" data-i18n="resources.nodeProperties.labels.graphSettings.options.enableDateMarker.title"></span>: 
+            <input type="checkbox" id="node-input-enableDateMarker" style="display: inline-block; width: auto; vertical-align: top;" checked>
+        </div>       
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
         <!-- グラフ表示色の設定 -->
         <div class="form-row">
             <label for="node-input-graph-colors" style="width: 150px;"><i class="fa fa-bar-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphColorSettings.title"></span></label>

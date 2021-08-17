@@ -1,45 +1,65 @@
 {
     "resources": {
         "paletteLabel": "状態チャート",
-        "nodeProperties" : {
+        "nodeProperties": {
             "labels": {
-                "group": { "title":"グループ" },
-                "size": { "title":"サイズ" },
-                "label": { "title":"ラベル" },
-                "graphAxisSettings": {
+                "group": {
+                    "title": "グループ"
+                },
+                "size": {
+                    "title": "サイズ"
+                },
+                "label": {
+                    "title": "ラベル"
+                },
+                "graphSettings": {
                     "xAxis": {
-                        "division": { 
-                            "title": "xAxis division",
-                            "options": [
-                                "default",
-                                "1 hour"
-                            ]
+                        "tickFormat": {
+                            "title": "xAxis tick format"
                         },
-                        "dateTimeFormat": {
-                            "title": "xAxis dateTime format"
+                        "startDateTime": {
+                            "title": "xAxis start datetime"
                         },
-                        "startDate": { "title": "start date" },
-                        "endDate": { "title": "end date" },
-                        "maxLineHeight": { "title": "chart's height[px]" }
+                        "endDateTime": {
+                            "title": "xAxis end datetime"
+                        },
+                        "labelsFontSize": {
+                            "title": "xAxis labels font size[px]"
+                        }
+                    },
+                    "resetZoomLabelColor": {
+                        "title": "reset zoom label color"
+                    },
+                    "maxLineHeight": {
+                        "title": "chart's height[px]"
+                    },
+                    "options":{
+                        "title": "options",
+                        "enableAnimations": {
+                            "title": "enable animations"
+                        },
+                        "enableDateMarker": {
+                            "title": "enable date marker(now)"
+                        }
                     }
                 },
                 "graphColorSettings": {
-                    "title":"legends",
+                    "title": "legends",
                     "add": "追加",
                     "delete": "削除",
                     "number": "No.",
                     "statusColor": "color",
                     "statusValue": "value"
                 },
-                "name": {"title":"名前"}
+                "name": {
+                    "title": "名前"
+                }
             }
         },
         "message": {
             "complete": "表示完了",
             "connect": "処理中",
-            "error": "エラー発生",
-            "noGraphData": "表示データなし",
-            "errGraphSetting": "グラフ設定異常"
-        }    
+            "error": "エラー発生"
+        }
     }
 }

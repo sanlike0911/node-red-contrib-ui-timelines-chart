@@ -3,27 +3,47 @@
         "paletteLabel": "Status Chart",
         "nodeProperties": {
             "labels": {
-                "group": {"title": "Group"},
-                "size": {"title": "Size"},
-                "label": {"title": "Label"},
-                "graphAxisSettings": {
+                "group": {
+                    "title": "Group"
+                },
+                "size": {
+                    "title": "Size"
+                },
+                "label": {
+                    "title": "Label"
+                },
+                "graphSettings": {
                     "xAxis": {
-                        "division": { 
-                            "title": "xAxis division",
-                            "options": [
-                                "default",
-                                "1 hour"
-                            ]
+                        "tickFormat": {
+                            "title": "xAxis tick format"
                         },
-                        "dateTimeFormat": {
-                            "title": "xAxis dateTime format"
+                        "startDateTime": {
+                            "title": "xAxis start datetime"
                         },
-                        "startDate": { "title": "start date" },
-                        "endDate": { "title": "end date" },
-                        "maxLineHeight": { "title": "chart's height[px]" }
+                        "endDateTime": {
+                            "title": "xAxis end datetime"
+                        },
+                        "labelsFontSize": {
+                            "title": "xAxis labels font size[px]"
+                        }
+                    },
+                    "resetZoomLabelColor": {
+                        "title": "reset zoom label color"
+                    },
+                        "maxLineHeight": {
+                            "title": "chart's height[px]"
+                        },
+                    "options":{
+                        "title": "options",
+                        "enableAnimations": {
+                            "title": "enable animations"
+                        },
+                        "enableDateMarker": {
+                            "title": "enable date marker(now)"
+                        }
                     }
                 },
-                "graphColorSettings": {                
+                "graphColorSettings": {
                     "title": "legends",
                     "add": "add",
                     "delete": "delete",
@@ -31,15 +51,15 @@
                     "statusColor": "color",
                     "statusValue": "value"
                 },
-                "name": {"title": "name"}
+                "name": {
+                    "title": "name"
+                }
             }
         },
         "message": {
-            "complete": "Display complete",
-            "connect": "in process",
-            "error": "Error occurred",
-            "noGraphData": "No display data",
-            "errGraphSetting": "Error graph display setting"
+            "complete": "Completed.",
+            "connect": "Processing.",
+            "error": "Error."
         }
     }
 }
