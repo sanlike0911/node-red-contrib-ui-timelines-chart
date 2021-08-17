@@ -21,6 +21,10 @@ class util {
             HALF_NUMBER_AND_EMPTY: /^[0-9]*$/,
             /* 半角数値のみ（空文字NG）*/
             HALF_NUMBER_AND_NOT_EMPTY: /^[0-9]+$/,
+            /* 半角Booleanのみ（空文字OK）*/
+            HALF_BOOLEAN_AND_EMPTY: /^(true)|(false)|()$/,
+            /* 半角Booleanのみ（空文字NG）*/
+            HALF_BOOLEAN_AND_NOT_EMPTY: /^(true)|(false)$/,
             /* 半角英字のみ（空文字OK) */
             HALF_ALPHABETIC_AND_EMPTY: /^[a-zA-Z]*$/,
             /* 半角英字のみ（空文字NG) */
