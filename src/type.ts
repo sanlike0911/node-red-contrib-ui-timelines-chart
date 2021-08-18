@@ -20,8 +20,12 @@ declare namespace statusChart {
         maxLineHeight: number;
         enableAnimations: boolean;
         enableDateMarker: boolean;
-        resetZoomLabelColor: string;
         xAxisLabelsFontSize: number;
+        xAxisLabelslColor: string;
+        yAxisLabelsFontSize: number;
+        yAxisLabelslColor: string;
+        resetZoomLabelFontSize: number;
+        resetZoomLabelColor: string;
     }
 
     // グラフ凡例設定

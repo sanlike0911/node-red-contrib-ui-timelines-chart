@@ -16,8 +16,12 @@ const nodeInit: NodeInitializer = (RED): void => {
     const DEFAULT_LINE_HEIGHT = 60;
     const DEFALUT_ENABLE_ANIMATIONS = true;
     const DEFALUT_ENABLE_DATE_MARKER = true;
+    const DEFALUT_X_AXIS_LABELS_FONT_SIZE = 16;
+    const DEFALUT_X_AXIS_LABELS_COLOR = "lightslategray";
+    const DEFALUT_Y_AXIS_LABELS_FONT_SIZE = 12;
+    const DEFALUT_Y_AXIS_LABELS_COLOR = "lightslategray";
+    const DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE = 24;
     const DEFALUT_RESET_ZOOM_LABEL_COLOR = "bule";
-    const DEFALUT_XAXIS_LABELS_FONT_SIZE = 16;
 
     const DEFALUT_MAKE_GRAPH_BASE: statusChart.makeGraphBase = {
         result: false,
@@ -76,16 +80,40 @@ const nodeInit: NodeInitializer = (RED): void => {
             return false;
         }
 
-        //  [xAxis]labels font size
-        if (!_config.hasOwnProperty("xAxisLabelsFontSize")) _config.xAxisLabelsFontSize = DEFALUT_XAXIS_LABELS_FONT_SIZE;
+        // [xAxis]labels font size
+        if (!_config.hasOwnProperty("xAxisLabelsFontSize")) _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
         if (!_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
             _node.warn(`The "x axis labels font size" is an incorrect.`);
-            _config.xAxisLabelsFontSize = DEFALUT_XAXIS_LABELS_FONT_SIZE;
+            _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
             _node.warn(`Update "x axis labels font size" with the default value "${_config.xAxisLabelsFontSize}".`);
 
         }
 
-        //  reset zoom label color
+        // [xAxis]labels color
+        if (!_config.hasOwnProperty("xAxisLabelslColor")) _config.xAxisLabelslColor = DEFALUT_X_AXIS_LABELS_COLOR;
+
+        // [yAxis]labels font size
+        if (!_config.hasOwnProperty("yAxisLabelsFontSize")) _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
+        if (!_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+            _node.warn(`The "y axis labels font size" is an incorrect.`);
+            _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
+            _node.warn(`Update "y axis labels font size" with the default value "${_config.yAxisLabelsFontSize}".`);
+
+        }
+
+        // [yAxis]labels color
+        if (!_config.hasOwnProperty("yAxisLabelslColor")) _config.yAxisLabelslColor = DEFALUT_Y_AXIS_LABELS_COLOR;
+
+        // [reset zoom]label font size
+        if (!_config.hasOwnProperty("resetZoomLabelFontSize")) _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
+        if (!_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+            _node.warn(`The "reset zoom label font size" is an incorrect.`);
+            _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
+            _node.warn(`Update "reset zoom label font size" with the default value "${_config.resetZoomLabelFontSize}".`);
+
+        }
+
+        // [reset zoom]label color
         if (!_config.hasOwnProperty("resetZoomLabelColor")) _config.resetZoomLabelColor = DEFALUT_RESET_ZOOM_LABEL_COLOR;
 
         // [options]enable animations
@@ -146,26 +174,30 @@ const nodeInit: NodeInitializer = (RED): void => {
 
         const _css = String.raw`
         <style>
-            .container-${_config.uniqueId} {
-                width:100%;
-                padding: 0;
-                margin: 0;
-                font-size: 24px;
-            }
-            .container-${_config.uniqueId} .graph-title-${_config.uniqueId} {
-                padding: 10px 0 10px 0;
-                font-size:32px;
-            }
-            .container-${_config.uniqueId} .timelines-chart .reset-zoom-btn {
-                font-size: 24px !important;
-                fill: ${_config.resetZoomLabelColor} !important;
-            }
-            .container-${_config.uniqueId} .timelines-chart .axises .x-axis text {
-                font-size: ${_config.xAxisLabelsFontSize}px !important;
-            }        
-            .container-${_config.uniqueId} .brusher .tick text {
-                font-size: ${_config.xAxisLabelsFontSize}px !important;
-            }
+        .container-${_config.uniqueId} {
+            width:100%;
+            padding: 0;
+            margin: 0;
+            font-size: 24px;
+        }
+        .container-${_config.uniqueId} .graph-title-${_config.uniqueId} {
+            padding: 10px 0 10px 0;
+            font-size:32px;
+        }
+        .container-${_config.uniqueId} .timelines-chart .reset-zoom-btn {
+            font-size: ${_config.resetZoomLabelFontSize}px !important;
+            fill: ${_config.resetZoomLabelColor} !important;
+        }
+        .container-${_config.uniqueId} .timelines-chart .axises .x-axis text,
+        .container-${_config.uniqueId} .brusher .tick text {
+            font-size: ${_config.xAxisLabelsFontSize}px !important;
+            fill: ${_config.xAxisLabelslColor} !important;
+        }
+        .container-${_config.uniqueId} .timelines-chart .axises .y-axis text,
+        .container-${_config.uniqueId} .timelines-chart .axises .grp-axis text {
+            font-size: ${_config.yAxisLabelsFontSize}px !important;
+            fill: ${_config.yAxisLabelslColor} !important;
+        }
         <\style>
         `;
 

@@ -23,17 +23,24 @@
                         "endDateTime": {
                             "title": "xAxis end datetime"
                         },
-                        "labelsFontSize": {
-                            "title": "xAxis labels font size[px]"
+                        "labels": {
+                            "title": "xAxis labels size[px]/color"
                         }
                     },
-                    "resetZoomLabelColor": {
-                        "title": "reset zoom label color"
+                    "yAxis": {
+                        "labels": {
+                            "title": "yAxis labels size[px]/color"
+                        }
+                    },
+                    "resetZoom": {
+                        "label": {
+                            "title": "reset zoom size[px]/color"
+                        }
                     },
                     "maxLineHeight": {
                         "title": "chart's height[px]"
                     },
-                    "options":{
+                    "options": {
                         "title": "options",
                         "enableAnimations": {
                             "title": "enable animations"

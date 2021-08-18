@@ -47,6 +47,10 @@
                 endDateTime: {value: ''},
                 maxLineHeight: {value: 0},
                 xAxisLabelsFontSize: {value: 0},
+                xAxisLabelslColor: {value: ''},
+                yAxisLabelsFontSize: {value: 0},
+                yAxisLabelslColor: {value: ''},
+                resetZoomLabelFontSize: {value: 0},
                 resetZoomLabelColor: {value: ''},
                 enableAnimations: {value: true},
                 enableDateMarker: {value: true},
@@ -152,7 +156,7 @@
 <script type="text/html" data-template-name="ui_timelines_chart">
     <!-- ノード名 -->
     <div class="form-row">
-        <label for="node-input-name"><i class="fa fa-tag"></i> <span data-i18n="resources.nodeProperties.labels.name.title"></span></label>
+        <label for="node-input-name"><i class="fa fa-tag" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.name.title"></span></label>
         <input type="text" id="node-input-name">
     </div>
     <!---------------------------------------------------------------------------->
@@ -161,19 +165,19 @@
     <div id="list-property">
         <!-- グループ -->
         <div class="form-row" id="template-row-group">
-            <label for="node-input-group"><i class="fa fa-table"></i> <span data-i18n="resources.nodeProperties.labels.group.title"></span></label>
+            <label for="node-input-group"><i class="fa fa-table" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.group.title"></span></label>
             <input type="text" id="node-input-group">
         </div>
         <!-- 表示サイズ -->
         <div class="form-row" id="template-row-size">
-            <label><i class="fa fa-object-group"></i> <span data-i18n="resources.nodeProperties.labels.size.title"></span></label>
+            <label><i class="fa fa-object-group" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.size.title"></span></label>
             <input type="hidden" id="node-input-width">
             <input type="hidden" id="node-input-height">
             <button class="editor-button" id="node-input-size"></button>
         </div>
         <!-- ラベル -->
         <div class="form-row">
-            <label for="node-input-label"><i class="fa fa-i-cursor"></i> <span data-i18n="resources.nodeProperties.labels.label.title"></span></label>
+            <label for="node-input-label"><i class="fa fa-i-cursor" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.label.title"></span></label>
             <input type="text" id="node-input-label">
         </div>
     </div>
@@ -185,38 +189,50 @@
 
         <!-- X軸:日時フォーマットの設定 -->
         <div class="form-row">
-            <label for="node-input-xTickFormat"><i class="fa fa-clock-o"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.tickFormat.title"></span></label>
+            <label for="node-input-xTickFormat"><i class="fa fa-clock-o" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.tickFormat.title"></span></label>
             <input type="text" id="node-input-xTickFormat" placeholder="YYYY-MM-DD HH:mm:ss(default:YYYY-MM-DD HH:mm:ss)">
         </div>
 
         <!-- X軸:開始日時の設定 -->
         <div class="form-row">
-            <label for="node-input-startDateTime"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.startDateTime.title"></span></label>
+            <label for="node-input-startDateTime"><i class="fa fa-calendar" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.startDateTime.title"></span></label>
             <input type="datetime-local" id="node-input-startDateTime" placeholder="(default:The oldest date and time of graph data)">
         </div>
+
         <!-- X軸:終了日時の設定 -->
         <div class="form-row">
-            <label for="node-input-endDateTime"><i class="fa fa-calendar"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.endDateTime.title"></span></label>
+            <label for="node-input-endDateTime"><i class="fa fa-calendar" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.endDateTime.title"></span></label>
             <input type="datetime-local" id="node-input-endDateTime"  placeholder="(default:Latest date and time of graph data)">
         </div>
 
-        <!-- X軸:フォントサイズ -->
+        <!-- X軸:フォントサイズ＆フォントカラー -->
         <div class="form-row">
-            <label for="node-input-xAxisLabelsFontSize"><i class="fa fa-font"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.labelsFontSize.title"></span></label>
-            <input type="number" id="node-input-xAxisLabelsFontSize" min="0" max="64" placeholder="from 0 to 64(default:16)">
+            <label for="node-input-xAxisLabels"><i class="fa fa-font" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.xAxis.labels.title"></span></label>
+            <input type="number" id="node-input-xAxisLabelsFontSize" min="0" max="64" style="width:60%" placeholder="from 0 to 64(default:16)">
+            <input type="color" id="node-input-xAxisLabelslColor" style="width:10%;" placeholder="(default:black)">
         </div>
         <!---------------------------------------------------------------------------->
         <hr>
         <!---------------------------------------------------------------------------->
-        <!-- X軸:ズームリセットラベルカラー -->
+        <!-- Y軸:フォントサイズ＆フォントカラー -->
         <div class="form-row">
-            <label for="node-input-resetZoomLabelColor"><i class="fa fa-paint-brush"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.resetZoomLabelColor.title"></span></label>
+            <label for="node-input-yAxisLabels"><i class="fa fa-font" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.yAxis.labels.title"></span></label>
+            <input type="number" id="node-input-yAxisLabelsFontSize" min="0" max="64" style="width:60%" placeholder="from 0 to 64(default:16)">
+            <input type="color" id="node-input-yAxisLabelslColor" style="width:10%;" placeholder="(default:black)">
+        </div>
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
+        <!-- ズームリセット:フォントサイズ＆フォントカラー -->
+        <div class="form-row">
+            <label for="node-input-resetZoomLabel"><i class="fa fa-font" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.resetZoom.label.title"></span></label>
+            <input type="number" id="node-input-resetZoomLabelFontSize" min="0" max="64" style="width:60%" placeholder="from 0 to 64(default:24)">
             <input type="color" id="node-input-resetZoomLabelColor" style="width:10%;" placeholder="(default:blue)">
         </div>
 
         <!-- グラフ高さの設定 -->
         <div class="form-row">
-            <label for="node-input-maxLineHeight"><i class="fa fa-bar-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.maxLineHeight.title"></span></label>
+            <label for="node-input-maxLineHeight"><i class="fa fa-bar-chart" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.maxLineHeight.title"></span></label>
             <input type="number" id="node-input-maxLineHeight" min="1" max="255" placeholder="from 1 to 255(default:60)">
         </div>
         <!---------------------------------------------------------------------------->
@@ -224,24 +240,24 @@
         <!---------------------------------------------------------------------------->
         <!-- オプション設定 -->
         <div class="form-row">
-            <label for="node-input-options" style="width: 150px;"><i class="fa fa-cogs"></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.options.title"></span></label>
+            <label for="node-input-options" style="width: 150px;"><i class="fa fa-cogs" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.options.title"></span></label>
         </div>
         <!-- グラフアニメーションの設定 -->
         <div class="form-row">
-            <span style="margin-left:30px;" data-i18n="resources.nodeProperties.labels.graphSettings.options.enableAnimations.title"></span>: 
+            <i class="fa fa-check-square-o" style="margin-left:20px;"  aria-hidden="true" ></i> <span style="margin-left:15px;" data-i18n="resources.nodeProperties.labels.graphSettings.options.enableAnimations.title"></span>: 
             <input type="checkbox" id="node-input-enableAnimations" style="display: inline-block; width: auto; vertical-align: top;" checked>
         </div>
         <!-- 現在時刻マーカー線の設定 -->
         <div class="form-row">
-            <span style="margin-left:30px;" data-i18n="resources.nodeProperties.labels.graphSettings.options.enableDateMarker.title"></span>: 
+            <i class="fa fa-check-square-o" style="margin-left:20px;"  aria-hidden="true" ></i> <span style="margin-left:15px;" data-i18n="resources.nodeProperties.labels.graphSettings.options.enableDateMarker.title"></span>: 
             <input type="checkbox" id="node-input-enableDateMarker" style="display: inline-block; width: auto; vertical-align: top;" checked>
-        </div>       
+        </div>
         <!---------------------------------------------------------------------------->
         <hr>
         <!---------------------------------------------------------------------------->
         <!-- グラフ表示色の設定 -->
         <div class="form-row">
-            <label for="node-input-graph-colors" style="width: 150px;"><i class="fa fa-bar-chart"></i> <span data-i18n="resources.nodeProperties.labels.graphColorSettings.title"></span></label>
+            <label for="node-input-graph-colors" style="width: 150px;"><i class="fa fa-bar-chart" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphColorSettings.title"></span></label>
         </div>
         <div class="form-row node-input-editable-list-container-row">
             <ol id="node-input-editable-list-container"></ol>
