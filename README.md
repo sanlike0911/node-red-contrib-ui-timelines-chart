@@ -55,7 +55,7 @@ npm install node-red-contrib-ui-timelines-chart
 
 - Widget properties
 
-  ![widget propertie](./figs/2021-08-02-13-31-43.png)
+  ![widget propertie](./figs/configs.png)
 
   - name
 
@@ -73,9 +73,9 @@ npm install node-red-contrib-ui-timelines-chart
 
     Set for the name to be displayed on the dashboard.
 
-  - x axis datetime format
+  - xAxis tick format
 
-    Set for the x-axis datetime format.
+    Set for the x-axis tick format.
 
     ```cmd
     - YYYY-MM-DD HH:mm:ss
@@ -88,31 +88,43 @@ npm install node-red-contrib-ui-timelines-chart
 
     **ISO 8601 format*
 
-  - start date
+  - xAxis start date
 
     Set for the start time for the X axis.
     If not set, select the first data.
 
-    ```cmd
-    2021-01-01T00:00:00Z
-    ```
-
-    **ISO 8601 format*
-
-  - end date
+  - xAxis end date
 
     Set for the end time for the X axis.
     If not set, select the last data.
 
-    ```cmd
-    2021-01-02T00:00:00Z
-    ```
+  - xAxis labels size[px]/color
 
-    **ISO 8601 format*
+    Set font size[px] and font color to X-axis label.
+    size: from 0 to 64(default:16)
+
+  - yAxis labels size[px]/color
+
+    Set font size[px] and font color to Y-axis label.
+    size: from 0 to 64(default:16)
+
+  - reset zoom label size[px]/color
+
+    Set font size[px] and font color to reset zoom label.
+    size: from 0 to 64(default:24)
 
   - chart's height[px]
 
     Set for the maximum height of each line, in px.
+    height: from 1 to 255(default:60)
+
+  - enable animations
+
+    Set for whether to animate transitions.
+
+  - enable date marker(now)
+
+    Set whether to display the current date of the vertical line.
 
   - legends
 
@@ -124,7 +136,7 @@ npm install node-red-contrib-ui-timelines-chart
 
     [Data syntax]
 
-    ```json
+    ```text
     [
         {
             group: "group1name",
@@ -167,6 +179,12 @@ npm install node-red-contrib-ui-timelines-chart
     ```
 
     ※windows only.
+
+- Run node-red
+
+    ```cmd
+    npm run start
+    ```
 
 - Debug
 
