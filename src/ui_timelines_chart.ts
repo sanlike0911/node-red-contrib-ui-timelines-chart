@@ -10,12 +10,15 @@ const nodeInit: NodeInitializer = (RED): void => {
     // const parameters
     const DEFAULT_WIDGET_WIDTH: number = 6;
     const DEFAULT_WIDGET_HEIGHT: number = 8;
+    const DEFAULT_EMIT_ONLY_NEW_VALUES = false;
+    const DEFAULT_FWD_IN_MESSAGES = false;
+    const DEFAULT_STORE_OUT_MESSAGES = false;
 
     const BLANK_STRING: string = '';
     const DEFAULT_X_TICK_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const DEFAULT_LINE_HEIGHT = 60;
     const DEFALUT_ENABLE_ANIMATIONS = true;
-    const DEFALUT_ENABLE_DATE_MARKER = true;
+    const DEFALUT_ENABLE_DATE_MARKER = false;
     const DEFALUT_X_AXIS_LABELS_FONT_SIZE = 16;
     const DEFALUT_X_AXIS_LABELS_COLOR = "lightslategray";
     const DEFALUT_Y_AXIS_LABELS_FONT_SIZE = 12;
@@ -216,6 +219,7 @@ const nodeInit: NodeInitializer = (RED): void => {
     function initWidget(this: Node, _config: statusChart.nodeConf): void {
         const _node: Node = this;
         let _done: any = null;
+        let _graphObjects:statusChart.makeGraphBase = DEFALUT_MAKE_GRAPH_BASE;
         try {
 
             if(ui === undefined) {
@@ -253,6 +257,8 @@ const nodeInit: NodeInitializer = (RED): void => {
                 // Generate HTML/Angular code
                 let _html = makeHTML(_config);
 
+                //console.log("config:", _config);
+
                 // Initialize Node-RED Dashboard widget
                 // see details: https://github.com/node-red/node-red-ui-nodes/blob/master/docs/api.md
                 //  #  name[*-optioal] ----------- description --------------------------------------
@@ -279,18 +285,22 @@ const nodeInit: NodeInitializer = (RED): void => {
                     height: _height,          // height of widget
                     templateScope: "local",   // scope of HTML/Angular(local/global)*
                     order: _config.order,      // order
-                    emitOnlyNewValues: false,
-                    forwardInputMessages: _config.fwdInMessages,
-                    storeFrontEndInputAsState: _config.storeOutMessages,
-                    convertBack: function (_value: statusChart.graphData) {
+                    emitOnlyNewValues: DEFAULT_EMIT_ONLY_NEW_VALUES,  // send message if changed
+                    forwardInputMessages: DEFAULT_FWD_IN_MESSAGES,    // forward input messages to output
+                    storeFrontEndInputAsState: DEFAULT_STORE_OUT_MESSAGES,    // store received message
+                    convertBack: function (_value: statusChart.graphData) { // callback to convert value to front-end
                         return _value;
                     },
                     beforeEmit: function(_msg: statusChart.inputNodeMsg, _value: statusChart.graphData): { msg: statusChart.makeGraphBase } {
-                        let _makeMsg: statusChart.makeGraphBase = makeGraph(_node, _config, _msg);
-                        return { msg: _makeMsg };
+                        _graphObjects = makeGraph(_node, _config, _msg);
+                        return { msg: _graphObjects };
                     },
                     beforeSend: function (_msg: statusChart.inputNodeMsg, _original: {msg:statusChart.inputNodeMsg}) {
-                        if (_original) { return _original.msg; }
+                        if(_msg) {
+                            _msg.payload = <any>_graphObjects;
+                            return _msg;
+                        }
+                        // if (_original) { return _original.msg; }
                     },
                     initController: function($scope: any, events: any) {
                         // Remark: all client-side functions should be added here!  

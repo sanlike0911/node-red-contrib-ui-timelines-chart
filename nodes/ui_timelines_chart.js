@@ -10,11 +10,14 @@ const nodeInit = (RED) => {
     // const parameters
     const DEFAULT_WIDGET_WIDTH = 6;
     const DEFAULT_WIDGET_HEIGHT = 8;
+    const DEFAULT_EMIT_ONLY_NEW_VALUES = false;
+    const DEFAULT_FWD_IN_MESSAGES = false;
+    const DEFAULT_STORE_OUT_MESSAGES = false;
     const BLANK_STRING = '';
     const DEFAULT_X_TICK_FORMAT = 'YYYY-MM-DD HH:mm:ss';
     const DEFAULT_LINE_HEIGHT = 60;
     const DEFALUT_ENABLE_ANIMATIONS = true;
-    const DEFALUT_ENABLE_DATE_MARKER = true;
+    const DEFALUT_ENABLE_DATE_MARKER = false;
     const DEFALUT_X_AXIS_LABELS_FONT_SIZE = 16;
     const DEFALUT_X_AXIS_LABELS_COLOR = "lightslategray";
     const DEFALUT_Y_AXIS_LABELS_FONT_SIZE = 12;
@@ -200,6 +203,7 @@ const nodeInit = (RED) => {
     function initWidget(_config) {
         const _node = this;
         let _done = null;
+        let _graphObjects = DEFALUT_MAKE_GRAPH_BASE;
         try {
             if (ui === undefined) {
                 // #1: Load node-red-dashboard module.
@@ -230,6 +234,7 @@ const nodeInit = (RED) => {
                 _config.uniqueId = getUniqueId();
                 // Generate HTML/Angular code
                 let _html = makeHTML(_config);
+                //console.log("config:", _config);
                 // Initialize Node-RED Dashboard widget
                 // see details: https://github.com/node-red/node-red-ui-nodes/blob/master/docs/api.md
                 //  #  name[*-optioal] ----------- description --------------------------------------
@@ -256,20 +261,22 @@ const nodeInit = (RED) => {
                     height: _height,
                     templateScope: "local",
                     order: _config.order,
-                    emitOnlyNewValues: false,
-                    forwardInputMessages: _config.fwdInMessages,
-                    storeFrontEndInputAsState: _config.storeOutMessages,
+                    emitOnlyNewValues: DEFAULT_EMIT_ONLY_NEW_VALUES,
+                    forwardInputMessages: DEFAULT_FWD_IN_MESSAGES,
+                    storeFrontEndInputAsState: DEFAULT_STORE_OUT_MESSAGES,
                     convertBack: function (_value) {
                         return _value;
                     },
                     beforeEmit: function (_msg, _value) {
-                        let _makeMsg = makeGraph(_node, _config, _msg);
-                        return { msg: _makeMsg };
+                        _graphObjects = makeGraph(_node, _config, _msg);
+                        return { msg: _graphObjects };
                     },
                     beforeSend: function (_msg, _original) {
-                        if (_original) {
-                            return _original.msg;
+                        if (_msg) {
+                            _msg.payload = _graphObjects;
+                            return _msg;
                         }
+                        // if (_original) { return _original.msg; }
                     },
                     initController: function ($scope, events) {
                         // Remark: all client-side functions should be added here!  

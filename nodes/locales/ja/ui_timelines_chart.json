@@ -1,6 +1,6 @@
 {
     "resources": {
-        "paletteLabel": "状態チャート",
+        "paletteLabel": "timelines-chart",
         "nodeProperties": {
             "labels": {
                 "group": {
