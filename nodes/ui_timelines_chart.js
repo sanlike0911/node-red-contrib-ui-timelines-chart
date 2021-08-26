@@ -283,7 +283,7 @@ const nodeInit = (RED) => {
                         // If added above, it will be server-side functions which are not available at the client-side ...
                         // console.log('initController');
                         $scope.flag = true;
-                        // $scope.inited = {};
+                        $scope.inited = {};
                         /**
                          * update: chart
                          *
@@ -293,70 +293,74 @@ const nodeInit = (RED) => {
                         function update(msg) {
                             // console.log('update');
                             try {
-                                const CHART_TOOTIP_CLASSNAME = 'chart-tooltip';
-                                // if( $scope.inited['timelines-chart'] !== true || $scope.inited['moment'] !== true ){
-                                //     console.log('script not loaded.');
-                                //     return;
-                                // }
+                                if ($scope.inited['timelines-chart'] !== true || $scope.inited['moment'] !== true) {
+                                    // console.log(`script not loaded. id:${msg.id}`);
+                                    return false;
+                                }
                                 if (undefined !== msg) {
                                     const _uniqueId = msg.id;
-                                    let _chartTooltip;
                                     // get: parent div(timelines chart)
                                     const _parent = document.getElementById(_uniqueId);
                                     if (null === _parent) {
                                         return false;
                                     }
-                                    while (_parent.lastChild) {
-                                        _parent.removeChild(_parent.lastChild);
+                                    // timelines chart: static script
+                                    {
+                                        const _staticScriptID = "script_static_" + _uniqueId;
+                                        const _staticScript = document.getElementById(_staticScriptID);
+                                        if (null === _staticScript) {
+                                            // console.log(`create static timelines-chart id:${_staticScriptID}`);
+                                            const _createStatcScript = document.createElement('script');
+                                            _createStatcScript.type = 'text/javascript';
+                                            // _createStatcScript.async = false;
+                                            _createStatcScript.id = _staticScriptID;
+                                            _createStatcScript.innerHTML = String.raw `
+                                            const timelinesChart${_uniqueId} = TimelinesChart()(document.getElementById('${_uniqueId}'));
+                                            `;
+                                            _parent.appendChild(_createStatcScript);
+                                        }
                                     }
-                                    // remove: char-tooltip
-                                    _chartTooltip = document.getElementsByClassName(CHART_TOOTIP_CLASSNAME);
-                                    if (null !== _chartTooltip) {
-                                        let _idx = 0;
-                                        Array.from(_chartTooltip).forEach(_element => {
-                                            if (`${CHART_TOOTIP_CLASSNAME}-${_uniqueId}-${_idx}` === _element.id) {
-                                                _element.remove();
-                                                ++_idx;
-                                            }
-                                        });
-                                    }
-                                    // create: chart script
-                                    const _childScript = document.createElement('script');
-                                    _childScript.type = 'text/javascript';
-                                    _childScript.id = 'script_' + _uniqueId;
-                                    _childScript.innerHTML = String.raw `
-                                        TimelinesChart()(document.getElementById('${_uniqueId}'))
-                                        .data(${JSON.stringify(msg.data)})
-                                        .zScaleLabel('My Scale Units')
-                                        .width(${_parent.clientWidth})
-                                        // .maxHeight(${_parent.clientHeight})
-                                        .maxLineHeight(${msg.configs.maxLineHeight.toString()})
-                                        .topMargin(60)
-                                        .rightMargin(90)
-                                        .leftMargin(90)
-                                        .bottomMargin(40)
-                                        // .minSegmentDuration(100)
-                                        .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
-                                        .timeFormat('%Y-%m-%d %H:%M:%S')
-                                        .zQualitative(true)
-                                        .enableOverview(true)
-                                        .enableAnimations(${msg.configs.enableAnimations})
-                                        .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
-                                        .zoomX([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                        .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                        .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
-                                    `;
-                                    _parent.appendChild(_childScript);
-                                    // set element-id: char-tooltip
-                                    _chartTooltip = document.getElementsByClassName(CHART_TOOTIP_CLASSNAME);
-                                    if (null !== _chartTooltip) {
-                                        let _idx = 0;
-                                        Array.from(_chartTooltip).forEach(_element => {
-                                            if ("" === _element.id) {
-                                                _element.id = `${CHART_TOOTIP_CLASSNAME}-${_uniqueId}-${_idx}`;
-                                                ++_idx;
-                                            }
-                                        });
+                                    // timelines chart: dynamic script
+                                    {
+                                        const _dynamicScriptID = "script_dynamic_" + _uniqueId;
+                                        const _createDynamicScript = document.createElement('script');
+                                        _createDynamicScript.type = 'text/javascript';
+                                        // _createDynamicScript.async = false;
+                                        _createDynamicScript.id = _dynamicScriptID;
+                                        const _dynamicScript = document.getElementById(_dynamicScriptID);
+                                        if (null === _dynamicScript) {
+                                            // console.log(`create dynamic timelines-chart id:${_dynamicScriptID}`);
+                                            _createDynamicScript.innerHTML = String.raw `
+                                            timelinesChart${_uniqueId}
+                                            .zScaleLabel('My Scale Units')
+                                            .width(${_parent.clientWidth})
+                                            // .maxHeight(${_parent.clientHeight})
+                                            .maxLineHeight(${msg.configs.maxLineHeight.toString()})
+                                            .topMargin(60)
+                                            .rightMargin(90)
+                                            .leftMargin(90)
+                                            .bottomMargin(40)
+                                            // .minSegmentDuration(100)
+                                            .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
+                                            .timeFormat('%Y-%m-%d %H:%M:%S')
+                                            .zQualitative(true)
+                                            .enableOverview(true)
+                                            .enableAnimations(${msg.configs.enableAnimations})
+                                            .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
+                                            .zoomX([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                            .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                            .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
+                                            `;
+                                        }
+                                        else {
+                                            // console.log(`update dynamic timelines-chart id:${_dynamicScriptID}`);
+                                            _dynamicScript.remove();
+                                            _createDynamicScript.innerHTML = String.raw `
+                                            timelinesChart${_uniqueId}
+                                            .data(${JSON.stringify(msg.data)})
+                                            `;
+                                        }
+                                        _parent.appendChild(_createDynamicScript);
                                     }
                                 }
                                 return true;
@@ -366,12 +370,6 @@ const nodeInit = (RED) => {
                                 return false;
                             }
                         }
-                        /**
-                         * load script
-                         *
-                         * @param {string} _id
-                         * @param {string} _path
-                         */
                         function loadScript(_id, _path) {
                             // console.log('loadscript', _path);
                             const _head = document.getElementsByTagName('head')[0];
@@ -379,26 +377,38 @@ const nodeInit = (RED) => {
                             _script.type = 'text/javascript';
                             _script.id = _id;
                             _script.src = _path;
+                            _script.async = false;
                             _head.appendChild(_script);
-                            // _script.onload = function () {
-                            //     try {
-                            //         $scope.inited[_id] = true;
-                            //         console.log(`script loaded. id:${_id} inited:${$scope.inited[_id]}`);
-                            //     } catch (error) {
-                            //         console.log(error);
-                            //     }
-                            // }
+                            _script.onload = function () {
+                                try {
+                                    $scope.inited[_id] = true;
+                                    // console.log(`script loaded. id:${_id} inited:${$scope.inited[_id]}`);
+                                }
+                                catch (error) {
+                                    console.log(error);
+                                }
+                            };
                         }
                         $scope.init = function (config) {
                             // console.log('$scope.init');
                             $scope.config = config;
                             // timelines-chart
                             if (!document.getElementById('timelines-chart')) {
+                                // console.log(`loadScript timelines-chart id:${config.uniqueId}`);
                                 loadScript('timelines-chart', 'ui-timelines-chart/js/timelines-chart.min.js');
+                            }
+                            else {
+                                // console.log(`[skip] loadScript timelines-chart id:${config.uniqueId}`);
+                                $scope.inited['timelines-chart'] = true;
                             }
                             // moment
                             if (!document.getElementById('moment')) {
+                                // console.log(`loadScript moment id:${config.uniqueId}`);
                                 loadScript('moment', 'ui-timelines-chart/js/moment.js');
+                            }
+                            else {
+                                // console.log(`[skip] loadScript moment id:${config.uniqueId}`);
+                                $scope.inited['moment'] = true;
                             }
                         };
                         $scope.$watch('msg', function (msg) {
