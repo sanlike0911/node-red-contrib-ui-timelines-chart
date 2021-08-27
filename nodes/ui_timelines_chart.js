@@ -319,7 +319,11 @@ const nodeInit = (RED) => {
                                             _createStatcScript.type = 'text/javascript';
                                             _createStatcScript.id = _staticScriptID;
                                             _createStatcScript.innerHTML = String.raw `
-                                            const timelinesChart${_uniqueId} = TimelinesChart()(document.getElementById('${_uniqueId}'));
+                                            const timelinesChart${_uniqueId} = {
+                                                instance: TimelinesChart()(document.getElementById('${_uniqueId}')),
+                                                currentZoomX: [],
+                                                currentZoomY: [],
+                                            }
                                             `;
                                             _parent.appendChild(_createStatcScript);
                                         }
@@ -336,26 +340,31 @@ const nodeInit = (RED) => {
                                         _createDynamicScript.type = 'text/javascript';
                                         _createDynamicScript.id = _dynamicScriptID;
                                         _createDynamicScript.innerHTML = String.raw `
-                                        timelinesChart${_uniqueId}
-                                        .data(${JSON.stringify(msg.data)})
-                                        .zScaleLabel('My Scale Units')
-                                        .width(${_parent.clientWidth})
-                                        // .maxHeight(${_parent.clientHeight})
-                                        .maxLineHeight(${msg.configs.maxLineHeight.toString()})
-                                        .topMargin(60)
-                                        .rightMargin(90)
-                                        .leftMargin(90)
-                                        .bottomMargin(40)
-                                        // .minSegmentDuration(100)
-                                        .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
-                                        .timeFormat('%Y-%m-%d %H:%M:%S')
-                                        .zQualitative(true)
-                                        .enableOverview(true)
-                                        .enableAnimations(${msg.configs.enableAnimations})
-                                        .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
-                                        .zoomX([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                        .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                        .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
+                                        {
+                                            const _chartobj = timelinesChart${_uniqueId}
+                                            if(_chartobj){
+                                                _chartobj.instance
+                                                .data(${JSON.stringify(msg.data)})
+                                                .width(${_parent.clientWidth})
+                                                // .maxHeight(${_parent.clientHeight})
+                                                .maxLineHeight(${msg.configs.maxLineHeight.toString()})
+                                                .topMargin(60)
+                                                .rightMargin(90)
+                                                .leftMargin(90)
+                                                .bottomMargin(40)
+                                                .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
+                                                .timeFormat('%Y-%m-%d %H:%M:%S')
+                                                .zQualitative(true)
+                                                .enableOverview(true)
+                                                .enableAnimations(${msg.configs.enableAnimations})
+                                                .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
+                                                .zoomX((_chartobj.currentZoomX?.length) ? _chartobj.currentZoomX : [moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                                .zoomY((_chartobj.currentZoomY?.length) ? _chartobj.currentZoomY : [])
+                                                .onZoom((x,y)=>{ _chartobj.currentZoomX=x; _chartobj.currentZoomY=y; })
+                                                .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                                .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
+                                            }
+                                        }
                                         `;
                                         _parent.appendChild(_createDynamicScript);
                                     }
