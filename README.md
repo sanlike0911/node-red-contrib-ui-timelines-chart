@@ -137,37 +137,64 @@ npm install node-red-contrib-ui-timelines-chart
     [Data syntax]
 
     ```text
-    [
-        {
-            group: "group1name",
-            data: [
+    {
+        dataItems:[
             {
-                label: "label1name",
+                group: "group1name",
                 data: [
                 {
-                    timeRange: [<date>, <date>],
-                    val: <val: number (continuous dataScale) or string (ordinal dataScale)>
+                    label: "label1name",
+                    data: [
+                    {
+                        timeRange: [<date>, <date>],
+                        val: <val: number (continuous dataScale) or string (ordinal dataScale)>
+                    },
+                    {
+                        timeRange: [<date>, <date>],
+                        val: <val>
+                    },
+                    (...)
+                    ]
                 },
                 {
-                    timeRange: [<date>, <date>],
-                    val: <val>
+                    label: "label2name",
+                    data: [...]
                 },
                 (...)
-                ]
+                ],
             },
             {
-                label: "label2name",
+                group: "group2name",
                 data: [...]
             },
             (...)
-            ],
-        },
-        {
-            group: "group2name",
-            data: [...]
-        },
-        (...)
-    ]
+        ],
+        settings:{
+            xAxis:{
+                tickFormat: <val: string (YYYY-MM-DD HH:mm:ss)>,
+                startDate: <date>,
+                endDate: <date>,
+                labelsFontSize: <val: number (from 0 to 64[default:16])>
+                labelsColor: <val: string (from #000000 to #ffffff[default:#000000])>
+            },
+            yAxis:{
+                labelsFontSize: <val: number (from 0 to 64[default:16])>
+                labelsColor: <val: string (from #000000 to #ffffff[default:#000000])>
+            },
+            resetZoom:{
+                labelFontSize: <val: number (from 0 to 64[default:24])>
+                labelColor: <val: string (from #000000 to #ffffff[default:#000000])>
+            },
+            chart:{
+              height: <val: number (from 1 to 255[default:60])>
+              lineColors <{val: string (from #000000 to #ffffff[default:#000000]), val: string (label name)}>,
+            },
+            options:{
+              enableAnimations: <boolean>,
+              enableDateMarker: <boolean>
+            }
+        }
+    }
     ```
 
 - Build and install

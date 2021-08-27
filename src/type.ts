@@ -13,7 +13,7 @@ declare namespace statusChart {
         height: number;
         storeOutMessages: boolean;
         fwdInMessages: boolean;
-        graphColors: graphColorsObject[];
+        lineColors: lineColorsObject[];
         xTickFormat: string;
         startDateTime: string;
         endDateTime: string;
@@ -29,21 +29,9 @@ declare namespace statusChart {
     }
 
     // グラフ凡例設定
-    type graphColorsObject = {
+    type lineColorsObject = {
         statusColor: string;
         statusValue: string;
-    }
-
-    // graph data
-    type graphData = {
-        group: string;
-        data: {
-            label: string;
-            data: {
-                timeRange: string[];
-                val: string;
-            }[]
-        }[]
     }
 
     // timelines-chart: zColorScaleObject
@@ -61,6 +49,12 @@ declare namespace statusChart {
         zColorScale: zColorScaleObject;
         enableAnimations: boolean;
         enableDateMarker: boolean;
+        xAxisLabelsFontSize: number;
+        xAxisLabelslColor: string;
+        yAxisLabelsFontSize: number;
+        yAxisLabelslColor: string;
+        resetZoomLabelFontSize: number;
+        resetZoomLabelColor: string;
     }
 
     // base: graph object
@@ -71,11 +65,53 @@ declare namespace statusChart {
         configs: graphConfigsObject;
     }
 
-    // input node 'msg' objects
+    // input: graph settings 
+    type graphSettings = {
+        xAxis:{
+            xTickFormat: string;
+            startDateTime: string;
+            endDateTime: string;
+            labelsFontSize: number;
+            labelsColor: string;
+        };
+        yAxis:{
+            labelsFontSize: number;
+            labelsColor: string;
+        };
+        resetZoom:{
+            labelFontSize: number;
+            labelColor: string;
+        };
+        chart:{
+            height: number;
+            lineColors: lineColorsObject[];
+        };
+        options:{
+            enableAnimations: boolean;
+            enableDateMarker: boolean;
+        };
+    }
+    
+    // input: graph data items
+    type graphData = {
+        group: string;
+        data: {
+            label: string;
+            data: {
+                timeRange: string[];
+                val: string;
+            }[]
+        }[]
+    }
+
+    // input: node 'msg' objects
     type inputNodeMsg = {
         [key: string]: any;
         _msgid: string;
-        payload: graphData[];
+        payload: {
+            settings: graphSettings;
+            dataItems: graphData[];
+        };
         topic: string;
     }
 

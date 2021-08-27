@@ -24,6 +24,7 @@ const nodeInit = (RED) => {
     const DEFALUT_Y_AXIS_LABELS_COLOR = "lightslategray";
     const DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE = 24;
     const DEFALUT_RESET_ZOOM_LABEL_COLOR = "bule";
+    const DEFAULT_LINE_CORLOS = [];
     const DEFALUT_MAKE_GRAPH_BASE = {
         result: false,
         id: "",
@@ -35,7 +36,13 @@ const nodeInit = (RED) => {
             endDateTime: BLANK_STRING,
             zColorScale: { range: [], domain: [] },
             enableAnimations: DEFALUT_ENABLE_ANIMATIONS,
-            enableDateMarker: DEFALUT_ENABLE_DATE_MARKER
+            enableDateMarker: DEFALUT_ENABLE_DATE_MARKER,
+            xAxisLabelsFontSize: DEFALUT_X_AXIS_LABELS_FONT_SIZE,
+            xAxisLabelslColor: DEFALUT_X_AXIS_LABELS_COLOR,
+            yAxisLabelsFontSize: DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
+            yAxisLabelslColor: DEFALUT_Y_AXIS_LABELS_COLOR,
+            resetZoomLabelFontSize: DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
+            resetZoomLabelColor: DEFALUT_RESET_ZOOM_LABEL_COLOR
         }
     };
     // Holds a reference to node-red-dashboard module.
@@ -449,15 +456,39 @@ const nodeInit = (RED) => {
      * @returns {statusChart.makeGraphBase}
      */
     function makeGraph(_node, _config, _msg) {
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24, _25, _26, _27, _28, _29, _30, _31, _32, _33, _34, _35, _36, _37, _38, _39, _40, _41, _42;
         try {
-            // 処理結果
-            let _makeMsg = DEFALUT_MAKE_GRAPH_BASE;
             // 処理開始
             _node.status({ fill: "blue", shape: "dot", text: "resources.message.connect" });
             // グラフ描画用データ
-            const _graphData = _msg.payload;
+            if (typeof _msg.payload.dataItems !== 'object' || 0 >= ((_b = (_a = _msg.payload) === null || _a === void 0 ? void 0 : _a.dataItems) === null || _b === void 0 ? void 0 : _b.length)) {
+                throw new Error("data not found.");
+            }
+            const _graphData = _msg.payload.dataItems;
+            // configs(priority: input > node property)
+            const _createConf = {
+                /*  values                  node-in: msg.payload.settings                          node-property                       default                          */
+                xTickFormat: (_g = (_f = (_e = (_d = (_c = _msg.payload) === null || _c === void 0 ? void 0 : _c.settings) === null || _d === void 0 ? void 0 : _d.xAxis) === null || _e === void 0 ? void 0 : _e.xTickFormat) !== null && _f !== void 0 ? _f : _config.xTickFormat) !== null && _g !== void 0 ? _g : DEFAULT_X_TICK_FORMAT,
+                xAxisLabelsFontSize: (_m = (_l = (_k = (_j = (_h = _msg.payload) === null || _h === void 0 ? void 0 : _h.settings) === null || _j === void 0 ? void 0 : _j.xAxis) === null || _k === void 0 ? void 0 : _k.labelsFontSize) !== null && _l !== void 0 ? _l : _config.xAxisLabelsFontSize) !== null && _m !== void 0 ? _m : DEFALUT_X_AXIS_LABELS_FONT_SIZE,
+                xAxisLabelslColor: (_s = (_r = (_q = (_p = (_o = _msg.payload) === null || _o === void 0 ? void 0 : _o.settings) === null || _p === void 0 ? void 0 : _p.xAxis) === null || _q === void 0 ? void 0 : _q.labelsColor) !== null && _r !== void 0 ? _r : _config.xAxisLabelslColor) !== null && _s !== void 0 ? _s : DEFALUT_X_AXIS_LABELS_COLOR,
+                startDateTime: (_x = (_w = (_v = (_u = (_t = _msg.payload) === null || _t === void 0 ? void 0 : _t.settings) === null || _u === void 0 ? void 0 : _u.xAxis) === null || _v === void 0 ? void 0 : _v.startDateTime) !== null && _w !== void 0 ? _w : _config.startDateTime) !== null && _x !== void 0 ? _x : BLANK_STRING,
+                endDateTime: (_2 = (_1 = (_0 = (_z = (_y = _msg.payload) === null || _y === void 0 ? void 0 : _y.settings) === null || _z === void 0 ? void 0 : _z.xAxis) === null || _0 === void 0 ? void 0 : _0.startDateTime) !== null && _1 !== void 0 ? _1 : _config.endDateTime) !== null && _2 !== void 0 ? _2 : BLANK_STRING,
+                yAxisLabelsFontSize: (_7 = (_6 = (_5 = (_4 = (_3 = _msg.payload) === null || _3 === void 0 ? void 0 : _3.settings) === null || _4 === void 0 ? void 0 : _4.yAxis) === null || _5 === void 0 ? void 0 : _5.labelsFontSize) !== null && _6 !== void 0 ? _6 : _config.yAxisLabelsFontSize) !== null && _7 !== void 0 ? _7 : DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
+                yAxisLabelslColor: (_12 = (_11 = (_10 = (_9 = (_8 = _msg.payload) === null || _8 === void 0 ? void 0 : _8.settings) === null || _9 === void 0 ? void 0 : _9.yAxis) === null || _10 === void 0 ? void 0 : _10.labelsColor) !== null && _11 !== void 0 ? _11 : _config.yAxisLabelslColor) !== null && _12 !== void 0 ? _12 : DEFALUT_Y_AXIS_LABELS_COLOR,
+                resetZoomLabelFontSize: (_17 = (_16 = (_15 = (_14 = (_13 = _msg.payload) === null || _13 === void 0 ? void 0 : _13.settings) === null || _14 === void 0 ? void 0 : _14.resetZoom) === null || _15 === void 0 ? void 0 : _15.labelFontSize) !== null && _16 !== void 0 ? _16 : _config.resetZoomLabelFontSize) !== null && _17 !== void 0 ? _17 : DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
+                resetZoomLabelColor: (_22 = (_21 = (_20 = (_19 = (_18 = _msg.payload) === null || _18 === void 0 ? void 0 : _18.settings) === null || _19 === void 0 ? void 0 : _19.resetZoom) === null || _20 === void 0 ? void 0 : _20.labelColor) !== null && _21 !== void 0 ? _21 : _config.resetZoomLabelColor) !== null && _22 !== void 0 ? _22 : DEFALUT_RESET_ZOOM_LABEL_COLOR,
+                maxLineHeight: (_27 = (_26 = (_25 = (_24 = (_23 = _msg.payload) === null || _23 === void 0 ? void 0 : _23.settings) === null || _24 === void 0 ? void 0 : _24.chart) === null || _25 === void 0 ? void 0 : _25.height) !== null && _26 !== void 0 ? _26 : _config.maxLineHeight) !== null && _27 !== void 0 ? _27 : DEFAULT_LINE_HEIGHT,
+                lineColors: (_32 = (_31 = (_30 = (_29 = (_28 = _msg.payload) === null || _28 === void 0 ? void 0 : _28.settings) === null || _29 === void 0 ? void 0 : _29.chart) === null || _30 === void 0 ? void 0 : _30.lineColors) !== null && _31 !== void 0 ? _31 : _config.lineColors) !== null && _32 !== void 0 ? _32 : DEFAULT_LINE_CORLOS,
+                enableAnimations: (_37 = (_36 = (_35 = (_34 = (_33 = _msg.payload) === null || _33 === void 0 ? void 0 : _33.settings) === null || _34 === void 0 ? void 0 : _34.options) === null || _35 === void 0 ? void 0 : _35.enableAnimations) !== null && _36 !== void 0 ? _36 : _config.enableAnimations) !== null && _37 !== void 0 ? _37 : DEFALUT_ENABLE_ANIMATIONS,
+                enableDateMarker: (_42 = (_41 = (_40 = (_39 = (_38 = _msg.payload) === null || _38 === void 0 ? void 0 : _38.settings) === null || _39 === void 0 ? void 0 : _39.options) === null || _40 === void 0 ? void 0 : _40.enableDateMarker) !== null && _41 !== void 0 ? _41 : _config.enableDateMarker) !== null && _42 !== void 0 ? _42 : DEFALUT_ENABLE_DATE_MARKER,
+            };
+            /* debug */
+            // for (const [key, value] of Object.entries(_createConf)) {
+            //     console.log(`[config] ${key}: ${value}`);
+            // }
+            /* debug */
             // 設定：開始日時(X軸)
-            let _startDateTime = _config.startDateTime;
+            let _startDateTime = _createConf.startDateTime;
             if (BLANK_STRING === _startDateTime) {
                 let _min = "";
                 _graphData.forEach((_ele, _idx) => {
@@ -468,9 +499,9 @@ const nodeInit = (RED) => {
                 });
                 _startDateTime = _min;
             }
-            // console.log(`_startDateTime: in:${_config.startDateTime} out:${_startDateTime}`);
+            // console.log(`_startDateTime: in:${_createConf.startDateTime} out:${_startDateTime}`);
             // 設定： 終了日時(X軸)
-            let _endDateTime = _config.endDateTime;
+            let _endDateTime = _createConf.endDateTime;
             if (BLANK_STRING === _endDateTime) {
                 let _max = "";
                 _graphData.forEach((_ele, _idx) => {
@@ -481,36 +512,37 @@ const nodeInit = (RED) => {
                 });
                 _endDateTime = _max;
             }
-            // console.log(`_endDateTime: in:${_config.endDateTime} out:${_endDateTime}`);
+            // console.log(`_endDateTime: in:${_createConf.endDateTime} out:${_endDateTime}`);
             // 設定：グラフ凡例
             let _zColorScale = { range: [], domain: [] };
-            _config.graphColors.forEach((_ele, _idx) => {
-                _zColorScale.range.push(_ele.statusColor);
-                _zColorScale.domain.push(_ele.statusValue);
-            });
-            // データ判定
-            if (_graphData.length > 0) {
-                // データ格納処理
-                _makeMsg = {
-                    result: true,
-                    id: _config.uniqueId,
-                    data: _graphData,
-                    configs: {
-                        xTickFormat: _config.xTickFormat,
-                        maxLineHeight: _config.maxLineHeight,
-                        startDateTime: _startDateTime,
-                        endDateTime: _endDateTime,
-                        zColorScale: _zColorScale,
-                        enableAnimations: _config.enableAnimations,
-                        enableDateMarker: _config.enableDateMarker
-                    }
-                };
-                _node.status({ fill: "green", shape: "dot", text: "resources.message.complete" });
+            if (0 < _createConf.lineColors.length) {
+                _createConf.lineColors.forEach((_ele, _idx) => {
+                    _zColorScale.range.push(_ele.statusColor);
+                    _zColorScale.domain.push(_ele.statusValue);
+                });
             }
-            // debug
-            // console.log(_makeMsg);
-            // debug
-            return _makeMsg;
+            // 処理完了
+            _node.status({ fill: "green", shape: "dot", text: "resources.message.complete" });
+            return {
+                result: true,
+                id: _config.uniqueId,
+                data: _graphData,
+                configs: {
+                    xTickFormat: _createConf.xTickFormat,
+                    xAxisLabelsFontSize: _createConf.xAxisLabelsFontSize,
+                    xAxisLabelslColor: _createConf.xAxisLabelslColor,
+                    startDateTime: _startDateTime,
+                    endDateTime: _endDateTime,
+                    yAxisLabelsFontSize: _createConf.yAxisLabelsFontSize,
+                    yAxisLabelslColor: _createConf.yAxisLabelslColor,
+                    resetZoomLabelFontSize: _createConf.resetZoomLabelFontSize,
+                    resetZoomLabelColor: _createConf.resetZoomLabelColor,
+                    maxLineHeight: _createConf.maxLineHeight,
+                    zColorScale: _zColorScale,
+                    enableAnimations: _createConf.enableAnimations,
+                    enableDateMarker: _createConf.enableDateMarker,
+                }
+            };
         }
         catch (_error) {
             _node.status({ fill: "red", shape: "ring", text: "resources.message.error" });

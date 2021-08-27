@@ -39,7 +39,7 @@
                         return valid;
                     }},
                 height: {value: 0},
-                graphColors: {value:[{}]},
+                lineColors: {value:[{}]},
                 xTickFormat: {value: ''},
                 startDateTime: {value: ''},
                 endDateTime: {value: ''},
@@ -123,8 +123,8 @@
                     },
                 });
 
-                for (let i = 0 ; i < node.graphColors.length ; i++) {
-                    const _graphColor = node.graphColors[i];
+                for (let i = 0 ; i < node.lineColors.length ; i++) {
+                    const _graphColor = node.lineColors[i];
                     $("#node-input-editable-list-container").editableList('addItem',_graphColor);
                 }
 
@@ -133,9 +133,9 @@
                 console.log("oneditsave");
                 const node = this;
                 const items = $("#node-input-editable-list-container").editableList('items');
-                node.graphColors = [];
+                node.lineColors = [];
                 items.each(function(i, e){
-                    node.graphColors.push({
+                    node.lineColors.push({
                         statusColor: e.find(".statusColor").val(),
                         statusValue: e.find(".statusValue").val()
                     });
@@ -227,7 +227,9 @@
             <input type="number" id="node-input-resetZoomLabelFontSize" min="0" max="64" style="width:60%" placeholder="from 0 to 64(default:24)">
             <input type="color" id="node-input-resetZoomLabelColor" style="width:10%;" placeholder="(default:blue)">
         </div>
-
+        <!---------------------------------------------------------------------------->
+        <hr>
+        <!---------------------------------------------------------------------------->
         <!-- グラフ高さの設定 -->
         <div class="form-row">
             <label for="node-input-maxLineHeight"><i class="fa fa-bar-chart" aria-hidden="true" ></i> <span data-i18n="resources.nodeProperties.labels.graphSettings.maxLineHeight.title"></span></label>

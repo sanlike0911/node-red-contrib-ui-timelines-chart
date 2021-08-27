@@ -10,21 +10,22 @@ const nodeInit: NodeInitializer = (RED): void => {
     // const parameters
     const DEFAULT_WIDGET_WIDTH: number = 6;
     const DEFAULT_WIDGET_HEIGHT: number = 8;
-    const DEFAULT_EMIT_ONLY_NEW_VALUES = false;
-    const DEFAULT_FWD_IN_MESSAGES = false;
-    const DEFAULT_STORE_OUT_MESSAGES = false;
+    const DEFAULT_EMIT_ONLY_NEW_VALUES: boolean = false;
+    const DEFAULT_FWD_IN_MESSAGES: boolean = false;
+    const DEFAULT_STORE_OUT_MESSAGES: boolean = false;
 
     const BLANK_STRING: string = '';
-    const DEFAULT_X_TICK_FORMAT = 'YYYY-MM-DD HH:mm:ss';
-    const DEFAULT_LINE_HEIGHT = 60;
-    const DEFALUT_ENABLE_ANIMATIONS = true;
-    const DEFALUT_ENABLE_DATE_MARKER = false;
+    const DEFAULT_X_TICK_FORMAT: string = 'YYYY-MM-DD HH:mm:ss';
+    const DEFAULT_LINE_HEIGHT: number = 60;
+    const DEFALUT_ENABLE_ANIMATIONS: boolean = true;
+    const DEFALUT_ENABLE_DATE_MARKER: boolean = false;
     const DEFALUT_X_AXIS_LABELS_FONT_SIZE = 16;
-    const DEFALUT_X_AXIS_LABELS_COLOR = "lightslategray";
-    const DEFALUT_Y_AXIS_LABELS_FONT_SIZE = 12;
-    const DEFALUT_Y_AXIS_LABELS_COLOR = "lightslategray";
-    const DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE = 24;
-    const DEFALUT_RESET_ZOOM_LABEL_COLOR = "bule";
+    const DEFALUT_X_AXIS_LABELS_COLOR: string = "lightslategray";
+    const DEFALUT_Y_AXIS_LABELS_FONT_SIZE: number = 12;
+    const DEFALUT_Y_AXIS_LABELS_COLOR: string = "lightslategray";
+    const DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE: number = 24;
+    const DEFALUT_RESET_ZOOM_LABEL_COLOR: string = "bule";
+    const DEFAULT_LINE_CORLOS: object[] = [];
 
     const DEFALUT_MAKE_GRAPH_BASE: statusChart.makeGraphBase = {
         result: false,
@@ -37,7 +38,13 @@ const nodeInit: NodeInitializer = (RED): void => {
             endDateTime: BLANK_STRING,
             zColorScale: { range:[], domain:[] },
             enableAnimations: DEFALUT_ENABLE_ANIMATIONS,
-            enableDateMarker: DEFALUT_ENABLE_DATE_MARKER
+            enableDateMarker: DEFALUT_ENABLE_DATE_MARKER,
+            xAxisLabelsFontSize: DEFALUT_X_AXIS_LABELS_FONT_SIZE,
+            xAxisLabelslColor: DEFALUT_X_AXIS_LABELS_COLOR,
+            yAxisLabelsFontSize: DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
+            yAxisLabelslColor: DEFALUT_Y_AXIS_LABELS_COLOR,
+            resetZoomLabelFontSize: DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
+            resetZoomLabelColor: DEFALUT_RESET_ZOOM_LABEL_COLOR
         }
     };
 
@@ -485,16 +492,41 @@ const nodeInit: NodeInitializer = (RED): void => {
      */
     function makeGraph(_node: Node, _config: statusChart.nodeConf, _msg: statusChart.inputNodeMsg): statusChart.makeGraphBase {
         try {
-            // 処理結果
-            let _makeMsg: statusChart.makeGraphBase = DEFALUT_MAKE_GRAPH_BASE;
+
             // 処理開始
             _node.status({fill:"blue", shape:"dot", text:"resources.message.connect"});
 
             // グラフ描画用データ
-            const _graphData: statusChart.graphData[] = _msg.payload;
- 
+            if(typeof _msg.payload.dataItems !== 'object' || 0 >= _msg.payload?.dataItems?.length ) {
+                throw new Error("data not found.");
+            }
+            const _graphData: statusChart.graphData[] = _msg.payload.dataItems;
+
+            // configs(priority: input > node property)
+            const _createConf = {
+            /*  values                  node-in: msg.payload.settings                          node-property                       default                          */
+                xTickFormat:            _msg.payload?.settings?.xAxis?.xTickFormat          ?? _config.xTickFormat              ?? DEFAULT_X_TICK_FORMAT,
+                xAxisLabelsFontSize:    _msg.payload?.settings?.xAxis?.labelsFontSize       ?? _config.xAxisLabelsFontSize      ?? DEFALUT_X_AXIS_LABELS_FONT_SIZE,
+                xAxisLabelslColor:      _msg.payload?.settings?.xAxis?.labelsColor          ?? _config.xAxisLabelslColor        ?? DEFALUT_X_AXIS_LABELS_COLOR,
+                startDateTime:          _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.startDateTime            ?? BLANK_STRING,
+                endDateTime:            _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.endDateTime              ?? BLANK_STRING,
+                yAxisLabelsFontSize:    _msg.payload?.settings?.yAxis?.labelsFontSize       ?? _config.yAxisLabelsFontSize      ?? DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
+                yAxisLabelslColor:      _msg.payload?.settings?.yAxis?.labelsColor          ?? _config.yAxisLabelslColor        ?? DEFALUT_Y_AXIS_LABELS_COLOR,
+                resetZoomLabelFontSize: _msg.payload?.settings?.resetZoom?.labelFontSize    ?? _config.resetZoomLabelFontSize   ?? DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
+                resetZoomLabelColor:    _msg.payload?.settings?.resetZoom?.labelColor       ?? _config.resetZoomLabelColor      ?? DEFALUT_RESET_ZOOM_LABEL_COLOR,
+                maxLineHeight:          _msg.payload?.settings?.chart?.height               ?? _config.maxLineHeight            ?? DEFAULT_LINE_HEIGHT,
+                lineColors:             _msg.payload?.settings?.chart?.lineColors           ?? _config.lineColors               ?? DEFAULT_LINE_CORLOS,
+                enableAnimations:       _msg.payload?.settings?.options?.enableAnimations   ?? _config.enableAnimations         ?? DEFALUT_ENABLE_ANIMATIONS,
+                enableDateMarker:       _msg.payload?.settings?.options?.enableDateMarker   ?? _config.enableDateMarker         ?? DEFALUT_ENABLE_DATE_MARKER,
+            }
+            /* debug */
+            // for (const [key, value] of Object.entries(_createConf)) {
+            //     console.log(`[config] ${key}: ${value}`);
+            // }
+            /* debug */
+
             // 設定：開始日時(X軸)
-            let _startDateTime:string = _config.startDateTime;
+            let _startDateTime:string = _createConf.startDateTime;
             if( BLANK_STRING === _startDateTime ){
                 let _min = "";
                 _graphData.forEach((_ele, _idx) => {
@@ -505,10 +537,10 @@ const nodeInit: NodeInitializer = (RED): void => {
                 })
                 _startDateTime = _min;
             }
-            // console.log(`_startDateTime: in:${_config.startDateTime} out:${_startDateTime}`);
+            // console.log(`_startDateTime: in:${_createConf.startDateTime} out:${_startDateTime}`);
 
             // 設定： 終了日時(X軸)
-            let _endDateTime:string = _config.endDateTime;
+            let _endDateTime:string = _createConf.endDateTime;
             if( BLANK_STRING === _endDateTime ){
                 let _max = "";
                 _graphData.forEach((_ele, _idx) => {
@@ -519,38 +551,40 @@ const nodeInit: NodeInitializer = (RED): void => {
                 });
                 _endDateTime = _max;
             }
-            // console.log(`_endDateTime: in:${_config.endDateTime} out:${_endDateTime}`);
+            // console.log(`_endDateTime: in:${_createConf.endDateTime} out:${_endDateTime}`);
 
             // 設定：グラフ凡例
             let _zColorScale: statusChart.zColorScaleObject = { range:[], domain:[] };
-            _config.graphColors.forEach((_ele, _idx) => {
-                _zColorScale.range.push(_ele.statusColor);
-                _zColorScale.domain.push(_ele.statusValue);
-            });
-
-            // データ判定
-            if ( _graphData.length > 0 ) {
-                // データ格納処理
-                _makeMsg = {
-                    result : true,
-                    id : _config.uniqueId,
-                    data : _graphData,
-                    configs:{
-                        xTickFormat: _config.xTickFormat,
-                        maxLineHeight: _config.maxLineHeight,
-                        startDateTime: _startDateTime,
-                        endDateTime: _endDateTime,
-                        zColorScale: _zColorScale,
-                        enableAnimations: _config.enableAnimations,
-                        enableDateMarker: _config.enableDateMarker
-                    }
-                };
-                _node.status({fill:"green", shape:"dot", text:"resources.message.complete"});
+            if( 0 < _createConf.lineColors.length ){
+                _createConf.lineColors.forEach((_ele, _idx) => {
+                    _zColorScale.range.push(_ele.statusColor);
+                    _zColorScale.domain.push(_ele.statusValue);
+                });
             }
-            // debug
-            // console.log(_makeMsg);
-            // debug
-            return _makeMsg;
+
+            // 処理完了
+            _node.status({fill:"green", shape:"dot", text:"resources.message.complete"});
+
+            return {
+                result : true,
+                id : _config.uniqueId,
+                data : _graphData,
+                configs:{
+                    xTickFormat:            _createConf.xTickFormat,
+                    xAxisLabelsFontSize:    _createConf.xAxisLabelsFontSize,
+                    xAxisLabelslColor:      _createConf.xAxisLabelslColor,
+                    startDateTime:          _startDateTime,
+                    endDateTime:            _endDateTime,
+                    yAxisLabelsFontSize:    _createConf.yAxisLabelsFontSize,
+                    yAxisLabelslColor:      _createConf.yAxisLabelslColor,
+                    resetZoomLabelFontSize: _createConf.resetZoomLabelFontSize,
+                    resetZoomLabelColor:    _createConf.resetZoomLabelColor,
+                    maxLineHeight:          _createConf.maxLineHeight,
+                    zColorScale:            _zColorScale,
+                    enableAnimations:       _createConf.enableAnimations,
+                    enableDateMarker:       _createConf.enableDateMarker,
+                }
+            };
         } catch (_error) {
             _node.status({fill:"red", shape:"ring", text:"resources.message.error"});
             _node.error(_error);
