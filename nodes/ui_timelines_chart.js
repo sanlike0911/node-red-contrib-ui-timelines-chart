@@ -67,16 +67,15 @@ const nodeInit = (RED) => {
         {
             const _propertyName = "xTickFormat";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp((_a = _config.xTickFormat) === null || _a === void 0 ? void 0 : _a.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.xTickFormat}". This ${_propertyName} was corrected with the default value. "${DEFAULT_X_TICK_FORMAT}".`);
                 _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
-                _node.warn(`The "${_propertyName}: ${_config.xTickFormat}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.xTickFormat}".`);
             }
         }
         // [xAxis]start date time
         {
             const _propertyName = "startDateTime";
             if (!_config.hasOwnProperty(_propertyName) || (BLANK_STRING !== _config.startDateTime && !_util.isRegExp(_config.startDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))) {
-                _config.startDateTime = BLANK_STRING;
-                _node.error(`The "${_propertyName}: ${_config.startDateTime}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.startDateTime}".`);
+                _node.error(`Incorrect ${_propertyName} value :"${_config.startDateTime}".`);
                 return false;
             }
         }
@@ -84,8 +83,7 @@ const nodeInit = (RED) => {
         {
             const _propertyName = "endDateTime";
             if (!_config.hasOwnProperty(_propertyName) || (BLANK_STRING !== _config.endDateTime && !_util.isRegExp(_config.endDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))) {
-                _config.endDateTime = BLANK_STRING;
-                _node.error(`The "${_propertyName}: ${_config.endDateTime}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.endDateTime}".`);
+                _node.error(`Incorrect ${_propertyName} value :"${_config.endDateTime}".`);
                 return false;
             }
         }
@@ -93,8 +91,8 @@ const nodeInit = (RED) => {
         {
             const _propertyName = "xAxisLabelsFontSize";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.xAxisLabelsFontSize}". This ${_propertyName} was corrected with the default value. "${DEFALUT_X_AXIS_LABELS_FONT_SIZE}".`);
                 _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
-                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.xAxisLabelsFontSize}".`);
             }
         }
         // [xAxis]labels color
@@ -104,8 +102,8 @@ const nodeInit = (RED) => {
         {
             const _propertyName = "yAxisLabelsFontSize";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.yAxisLabelsFontSize}". This ${_propertyName} was corrected with the default value. "${DEFALUT_Y_AXIS_LABELS_FONT_SIZE}".`);
                 _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
-                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.yAxisLabelsFontSize}".`);
             }
         }
         // [yAxis]labels color
@@ -115,8 +113,8 @@ const nodeInit = (RED) => {
         {
             const _propertyName = "resetZoomLabelFontSize";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.resetZoomLabelFontSize}". This ${_propertyName} was corrected with the default value. "${DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE}".`);
                 _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
-                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.resetZoomLabelFontSize}".`);
             }
         }
         // [reset zoom]label color
@@ -132,8 +130,8 @@ const nodeInit = (RED) => {
         {
             const _propertyName = "maxLineHeight";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.maxLineHeight}". This ${_propertyName} was corrected with the default value. "${DEFAULT_LINE_HEIGHT}".`);
                 _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
-                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.maxLineHeight}".`);
             }
         }
         return true;
