@@ -68,3 +68,12 @@ typings/
 .yarn-integrity
 .env
 .next
+
+# my node-red project
+data/
+!/data/settings.js
+
+# my project
+dist/
+nodes/*.map
+package-lock.json
