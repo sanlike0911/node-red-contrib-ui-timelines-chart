@@ -1,8 +1,48 @@
 [
     {
+        "id": "491c9326bcc39059",
+        "type": "group",
+        "z": "299de46f.fed57c",
+        "style": {
+            "stroke": "#999999",
+            "stroke-opacity": "1",
+            "fill": "none",
+            "fill-opacity": "1",
+            "label": true,
+            "label-position": "nw",
+            "color": "#a4a4a4"
+        },
+        "nodes": [
+            "a139a777.1c72f8",
+            "c453449a.2a34a8",
+            "b123d4bb.967e08",
+            "acf55e6a.5eebd",
+            "7f5e9c62.03fd64",
+            "4c554da1.775324",
+            "28e6ce38.b125f2",
+            "d6480b66.212d38",
+            "349a939e.2441fc",
+            "bff180da7ef4c770",
+            "36a1bb954d1be862",
+            "7d8a882c438c1cb9",
+            "9ca8de59a4d3c560",
+            "ad848f5f31111f27",
+            "cec323ebfe42f717",
+            "4b4b8bc35b733b9d",
+            "f6fe68bfc979dde5",
+            "f25da158a2c9f1eb",
+            "3cb7a90fdbdaa7f5"
+        ],
+        "x": 54,
+        "y": 39,
+        "w": 1112,
+        "h": 402
+    },
+    {
         "id": "a139a777.1c72f8",
         "type": "inject",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "inject",
         "props": [
             {
@@ -32,14 +72,15 @@
         "id": "c453449a.2a34a8",
         "type": "template",
         "z": "299de46f.fed57c",
-        "name": "timelines-chart-1",
+        "g": "491c9326bcc39059",
+        "name": "dataItems",
         "field": "payload",
         "fieldType": "msg",
         "format": "json",
         "syntax": "mustache",
         "template": "{\n    \"dataItems\":[\n      {\n          \"group\": \"\",\n          \"data\": [\n              {\n                  \"label\": \"\",\n                  \"data\": [\n                      {\n                          \"timeRange\": [\n                              \"2020-12-31T08:00:00+09:00\",\n                              \"2020-12-31T09:10:00+09:00\"\n                          ],\n                          \"val\": \"1\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2020-12-31T09:10:00+09:00\",\n                              \"2020-12-31T12:00:00+09:00\"\n                          ],\n                          \"val\": \"2\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2020-12-31T12:00:00+09:00\",\n                              \"2020-12-31T12:10:00+09:00\"\n                          ],\n                          \"val\": \"3\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2020-12-31T12:10:00+09:00\",\n                              \"2020-12-31T12:20:00+09:00\"\n                          ],\n                          \"val\": \"4\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2020-12-31T12:20:00+09:00\",\n                              \"2020-12-31T12:30:00+09:00\"\n                          ],\n                          \"val\": \"5\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2020-12-31T12:30:00+09:00\",\n                              \"2020-12-31T22:00:00+09:00\"\n                          ],\n                          \"val\": \"6\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:00:00+09:00\",\n                              \"2021-01-01T00:10:00+09:00\"\n                          ],\n                          \"val\": \"1\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:10:00+09:00\",\n                              \"2021-01-01T00:20:00+09:00\"\n                          ],\n                          \"val\": \"2\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:20:00+09:00\",\n                              \"2021-01-01T00:40:00+09:00\"\n                          ],\n                          \"val\": \"3\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:00+09:00\",\n                              \"2021-01-01T00:40:01+09:00\"\n                          ],\n                          \"val\": \"4\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:01+09:00\",\n                              \"2021-01-01T00:40:02+09:00\"\n                          ],\n                          \"val\": \"5\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:02+09:00\",\n                              \"2021-01-01T00:40:03+09:00\"\n                          ],\n                          \"val\": \"6\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:04+09:00\",\n                              \"2021-01-01T00:40:05+09:00\"\n                          ],\n                          \"val\": \"7\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:05+09:00\",\n                              \"2021-01-01T00:40:10+09:00\"\n                          ],\n                          \"val\": \"8\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:10+09:00\",\n                              \"2021-01-01T00:40:15+09:00\"\n                          ],\n                          \"val\": \"9\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:15+09:00\",\n                              \"2021-01-01T00:40:30+09:00\"\n                          ],\n                          \"val\": \"10\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T00:40:30+09:00\",\n                              \"2021-01-01T01:00:00+09:00\"\n                          ],\n                          \"val\": \"11\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T01:00:00+09:00\",\n                              \"2021-01-01T01:10:00+09:00\"\n                          ],\n                          \"val\": \"12\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T01:10:00+09:00\",\n                              \"2021-01-01T01:30:00+09:00\"\n                          ],\n                          \"val\": \"13\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T01:30:00+09:00\",\n                              \"2021-01-01T02:00:00+09:00\"\n                          ],\n                          \"val\": \"14\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T02:00:00+09:00\",\n                              \"2021-01-01T03:00:00+09:00\"\n                          ],\n                          \"val\": \"15\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T03:00:00+09:00\",\n                              \"2021-01-01T04:00:00+09:00\"\n                          ],\n                          \"val\": \"16\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T04:00:00+09:00\",\n                              \"2021-01-01T05:00:00+09:00\"\n                          ],\n                          \"val\": \"17\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T05:00:00+09:00\",\n                              \"2021-01-01T06:00:00+09:00\"\n                          ],\n                          \"val\": \"18\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T06:00:00+09:00\",\n                              \"2021-01-01T07:00:00+09:00\"\n                          ],\n                          \"val\": \"19\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T07:00:00+09:00\",\n                              \"2021-01-01T08:00:00+09:00\"\n                          ],\n                          \"val\": \"20\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T08:00:00+09:00\",\n                              \"2021-01-01T09:00:00+09:00\"\n                          ],\n                          \"val\": \"21\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T09:00:00+09:00\",\n                              \"2021-01-01T10:00:00+09:00\"\n                          ],\n                          \"val\": \"22\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T10:00:00+09:00\",\n                              \"2021-01-01T11:00:00+09:00\"\n                          ],\n                          \"val\": \"15\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T11:00:00+09:00\",\n                              \"2021-01-01T12:00:00+09:00\"\n                          ],\n                          \"val\": \"16\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T12:00:00+09:00\",\n                              \"2021-01-01T13:00:00+09:00\"\n                          ],\n                          \"val\": \"17\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T13:00:00+09:00\",\n                              \"2021-01-01T14:00:00+09:00\"\n                          ],\n                          \"val\": \"18\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T14:00:00+09:00\",\n                              \"2021-01-01T15:00:00+09:00\"\n                          ],\n                          \"val\": \"19\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T15:00:00+09:00\",\n                              \"2021-01-01T16:00:00+09:00\"\n                          ],\n                          \"val\": \"20\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T17:00:00+09:00\",\n                              \"2021-01-01T18:00:00+09:00\"\n                          ],\n                          \"val\": \"21\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T19:00:00+09:00\",\n                              \"2021-01-01T20:00:00+09:00\"\n                          ],\n                          \"val\": \"22\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T20:00:00+09:00\",\n                              \"2021-01-01T21:00:00+09:00\"\n                          ],\n                          \"val\": \"23\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:00:00+09:00\",\n                              \"2021-01-01T22:10:00+09:00\"\n                          ],\n                          \"val\": \"24\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:10:00+09:00\",\n                              \"2021-01-01T22:20:00+09:00\"\n                          ],\n                          \"val\": \"25\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:20:00+09:00\",\n                              \"2021-01-01T22:30:00+09:00\"\n                          ],\n                          \"val\": \"26\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:30:00+09:00\",\n                              \"2021-01-01T22:31:00+09:00\"\n                          ],\n                          \"val\": \"27\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:31:00+09:00\",\n                              \"2021-01-01T22:35:00+09:00\"\n                          ],\n                          \"val\": \"28\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:35:00+09:00\",\n                              \"2021-01-01T22:40:00+09:00\"\n                          ],\n                          \"val\": \"29\"\n                      },\n                      {\n                          \"timeRange\": [\n                              \"2021-01-01T22:40:00+09:00\",\n                              \"2021-01-02T23:59:59+09:00\"\n                          ],\n                          \"val\": \"30\"\n                      }\n                  ]\n              }\n          ]\n      }\n    ]\n}",
         "output": "json",
-        "x": 410,
+        "x": 400,
         "y": 240,
         "wires": [
             [
@@ -51,6 +92,7 @@
         "id": "b123d4bb.967e08",
         "type": "debug",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "",
         "active": false,
         "tosidebar": true,
@@ -59,7 +101,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1010,
+        "x": 1050,
         "y": 240,
         "wires": []
     },
@@ -67,6 +109,7 @@
         "id": "acf55e6a.5eebd",
         "type": "inject",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "inject",
         "props": [
             {
@@ -96,6 +139,7 @@
         "id": "7f5e9c62.03fd64",
         "type": "ui_timelines_chart",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "group": "b34577b7.7dc8e8",
         "name": "timelines-chart-2",
         "order": 0,
@@ -152,7 +196,7 @@
         "resetZoomLabelColor": "#ffd000",
         "enableAnimations": true,
         "enableDateMarker": true,
-        "x": 790,
+        "x": 830,
         "y": 320,
         "wires": [
             [
@@ -164,6 +208,7 @@
         "id": "4c554da1.775324",
         "type": "debug",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "",
         "active": false,
         "tosidebar": true,
@@ -172,7 +217,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1010,
+        "x": 1050,
         "y": 320,
         "wires": []
     },
@@ -180,6 +225,7 @@
         "id": "28e6ce38.b125f2",
         "type": "inject",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "inject",
         "props": [
             {
@@ -209,6 +255,7 @@
         "id": "d6480b66.212d38",
         "type": "debug",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "",
         "active": false,
         "tosidebar": true,
@@ -217,7 +264,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1010,
+        "x": 1050,
         "y": 400,
         "wires": []
     },
@@ -225,6 +272,7 @@
         "id": "349a939e.2441fc",
         "type": "ui_timelines_chart",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "group": "b34577b7.7dc8e8",
         "name": "timelines-chart-3",
         "order": 0,
@@ -261,7 +309,7 @@
         "resetZoomLabelColor": "#00f2ff",
         "enableAnimations": false,
         "enableDateMarker": false,
-        "x": 790,
+        "x": 830,
         "y": 400,
         "wires": [
             [
@@ -273,14 +321,15 @@
         "id": "bff180da7ef4c770",
         "type": "function",
         "z": "299de46f.fed57c",
-        "name": "getRandomData",
+        "g": "491c9326bcc39059",
+        "name": "dataItems",
         "func": "function getRandomData(ordinal = false) {\n\n  const NGROUPS = 3,\n    MAXLINES = 5,\n    MAXSEGMENTS = 10,\n    MAXCATEGORIES = 10,\n    MINTIME = new Date(2018,1,1);\n\n  const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),\n    categoryLabels = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];\n\n  return [...Array(NGROUPS).keys()].map(i => ({\n    group: 'group' + (i+1),\n    data: getGroupData()\n  }));\n\n  function getGroupData() {\n\n    return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({\n      label: 'label' + (i+1),\n      data: getSegmentsData()\n    }));\n\n    //\n\n    function getSegmentsData() {\n      const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),\n        segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);\n      let runLength = MINTIME;\n\n      return [...Array(nSegments).keys()].map(i => {\n        const tDivide = [Math.random(), Math.random()].sort(),\n          start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),\n          end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);\n\n        runLength = new Date(runLength.getTime() + segMaxLength);\n\n        return {\n          timeRange: [start, end],\n          val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()\n          //labelVal: is optional - only displayed in the labels\n        };\n      });\n\n    }\n  }\n}\n\nmsg.payload.randomFontSize = Math.ceil(Math.random()*100);\nmsg.payload.dataItems = getRandomData(true);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 400,
         "y": 160,
         "wires": [
             [
@@ -292,6 +341,7 @@
         "id": "36a1bb954d1be862",
         "type": "inject",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "inject",
         "props": [
             {
@@ -321,6 +371,7 @@
         "id": "7d8a882c438c1cb9",
         "type": "debug",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "",
         "active": true,
         "tosidebar": true,
@@ -330,7 +381,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 1010,
+        "x": 1050,
         "y": 160,
         "wires": []
     },
@@ -338,6 +389,7 @@
         "id": "9ca8de59a4d3c560",
         "type": "ui_timelines_chart",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "group": "ead3fc9.832a3",
         "name": "timelines-chart-0",
         "order": 1,
@@ -345,19 +397,19 @@
         "width": "0",
         "height": "0",
         "lineColors": [],
-        "xTickFormat": "MM-DD",
+        "xTickFormat": "HH",
         "startDateTime": "",
         "endDateTime": "",
-        "maxLineHeight": "255",
-        "xAxisLabelsFontSize": "16",
-        "xAxisLabelslColor": "#ffffff",
-        "yAxisLabelsFontSize": "16",
-        "yAxisLabelslColor": "#ffffff",
-        "resetZoomLabelFontSize": "24",
-        "resetZoomLabelColor": "#fbff00",
+        "maxLineHeight": "1",
+        "xAxisLabelsFontSize": "0",
+        "xAxisLabelslColor": "#000000",
+        "yAxisLabelsFontSize": "0",
+        "yAxisLabelslColor": "#000000",
+        "resetZoomLabelFontSize": "0",
+        "resetZoomLabelColor": "#000000",
         "enableAnimations": false,
         "enableDateMarker": false,
-        "x": 790,
+        "x": 830,
         "y": 160,
         "wires": [
             [
@@ -369,6 +421,7 @@
         "id": "ad848f5f31111f27",
         "type": "inject",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "inject",
         "props": [
             {
@@ -401,14 +454,15 @@
         "id": "cec323ebfe42f717",
         "type": "function",
         "z": "299de46f.fed57c",
-        "name": "getRandomData",
+        "g": "491c9326bcc39059",
+        "name": "dataItems",
         "func": "function getRandomData(ordinal = false) {\n\n  const _d = new Date();\n\n  const NGROUPS = 1,\n    MAXLINES = 1,\n    MAXSEGMENTS = 9,\n    MAXCATEGORIES = 9,\n    MINTIME = new Date(_d.getFullYear(), _d.getMonth(), _d.getDate(), 0, 0, 0);\n\n  const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),\n    categoryLabels = ['true','false','ERROR1','ERROR2','ERROR3','ERROR4','ERROR5','ERROR6','ERROR7'];\n\n  return [...Array(NGROUPS).keys()].map(i => ({\n    group: 'group' + (i+1),\n    data: getGroupData()\n  }));\n\n  function getGroupData() {\n\n    return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({\n      label: 'label' + (i+1),\n      data: getSegmentsData()\n    }));\n\n    //\n\n    function getSegmentsData() {\n      const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),\n        segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);\n      let runLength = MINTIME;\n\n      return [...Array(nSegments).keys()].map(i => {\n        const tDivide = [Math.random(), Math.random()].sort(),\n          start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),\n          end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);\n\n        runLength = new Date(runLength.getTime() + segMaxLength);\n\n        return {\n          timeRange: [start, end],\n          val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()\n          //labelVal: is optional - only displayed in the labels\n        };\n      });\n\n    }\n  }\n}\n\nmsg.payload = {};\nmsg.payload.dataItems = getRandomData(true);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 400,
         "y": 320,
         "wires": [
             [
@@ -420,14 +474,15 @@
         "id": "4b4b8bc35b733b9d",
         "type": "function",
         "z": "299de46f.fed57c",
-        "name": "getRandomData",
+        "g": "491c9326bcc39059",
+        "name": "dataItems",
         "func": "function getRandomData(ordinal = false) {\n\n  const _d = new Date();\n\n  const NGROUPS = 2,\n    MAXLINES = 2,\n    MAXSEGMENTS = 4,\n    MAXCATEGORIES = 4,\n    MINTIME = new Date(_d.getFullYear(), _d.getMonth(), _d.getDate(), 0, 0, 0);\n\n  const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),\n    categoryLabels = ['error1','error2','error3','error4'];\n\n  return [...Array(NGROUPS).keys()].map(i => ({\n    group: 'machine' + (i+1),\n    data: getGroupData()\n  }));\n\n  function getGroupData() {\n\n    return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({\n      label: 'label' + (i+1),\n      data: getSegmentsData()\n    }));\n\n    //\n\n    function getSegmentsData() {\n      const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),\n        segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);\n      let runLength = MINTIME;\n\n      return [...Array(nSegments).keys()].map(i => {\n        const tDivide = [Math.random(), Math.random()].sort(),\n          start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),\n          end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);\n\n        runLength = new Date(runLength.getTime() + segMaxLength);\n\n        return {\n          timeRange: [start, end],\n          val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()\n          //labelVal: is optional - only displayed in the labels\n        };\n      });\n\n    }\n  }\n}\n\nmsg.payload = {};\nmsg.payload.dataItems = getRandomData(true);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 420,
+        "x": 400,
         "y": 400,
         "wires": [
             [
@@ -439,6 +494,7 @@
         "id": "f6fe68bfc979dde5",
         "type": "ui_timelines_chart",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "group": "ead3fc9.832a3",
         "name": "timelines-chart-1",
         "order": 2,
@@ -579,7 +635,7 @@
         "resetZoomLabelColor": "#91ff00",
         "enableAnimations": false,
         "enableDateMarker": false,
-        "x": 790,
+        "x": 830,
         "y": 240,
         "wires": [
             [
@@ -591,6 +647,7 @@
         "id": "f25da158a2c9f1eb",
         "type": "template",
         "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
         "name": "settings",
         "field": "payload.settings",
         "fieldType": "msg",
@@ -605,6 +662,17 @@
                 "9ca8de59a4d3c560"
             ]
         ]
+    },
+    {
+        "id": "3cb7a90fdbdaa7f5",
+        "type": "comment",
+        "z": "299de46f.fed57c",
+        "g": "491c9326bcc39059",
+        "name": "priority: (msg.payload.settings > node property settings)",
+        "info": "",
+        "x": 740,
+        "y": 120,
+        "wires": []
     },
     {
         "id": "b34577b7.7dc8e8",

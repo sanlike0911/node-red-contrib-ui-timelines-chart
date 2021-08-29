@@ -4,6 +4,8 @@ A Node-RED widget node for showing the chart of status.
 
 ![ui-timelines-chart](./figs/sample00.png)
 
+![node-red](./figs/sample01.png)
+
 ## Pre-requisites
 
 The node-red-contrib-ui-timelines-chart requires `Node-RED Dashboard 2.10` to be installed.
@@ -23,8 +25,10 @@ root
 │
 ├─nodes
 │  ├─icons
+│  ├─lib
+│  ├─locales
 │
-├─src   -> Development folder
+├─src
 │  │
 │  ├─locales
 │  │  ├─en-US
@@ -196,6 +200,8 @@ npm install node-red-contrib-ui-timelines-chart
         }
     }
     ```
+
+    **priority: (msg.payload.settings > node property settings)**
 
 - Build and install
 
