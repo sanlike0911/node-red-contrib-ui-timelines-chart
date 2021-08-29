@@ -59,7 +59,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 980,
+        "x": 1010,
         "y": 240,
         "wires": []
     },
@@ -149,7 +149,7 @@
         "yAxisLabelsFontSize": "14",
         "yAxisLabelslColor": "#b750dc",
         "resetZoomLabelFontSize": "14",
-        "resetZoomLabelColor": "#ffffff",
+        "resetZoomLabelColor": "#ffd000",
         "enableAnimations": true,
         "enableDateMarker": true,
         "x": 790,
@@ -172,7 +172,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 980,
+        "x": 1010,
         "y": 320,
         "wires": []
     },
@@ -217,7 +217,7 @@
         "complete": "false",
         "statusVal": "",
         "statusType": "auto",
-        "x": 980,
+        "x": 1010,
         "y": 400,
         "wires": []
     },
@@ -258,7 +258,7 @@
         "yAxisLabelsFontSize": "12",
         "yAxisLabelslColor": "#ffffff",
         "resetZoomLabelFontSize": "14",
-        "resetZoomLabelColor": "#ffffff",
+        "resetZoomLabelColor": "#00f2ff",
         "enableAnimations": false,
         "enableDateMarker": false,
         "x": 790,
@@ -274,17 +274,17 @@
         "type": "function",
         "z": "299de46f.fed57c",
         "name": "getRandomData",
-        "func": "function getRandomData(ordinal = false) {\n\n  const NGROUPS = 3,\n    MAXLINES = 5,\n    MAXSEGMENTS = 10,\n    MAXCATEGORIES = 10,\n    MINTIME = new Date(2018,1,1);\n\n  const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),\n    categoryLabels = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];\n\n  return [...Array(NGROUPS).keys()].map(i => ({\n    group: 'group' + (i+1),\n    data: getGroupData()\n  }));\n\n  function getGroupData() {\n\n    return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({\n      label: 'label' + (i+1),\n      data: getSegmentsData()\n    }));\n\n    //\n\n    function getSegmentsData() {\n      const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),\n        segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);\n      let runLength = MINTIME;\n\n      return [...Array(nSegments).keys()].map(i => {\n        const tDivide = [Math.random(), Math.random()].sort(),\n          start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),\n          end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);\n\n        runLength = new Date(runLength.getTime() + segMaxLength);\n\n        return {\n          timeRange: [start, end],\n          val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()\n          //labelVal: is optional - only displayed in the labels\n        };\n      });\n\n    }\n  }\n}\n\nmsg.payload.dataItems = getRandomData(true);\n\nreturn msg;",
+        "func": "function getRandomData(ordinal = false) {\n\n  const NGROUPS = 3,\n    MAXLINES = 5,\n    MAXSEGMENTS = 10,\n    MAXCATEGORIES = 10,\n    MINTIME = new Date(2018,1,1);\n\n  const nCategories = Math.ceil(Math.random()*MAXCATEGORIES),\n    categoryLabels = ['A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];\n\n  return [...Array(NGROUPS).keys()].map(i => ({\n    group: 'group' + (i+1),\n    data: getGroupData()\n  }));\n\n  function getGroupData() {\n\n    return [...Array(Math.ceil(Math.random()*MAXLINES)).keys()].map(i => ({\n      label: 'label' + (i+1),\n      data: getSegmentsData()\n    }));\n\n    //\n\n    function getSegmentsData() {\n      const nSegments = Math.ceil(Math.random()*MAXSEGMENTS),\n        segMaxLength = Math.round(((new Date())-MINTIME)/nSegments);\n      let runLength = MINTIME;\n\n      return [...Array(nSegments).keys()].map(i => {\n        const tDivide = [Math.random(), Math.random()].sort(),\n          start = new Date(runLength.getTime() + tDivide[0]*segMaxLength),\n          end = new Date(runLength.getTime() + tDivide[1]*segMaxLength);\n\n        runLength = new Date(runLength.getTime() + segMaxLength);\n\n        return {\n          timeRange: [start, end],\n          val: ordinal ? categoryLabels[Math.ceil(Math.random()*nCategories)] : Math.random()\n          //labelVal: is optional - only displayed in the labels\n        };\n      });\n\n    }\n  }\n}\n\nmsg.payload.randomFontSize = Math.ceil(Math.random()*100);\nmsg.payload.dataItems = getRandomData(true);\n\nreturn msg;",
         "outputs": 1,
         "noerr": 0,
         "initialize": "",
         "finalize": "",
         "libs": [],
-        "x": 410,
+        "x": 420,
         "y": 160,
         "wires": [
             [
-                "17a0bb5d1df8e49e"
+                "f25da158a2c9f1eb"
             ]
         ]
     },
@@ -330,7 +330,7 @@
         "targetType": "msg",
         "statusVal": "",
         "statusType": "auto",
-        "x": 980,
+        "x": 1010,
         "y": 160,
         "wires": []
     },
@@ -348,12 +348,12 @@
         "xTickFormat": "MM-DD",
         "startDateTime": "",
         "endDateTime": "",
-        "maxLineHeight": "",
-        "xAxisLabelsFontSize": "",
+        "maxLineHeight": "255",
+        "xAxisLabelsFontSize": "16",
         "xAxisLabelslColor": "#ffffff",
-        "yAxisLabelsFontSize": "",
+        "yAxisLabelsFontSize": "16",
         "yAxisLabelslColor": "#ffffff",
-        "resetZoomLabelFontSize": "",
+        "resetZoomLabelFontSize": "24",
         "resetZoomLabelColor": "#fbff00",
         "enableAnimations": false,
         "enableDateMarker": false,
@@ -379,7 +379,7 @@
                 "vt": "str"
             }
         ],
-        "repeat": "1",
+        "repeat": "",
         "crontab": "",
         "once": true,
         "onceDelay": "0.1",
@@ -432,25 +432,6 @@
         "wires": [
             [
                 "349a939e.2441fc"
-            ]
-        ]
-    },
-    {
-        "id": "17a0bb5d1df8e49e",
-        "type": "template",
-        "z": "299de46f.fed57c",
-        "name": "settings",
-        "field": "payload.settings",
-        "fieldType": "msg",
-        "format": "json",
-        "syntax": "plain",
-        "template": "{\n    \"xAxis\":{\n        \"xTickFormat\": \"YY-MM-DD\",\n        \"startDateTime\": \"\",\n        \"endDateTime\": \"\",\n        \"labelsFontSize\": 12,\n        \"labelsColor\": \"#123123\"\n    },\n    \"yAxis\": {\n        \"labelsFontSize\": 16,\n        \"labelsColor\": \"#223344\"\n    },\n    \"resetZoom\": {\n        \"labelFontSize\": 32,\n        \"labelColor\": \"#667788\"\n    },\n    \"chart\": {\n        \"height\": 20,\n        \"lineColors\": [\n          { \"statusColor\": \"#000000\", \"statusValue\": \"A\" },\n          { \"statusColor\": \"#ffee00\", \"statusValue\": \"B\" },\n          { \"statusColor\": \"#1100ff\", \"statusValue\": \"C\" },\n          { \"statusColor\": \"#00bfff\", \"statusValue\": \"D\" },\n          { \"statusColor\": \"#00ff62\", \"statusValue\": \"E\" },\n          { \"statusColor\": \"#ff0000\", \"statusValue\": \"F\" },\n          { \"statusColor\": \"#ee7272\", \"statusValue\": \"G\" },\n          { \"statusColor\": \"#00bfff\", \"statusValue\": \"H\" },\n          { \"statusColor\": \"#ffa200\", \"statusValue\": \"I\" },\n          { \"statusColor\": \"#8000ff\", \"statusValue\": \"J\" },\n          { \"statusColor\": \"#000000\", \"statusValue\": \"K\" },\n          { \"statusColor\": \"#317881\", \"statusValue\": \"L\" },\n          { \"statusColor\": \"#dc6f6f\", \"statusValue\": \"M\" },\n          { \"statusColor\": \"#007bff\", \"statusValue\": \"N\" },\n          { \"statusColor\": \"#ff941a\", \"statusValue\": \"O\" },\n          { \"statusColor\": \"#fbec23\", \"statusValue\": \"P\" },\n          { \"statusColor\": \"#47bac2\", \"statusValue\": \"R\" },\n          { \"statusColor\": \"#c53030\", \"statusValue\": \"S\" },\n          { \"statusColor\": \"#00ffbf\", \"statusValue\": \"T\" },\n          { \"statusColor\": \"#313bbf\", \"statusValue\": \"U\" },\n          { \"statusColor\": \"#00ff33\", \"statusValue\": \"V\" },\n          { \"statusColor\": \"#47bd8a\", \"statusValue\": \"W\" },\n          { \"statusColor\": \"#efff0a\", \"statusValue\": \"X\" },\n          { \"statusColor\": \"#ff0000\", \"statusValue\": \"Y\" },\n          { \"statusColor\": \"#ff00a2\", \"statusValue\": \"Z\" }\n        ]\n    },\n    \"options\": {\n        \"enableAnimations\": true,\n        \"enableDateMarker\": false\n    }\n}",
-        "output": "json",
-        "x": 600,
-        "y": 160,
-        "wires": [
-            [
-                "9ca8de59a4d3c560"
             ]
         ]
     },
@@ -592,10 +573,10 @@
         "maxLineHeight": "60",
         "xAxisLabelsFontSize": "16",
         "xAxisLabelslColor": "#ffffff",
-        "yAxisLabelsFontSize": "16",
+        "yAxisLabelsFontSize": "32",
         "yAxisLabelslColor": "#ffffff",
         "resetZoomLabelFontSize": "24",
-        "resetZoomLabelColor": "#00ff2a",
+        "resetZoomLabelColor": "#91ff00",
         "enableAnimations": false,
         "enableDateMarker": false,
         "x": 790,
@@ -603,6 +584,25 @@
         "wires": [
             [
                 "b123d4bb.967e08"
+            ]
+        ]
+    },
+    {
+        "id": "f25da158a2c9f1eb",
+        "type": "template",
+        "z": "299de46f.fed57c",
+        "name": "settings",
+        "field": "payload.settings",
+        "fieldType": "msg",
+        "format": "json",
+        "syntax": "plain",
+        "template": "{\n    \"xAxis\":{\n        \"xTickFormat\": \"YY-MM-DD\",\n        \"startDateTime\": \"\",\n        \"endDateTime\": \"\",\n        \"labelsFontSize\": 20,\n        \"labelsColor\": \"#ffffff\"\n    },\n    \"yAxis\": {\n        \"labelsFontSize\": 16,\n        \"labelsColor\": \"#cccccc\"\n    },\n    \"resetZoom\": {\n        \"labelFontSize\": 32,\n        \"labelColor\": \"#ffffff\"\n    },\n    \"chart\": {\n        \"height\": 20,\n        \"lineColors\": [\n          { \"statusColor\": \"#000000\", \"statusValue\": \"A\" },\n          { \"statusColor\": \"#ffee00\", \"statusValue\": \"B\" },\n          { \"statusColor\": \"#1100ff\", \"statusValue\": \"C\" },\n          { \"statusColor\": \"#00bfff\", \"statusValue\": \"D\" },\n          { \"statusColor\": \"#00ff62\", \"statusValue\": \"E\" },\n          { \"statusColor\": \"#ff0000\", \"statusValue\": \"F\" },\n          { \"statusColor\": \"#ee7272\", \"statusValue\": \"G\" },\n          { \"statusColor\": \"#00bfff\", \"statusValue\": \"H\" },\n          { \"statusColor\": \"#ffa200\", \"statusValue\": \"I\" },\n          { \"statusColor\": \"#8000ff\", \"statusValue\": \"J\" },\n          { \"statusColor\": \"#000000\", \"statusValue\": \"K\" },\n          { \"statusColor\": \"#317881\", \"statusValue\": \"L\" },\n          { \"statusColor\": \"#dc6f6f\", \"statusValue\": \"M\" },\n          { \"statusColor\": \"#007bff\", \"statusValue\": \"N\" },\n          { \"statusColor\": \"#ff941a\", \"statusValue\": \"O\" },\n          { \"statusColor\": \"#fbec23\", \"statusValue\": \"P\" },\n          { \"statusColor\": \"#47bac2\", \"statusValue\": \"R\" },\n          { \"statusColor\": \"#c53030\", \"statusValue\": \"S\" },\n          { \"statusColor\": \"#00ffbf\", \"statusValue\": \"T\" },\n          { \"statusColor\": \"#313bbf\", \"statusValue\": \"U\" },\n          { \"statusColor\": \"#00ff33\", \"statusValue\": \"V\" },\n          { \"statusColor\": \"#47bd8a\", \"statusValue\": \"W\" },\n          { \"statusColor\": \"#efff0a\", \"statusValue\": \"X\" },\n          { \"statusColor\": \"#ff0000\", \"statusValue\": \"Y\" },\n          { \"statusColor\": \"#ff00a2\", \"statusValue\": \"Z\" }\n        ]\n    },\n    \"options\": {\n        \"enableAnimations\": true,\n        \"enableDateMarker\": false\n    }\n}",
+        "output": "json",
+        "x": 600,
+        "y": 160,
+        "wires": [
+            [
+                "9ca8de59a4d3c560"
             ]
         ]
     },

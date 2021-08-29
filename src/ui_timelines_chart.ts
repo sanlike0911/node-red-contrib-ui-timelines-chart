@@ -69,58 +69,65 @@ const nodeInit: NodeInitializer = (RED): void => {
         }
 
         // [xAxis]tick format
-        if (!_config.hasOwnProperty("xTickFormat")) _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
-        if (!_util.isRegExp(_config.xTickFormat.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY)) {
-            _node.warn(`The "x tick format: ${_config.xTickFormat}" is an incorrect.`);
-            _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
-            _node.warn(`Update "x tick format" with the default value "${_config.xTickFormat}".`);
+        {
+            const _propertyName: string = "xTickFormat";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xTickFormat?.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY)) {
+                _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
+                _node.warn(`The "${_propertyName}: ${_config.xTickFormat}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.xTickFormat}".`);
+            }
         }
 
         // [xAxis]start date time
-        if (!_config.hasOwnProperty("startDateTime")) _config.startDateTime = BLANK_STRING;
-        if (BLANK_STRING !== _config.startDateTime && !_util.isRegExp(_config.startDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY)) {
-            _node.error(`The "start date: ${_config.startDateTime}" is an incorrect.`);
-            return false;
+        {
+            const _propertyName: string = "startDateTime";
+            if (!_config.hasOwnProperty(_propertyName) || (BLANK_STRING !== _config.startDateTime && !_util.isRegExp(_config.startDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))) {
+                _config.startDateTime = BLANK_STRING;
+                _node.error(`The "${_propertyName}: ${_config.startDateTime}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.startDateTime}".`);
+                return false;
+            }
         }
 
         // [xAxis]end date time
-        if (!_config.hasOwnProperty("endDateTime")) _config.endDateTime = BLANK_STRING;
-        if (BLANK_STRING !== _config.endDateTime && !_util.isRegExp(_config.endDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY)) {
-            _node.error(`The "end date: ${_config.endDateTime}" is an incorrect.`);
-            return false;
+        {
+            const _propertyName: string = "endDateTime";
+            if (!_config.hasOwnProperty(_propertyName) || (BLANK_STRING !== _config.endDateTime && !_util.isRegExp(_config.endDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))) {
+                _config.endDateTime = BLANK_STRING;
+                _node.error(`The "${_propertyName}: ${_config.endDateTime}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.endDateTime}".`);
+                return false;
+            }
         }
 
         // [xAxis]labels font size
-        if (!_config.hasOwnProperty("xAxisLabelsFontSize")) _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
-        if (!_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-            _node.warn(`The "x axis labels font size" is an incorrect.`);
-            _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
-            _node.warn(`Update "x axis labels font size" with the default value "${_config.xAxisLabelsFontSize}".`);
-
+        {
+            const _propertyName: string = "xAxisLabelsFontSize";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
+                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.xAxisLabelsFontSize}".`);
+            }
         }
 
         // [xAxis]labels color
         if (!_config.hasOwnProperty("xAxisLabelslColor")) _config.xAxisLabelslColor = DEFALUT_X_AXIS_LABELS_COLOR;
 
         // [yAxis]labels font size
-        if (!_config.hasOwnProperty("yAxisLabelsFontSize")) _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
-        if (!_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-            _node.warn(`The "y axis labels font size" is an incorrect.`);
-            _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
-            _node.warn(`Update "y axis labels font size" with the default value "${_config.yAxisLabelsFontSize}".`);
-
+        {
+            const _propertyName: string = "yAxisLabelsFontSize";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
+                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.yAxisLabelsFontSize}".`);
+            }
         }
 
         // [yAxis]labels color
         if (!_config.hasOwnProperty("yAxisLabelslColor")) _config.yAxisLabelslColor = DEFALUT_Y_AXIS_LABELS_COLOR;
 
         // [reset zoom]label font size
-        if (!_config.hasOwnProperty("resetZoomLabelFontSize")) _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
-        if (!_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-            _node.warn(`The "reset zoom label font size" is an incorrect.`);
-            _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
-            _node.warn(`Update "reset zoom label font size" with the default value "${_config.resetZoomLabelFontSize}".`);
-
+        {
+            const _propertyName: string = "resetZoomLabelFontSize";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
+                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.resetZoomLabelFontSize}".`);
+            }
         }
 
         // [reset zoom]label color
@@ -133,11 +140,12 @@ const nodeInit: NodeInitializer = (RED): void => {
         if (!_config.hasOwnProperty("enableDateMarker")) _config.enableDateMarker = DEFALUT_ENABLE_DATE_MARKER;
 
         // line height
-        if (!_config.hasOwnProperty("maxLineHeight")) _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
-        if (!_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-            _node.warn(`The "max line height" is an incorrect.`);
-            _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
-            _node.warn(`Update "max line height" with the default value "${_config.maxLineHeight}".`);
+        {
+            const _propertyName: string = "maxLineHeight";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
+                _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
+                _node.warn(`The "${_propertyName}" is an incorrect. This "${_propertyName}" was corrected with the default value. "${_config.maxLineHeight}".`);
+            }
         }
 
         return true;
@@ -183,6 +191,7 @@ const nodeInit: NodeInitializer = (RED): void => {
         `;
 
         const _css = String.raw`
+        <!-- <style title="${_config.uniqueId}"> -->
         <style>
         .container-${_config.uniqueId} {
             width:100%;
@@ -354,11 +363,19 @@ const nodeInit: NodeInitializer = (RED): void => {
                                             _createStatcScript.type = 'text/javascript';
                                             _createStatcScript.id = _staticScriptID;
                                             _createStatcScript.innerHTML = String.raw`
+                                            // const styleSheet${_uniqueId} = utility.getStyleSheet('${_uniqueId}');
                                             const timelinesChart${_uniqueId} = {
                                                 instance: TimelinesChart()(document.getElementById('${_uniqueId}')),
                                                 currentZoomX: [],
                                                 currentZoomY: [],
+                                                ruleStylexAxisLabels: utility.getStyleRule('.container-${_uniqueId} .timelines-chart .axises .x-axis text, .container-${_uniqueId} .brusher .tick text'),
+                                                ruleStyleyAxisLabels: utility.getStyleRule('.container-${_uniqueId} .timelines-chart .axises .y-axis text, .container-${_uniqueId} .timelines-chart .axises .grp-axis text'),
+                                                ruleStyleResetZoomLabel: utility.getStyleRule('.container-${_uniqueId} .timelines-chart .reset-zoom-btn')
                                             }
+                                            // console.log("styleSheet${_uniqueId}:", styleSheet${_uniqueId});
+                                            // console.log("timelinesChart${_uniqueId}.ruleStylexAxisLabels :", timelinesChart${_uniqueId}.ruleStylexAxisLabels);
+                                            // console.log("timelinesChart${_uniqueId}.ruleStyleyAxisLabels :", timelinesChart${_uniqueId}.ruleStyleyAxisLabels);
+                                            // console.log("timelinesChart${_uniqueId}.ruleStyleResetZoomLabel :", timelinesChart${_uniqueId}.ruleStyleResetZoomLabel);
                                             `;
                                             _parent.appendChild(_createStatcScript);
                                         }
@@ -379,26 +396,32 @@ const nodeInit: NodeInitializer = (RED): void => {
                                         {
                                             const _chartobj = timelinesChart${_uniqueId}
                                             if(_chartobj){
+                                                /* css */
+                                                _chartobj.ruleStylexAxisLabels.style.cssText    = 'font-size: ${msg.configs.xAxisLabelsFontSize}px !important; fill: ${msg.configs.xAxisLabelslColor} !important';
+                                                _chartobj.ruleStyleyAxisLabels.style.cssText    = 'font-size: ${msg.configs.yAxisLabelsFontSize}px !important; fill: ${msg.configs.yAxisLabelslColor} !important';
+                                                _chartobj.ruleStyleResetZoomLabel.style.cssText = 'font-size: ${msg.configs.resetZoomLabelFontSize}px !important; fill: ${msg.configs.resetZoomLabelColor} !important';
+    
+                                                /* chart */
                                                 _chartobj.instance
-                                                .data(${JSON.stringify(msg.data)})
-                                                .width(${_parent.clientWidth})
-                                                // .maxHeight(${_parent.clientHeight})
-                                                .maxLineHeight(${msg.configs.maxLineHeight.toString()})
-                                                .topMargin(60)
-                                                .rightMargin(90)
-                                                .leftMargin(90)
-                                                .bottomMargin(40)
-                                                .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
-                                                .timeFormat('%Y-%m-%d %H:%M:%S')
-                                                .zQualitative(true)
-                                                .enableOverview(true)
-                                                .enableAnimations(${msg.configs.enableAnimations})
-                                                .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
-                                                .zoomX((_chartobj.currentZoomX?.length) ? _chartobj.currentZoomX : [moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                                .zoomY((_chartobj.currentZoomY?.length) ? _chartobj.currentZoomY : [])
-                                                .onZoom((x,y)=>{ _chartobj.currentZoomX=x; _chartobj.currentZoomY=y; })
-                                                .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                                .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
+                                                    .data(${JSON.stringify(msg.data)})
+                                                    .width(${_parent.clientWidth})
+                                                    // .maxHeight(${_parent.clientHeight})
+                                                    .maxLineHeight(${msg.configs.maxLineHeight.toString()})
+                                                    .topMargin(60)
+                                                    .rightMargin(90)
+                                                    .leftMargin(90)
+                                                    .bottomMargin(40)
+                                                    .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
+                                                    .timeFormat('%Y-%m-%d %H:%M:%S')
+                                                    .zQualitative(true)
+                                                    .enableOverview(true)
+                                                    .enableAnimations(${msg.configs.enableAnimations})
+                                                    .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
+                                                    .zoomX((_chartobj.currentZoomX?.length) ? _chartobj.currentZoomX : [moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                                    .zoomY((_chartobj.currentZoomY?.length) ? _chartobj.currentZoomY : [])
+                                                    .onZoom((x,y)=>{ _chartobj.currentZoomX=x; _chartobj.currentZoomY=y; })
+                                                    .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                                    .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
                                             }
                                         }
                                         `;
@@ -445,7 +468,13 @@ const nodeInit: NodeInitializer = (RED): void => {
                             // moment
                             if (!document.getElementById('moment')) {
                                 // console.log(`loadScript moment id:${config.uniqueId}`);
-                                loadScript('moment', 'ui-timelines-chart/js/moment.js');
+                                loadScript('moment', 'ui-timelines-chart/js/moment.min.js');
+                            }
+
+                            // utility
+                            if (!document.getElementById('utility')) {
+                                // console.log(`loadScript moment id:${config.uniqueId}`);
+                                loadScript('utility', 'ui-timelines-chart/js/utility.js');
                             }
 
                         }

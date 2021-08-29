@@ -8,6 +8,7 @@
     "node-red",
     "dashboard",
     "status chart",
+    "timeline chart",
     "chart",
     "widget"
   ],
