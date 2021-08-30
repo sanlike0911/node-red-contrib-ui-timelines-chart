@@ -536,7 +536,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 xAxisLabelsFontSize:    _msg.payload?.settings?.xAxis?.labelsFontSize       ?? _config.xAxisLabelsFontSize      ?? DEFALUT_X_AXIS_LABELS_FONT_SIZE,
                 xAxisLabelslColor:      _msg.payload?.settings?.xAxis?.labelsColor          ?? _config.xAxisLabelslColor        ?? DEFALUT_X_AXIS_LABELS_COLOR,
                 startDateTime:          _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.startDateTime            ?? BLANK_STRING,
-                endDateTime:            _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.endDateTime              ?? BLANK_STRING,
+                endDateTime:            _msg.payload?.settings?.xAxis?.endDateTime          ?? _config.endDateTime              ?? BLANK_STRING,
                 yAxisLabelsFontSize:    _msg.payload?.settings?.yAxis?.labelsFontSize       ?? _config.yAxisLabelsFontSize      ?? DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
                 yAxisLabelslColor:      _msg.payload?.settings?.yAxis?.labelsColor          ?? _config.yAxisLabelslColor        ?? DEFALUT_Y_AXIS_LABELS_COLOR,
                 resetZoomLabelFontSize: _msg.payload?.settings?.resetZoom?.labelFontSize    ?? _config.resetZoomLabelFontSize   ?? DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
