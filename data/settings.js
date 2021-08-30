@@ -256,7 +256,7 @@ module.exports = {
     },
 
     // Allow the Function node to load additional npm modules
-    functionExternalModules: false,
+    functionExternalModules: true,
 
     // `global.keys()` returns a list of all properties set in global context.
     // This allows them to be displayed in the Context Sidebar within the editor.
