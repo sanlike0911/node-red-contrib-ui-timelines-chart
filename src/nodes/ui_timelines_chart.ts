@@ -250,18 +250,20 @@ const nodeInit: NodeInitializer = (RED): void => {
 
             if (checkConfig(_node, _config)) {
 
-                let _group: any = RED.nodes.getNode(_config.group);
+                let _group: any = RED.nodes.getNode(_config?.group);
                 // console.log(`config.width: ${config.width}, config.height: ${config.height}`);
 
+                // widget width
                 let _width: number = DEFAULT_WIDGET_WIDTH;  //default
-                if(0 < Number(_config.width)) {
+                if(0 < Number(_config?.width)) {
                     _width = Number(_config.width);
-                } else if(0 < Number(_group.config.width)){
+                } else if(0 < Number(_group?.config?.width)) {
                     _width = Number(_group.config.width);
                 }
 
+                // widget height
                 let _height: number = DEFAULT_WIDGET_HEIGHT;  //default
-                if(0 < Number(_config.height)) {
+                if(0 < Number(_config?.height)) {
                     _height = Number(_config.height);
                 }
 
