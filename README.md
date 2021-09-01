@@ -19,20 +19,24 @@ root
 │
 ├─dist  -> Build output folder
 │
+├─examples
+│
 ├─figs
 │
 ├─node_modules
 │
-├─nodes
-│  ├─icons
-│  ├─lib
-│  ├─locales
-│
 ├─src
+│  │
+│  ├─icons
 │  │
 │  ├─locales
 │  │  ├─en-US
 │  │  └─ja
+│  │
+│  ├─lib/js
+│  │     ├─moment.min.js
+│  │     ├─timelines-chart.min.js
+│  │     └─utility.js
 │  │
 │  ├─ type.ts
 │  ├─ ui_timelines_chart.html
@@ -41,6 +45,7 @@ root
 │
 ├─.gitignore
 ├─.npmignore
+├─build-exclude-filelist
 ├─build.bat  -> windows only
 │
 ```
@@ -176,8 +181,8 @@ npm install node-red-contrib-ui-timelines-chart
         settings:{
             xAxis:{
                 tickFormat: <val: string (YYYY-MM-DD HH:mm:ss)>,
-                startDate: <date>,
-                endDate: <date>,
+                startDateTime: <date>,
+                endDateTime: <date>,
                 labelsFontSize: <val: number (from 0 to 64[default:16])>
                 labelsColor: <val: string (from #000000 to #ffffff[default:#000000])>
             },
