@@ -1,8 +1,6 @@
 const helper = require("node-red-node-test-helper");
 const tagetNode = require("../../../dist/ui_timelines_chart.js");
-
-const current = __dirname;
-const fs = require("fs");
+const d = require("../../../dist/define.js");
 
 helper.init(require.resolve('node-red'), { 
   // functionGlobalContext: { fs:require('fs') }
@@ -10,20 +8,8 @@ helper.init(require.resolve('node-red'), {
 
 describe("ui_timelines_chart Node", function () {
 
-  // let tapoAccountSettings = {};
-
   before(function(done) {
     // runs once before the first test in this block
-    // try {
-    //   fs.readFile(`${current}/../../../data/tapoSettings.json`, "utf-8", (err, data) => {
-    //     if (err) throw err;
-    //     tapoAccountSettings = JSON.parse(data);
-    //     // console.log("tapoAccountSettings: ", tapoAccountSettings);
-    //   });
-    // } catch (error) {
-    //   console.log(error);
-    //   done(error);
-    // }
     helper.startServer(done);
   });
 
@@ -41,619 +27,431 @@ describe("ui_timelines_chart Node", function () {
     helper.unload();
   });
 
-  it('should be loaded', function (done) {
-    var flow = [{ id: "n1", type: "ui_timelines_chart", name: "test name" }];
-    helper.load(tagetNode, flow, function () {
-      var n1 = helper.getNode("n1");
-      try {
-        n1.should.have.property('name', 'test name');
-        done();
-      } catch(err) {
-        done(err);
+  // test results
+  const TEST_CASE_NG = "TEST_CASE_NG";
+  const TEST_CASE_OK = "TEST_CASE_OK";
+
+  // enable tests
+  const BASIC_TEST_PROPERTY = 0;
+  const BASIC_TEST_BOOLEAN = 0;
+  const BASIC_TEST_NUMBER = 0;
+  const BASIC_TEST_STRING = 0;
+  const BASIC_TEST_DATETIME = 0;
+
+  const defaultFlow = [
+    {
+      id: "n1",
+      type: "ui_timelines_chart",
+      name: "test name",
+      group: "",
+      startDateTime: d.myConst.items.startDateTime.default,
+      endDateTime: d.myConst.items.endDateTime.default,
+    }
+  ];
+
+  /* --------------------------------------------------------------------------------------- */
+  // start: basic test property
+  /* --------------------------------------------------------------------------------------- */
+  if( BASIC_TEST_PROPERTY ){
+    describe("test node property", function () {
+
+      it('should be loaded', function (done) {
+        var flow = [{ id: "n1", type: "ui_timelines_chart", name: "test name" }];
+        helper.load(tagetNode, flow, function () {
+          var n1 = helper.getNode("n1");
+          try {
+            n1.should.have.property('name', 'test name');
+            done();
+          } catch(err) {
+            done(err);
+          }
+        });
+      });
+
+    });
+  }
+
+  /* --------------------------------------------------------------------------------------- */
+  // start: basic test boolean
+  /* --------------------------------------------------------------------------------------- */
+  if( BASIC_TEST_BOOLEAN ){
+    function basicTestBoolean(_valueName, _default, _testValue, _testCase){
+      it(`${_valueName} test case: ${_testCase} value:"${_testValue}"`, function (done) {
+        let _flow = defaultFlow;
+        _flow[0][_valueName] = _testValue;
+        helper.load(tagetNode, _flow, function () {
+          const _n1 = helper.getNode("n1");
+          try {
+            const _warnText = `Incorrect ${_valueName} value :"${_testValue}". This ${_valueName} was corrected with the default value: "${_default}".`;
+            switch(_testCase){
+              case TEST_CASE_OK: /* case: TEST_CASE_OK */
+                _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                _n1.warn.should.be.not.calledWithExactly(_warnText); /* not warning */
+                break;
+              case TEST_CASE_NG: /* case: TEST_CASE_NG */
+                switch(_testValue){
+                  case undefined:
+                  case null:
+                    if( _testValue !== _n1._flow.flow.configs.n1[_valueName]) throw new Error("test ng.");
+                    break;
+                  default:
+                    _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                    break;
+                }
+                _n1.warn.should.be.calledWithExactly(_warnText);  /* warning */
+                break;
+              default:
+                throw new Error("test case no not found.");
+              }
+            done();
+          } catch(err) {
+            // console.log(err);
+            done(err);
+          }
+        });
+      });
+    }
+
+    // basic test
+    describe("basic test numbar", function () {
+      this.timeout(10000);
+      // enableAnimations
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, true, TEST_CASE_OK);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, false, TEST_CASE_OK);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, "true", TEST_CASE_OK);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, "false", TEST_CASE_OK);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, "", TEST_CASE_NG);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, 0, TEST_CASE_NG);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, undefined, TEST_CASE_NG);
+      basicTestBoolean('enableAnimations', d.myConst.items.enableAnimations.default, null, TEST_CASE_NG);
+
+      // enableDateMarker
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, true, TEST_CASE_OK);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, false, TEST_CASE_OK);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, "true", TEST_CASE_OK);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, "false", TEST_CASE_OK);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, "", TEST_CASE_NG);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, 0, TEST_CASE_NG);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, undefined, TEST_CASE_NG);
+      basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, null, TEST_CASE_NG);
+    });
+  }
+
+  /* --------------------------------------------------------------------------------------- */
+  // start: basic test number
+  /* --------------------------------------------------------------------------------------- */
+  if( BASIC_TEST_NUMBER ){
+
+    const testCaseMin = 1;
+    const testCaseMax = 9;
+
+    /**
+     * basicTestNumber
+     *
+     * @param {*} _valueName
+     * @param {*} _default
+     * @param {*} _valueMin
+     * @param {*} _valueMax
+     * @param {*} _testCase
+     */
+    function basicTestNumber(_valueName, _default, _valueMin, _valueMax, _testCase){
+
+      // test case
+      const _testCaseNumber = [
+        _valueMin,
+        Math.round((_valueMax - _valueMin)/2),
+        _valueMax,
+        _valueMin - 1,
+        _valueMax + 1,
+        "",
+        "string",
+        null,
+        undefined
+      ];
+
+      const _testValue = _testCaseNumber[_testCase - testCaseMin];
+      it(`${_valueName} test case:${_testCase} value:${_testValue}`, function (done) {
+        let _flow = defaultFlow;
+        _flow[0][_valueName] = _testValue;
+        helper.load(tagetNode, _flow, function () {
+          const _n1 = helper.getNode("n1");
+          try {
+            const _warnText = `Incorrect ${_valueName} value :"${_testValue}". This ${_valueName} was corrected with the default value: "${_default}".`;
+            switch(_testCase){
+              case 1: /* case: min */
+              case 2: /* case: middle */
+              case 3: /* case: max */
+                _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                _n1.warn.should.be.not.calledWithExactly(_warnText); /* not warning */
+                break;
+              case 4: /* case: min - 1 */
+              case 5: /* case: max + 1 */
+              case 6: /* case: "" blank */
+              case 7: /* case: "string" */
+                _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                _n1.warn.should.be.calledWithExactly(_warnText);  /* warning */
+                break;
+              case 8: /* case: null */
+              case 9: /* case: undefined */
+                if( _testValue !== _n1._flow.flow.configs.n1[_valueName]) throw new Error("test ng.");
+                _n1.warn.should.be.calledWithExactly(_warnText);  /* warning */
+              break;
+              default:
+                throw new Error("test case no not found.");
+              }
+            done();
+          } catch(err) {
+            // console.log(err);
+            done(err);
+          }
+        });
+      });
+    }
+
+    // basic test
+    describe("basic test numbar", function () {
+      this.timeout(10000);
+      for(let _testCase = testCaseMin ; _testCase <= testCaseMax ; ++_testCase){
+        basicTestNumber('xAxisLabelsFontSize',    d.myConst.items.xAxisLabelsFontSize.default, d.myConst.items.xAxisLabelsFontSize.minNum, d.myConst.items.xAxisLabelsFontSize.maxNum, _testCase);
+        basicTestNumber('yAxisLabelsFontSize',    d.myConst.items.yAxisLabelsFontSize.default, d.myConst.items.yAxisLabelsFontSize.minNum, d.myConst.items.yAxisLabelsFontSize.maxNum, _testCase);
+        basicTestNumber('resetZoomLabelFontSize', d.myConst.items.resetZoomLabelFontSize.default, d.myConst.items.resetZoomLabelFontSize.minNum, d.myConst.items.resetZoomLabelFontSize.maxNum, _testCase); 
+        basicTestNumber('maxLineHeight',          d.myConst.items.maxLineHeight.default, d.myConst.items.maxLineHeight.minNum, d.myConst.items.maxLineHeight.maxNum, _testCase);
       }
     });
-  });
+  }
 
-  // describe("Search mode: device IP", function () {
+  /* --------------------------------------------------------------------------------------- */
+  // start: basic test string
+  /* --------------------------------------------------------------------------------------- */
+  if( BASIC_TEST_STRING ){
+    // xTickFormat, xAxisLabelslColor, yAxisLabelslColor, resetZoomLabelColor
+    function basicTestString(_valueName, _default, _testValue, _testCase){
+      it(`${_valueName} test case: ${_testCase} value:"${_testValue}"`, function (done) {
+        let _flow = defaultFlow;
+        _flow[0][_valueName] = _testValue;
+        helper.load(tagetNode, _flow, function () {
+          const _n1 = helper.getNode("n1");
+          try {
+            const _warnText = `Incorrect ${_valueName} value :"${_testValue}". This ${_valueName} was corrected with the default value: "${_default}".`;
+            switch(_testCase){
+              case TEST_CASE_OK: /* case: TEST_CASE_OK */
+                _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                _n1.warn.should.be.not.calledWithExactly(_warnText); /* not warning */
+                break;
+              case TEST_CASE_NG: /* case: TEST_CASE_NG */
+                switch(_testValue){
+                  case undefined:
+                  case null:
+                    if( _testValue !== _n1._flow.flow.configs.n1[_valueName]) throw new Error("test ng.");
+                    break;
+                  default:
+                    _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                    break;
+                }
+                _n1.warn.should.be.calledWithExactly(_warnText);  /* warning */
+                break;
+              default:
+                throw new Error("test case no not found.");
+              }
+            done();
+          } catch(err) {
+            // console.log(err);
+            done(err);
+          }
+        });
+      });
+    }
 
-  //   it('should result true of command 1(power on) case:Search mode: device IP', function (done) {
-  //     this.timeout(5000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: tapoAccountSettings.deviceIp,
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: tapoAccountSettings.mode,
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 1 });
-  //     });
-  //   });
-  
-  //   it('should result true of command 0(power off) case:Search mode: device IP', function (done) {
-  //     this.timeout(5000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: tapoAccountSettings.deviceIp,
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: tapoAccountSettings.mode,
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 0});
-  //     });
-  //   });
+    // basic test
+    describe("basic test string", function () {
+      this.timeout(10000);
+      // xTickFormat case1:true, case2:false
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, d.myConst.items.xTickFormat.default ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "s" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "mm" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "m" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "ss:mm" ,TEST_CASE_NG); 
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "s:m" ,TEST_CASE_NG); 
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "HH" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "H" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "HH:ss" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "HH:mm" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "DD HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "MM HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "MM-DD HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-DD HH:mm:ss" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD HH:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD hh:mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD mm" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD mm:ss" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD hh" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD hh:ss" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD hh:mm" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "yyyy-mm-dd HH:mm:ss" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY/MM/DD HH:mm:ss" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "DD" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "MM" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "MM-DD" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYY" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YY" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "Y" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-DD" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "YYYY-MM-DD" ,TEST_CASE_OK);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "0" ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, null ,TEST_CASE_NG);
+      basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, undefined ,TEST_CASE_NG);
 
-  //   it('should result true of toggle(off=>on) case:Search mode: device IP', function (done) {
-  //     this.timeout(5000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: tapoAccountSettings.deviceIp,
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: "toggle",
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 1});
-  //     });
-  //   });
+      // xAxisLabelslColor case1:true, case2:false
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, d.myConst.items.xAxisLabelslColor.default ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "#000000" ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "#FFFFFF" ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "#AAAAAA" ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "red" ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "mediumslateblue" ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "black" ,TEST_CASE_OK);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "" ,TEST_CASE_NG);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, null ,TEST_CASE_NG);
+      basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, undefined ,TEST_CASE_NG);
 
-  //   it('should result true of toggle(on=>off) case:Search mode: device IP', function (done) {
-  //     this.timeout(5000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: tapoAccountSettings.deviceIp,
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: "toggle",
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 1});
-  //     });
-  //   });
+      // yAxisLabelslColor case1:true, case2:false
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, d.myConst.items.yAxisLabelslColor.default ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "#000000" ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "#FFFFFF" ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "#AAAAAA" ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "red" ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "mediumslateblue" ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "black" ,TEST_CASE_OK);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "" ,TEST_CASE_NG);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, null ,TEST_CASE_NG);
+      basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, undefined ,TEST_CASE_NG);
 
-  //   it('should result true and device infomatiuon of command 255(status) case:Search mode: device IP', function (done) {
-  //     this.timeout(5000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: tapoAccountSettings.deviceIp,
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: tapoAccountSettings.mode,
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           msg.payload.should.have.ownProperty("tapoDeviceInfo");  /* msg.payload.hasOwnProperty('tapoDeviceInfo') */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 255 });
-  //     });
-  //   });
+      // resetZoomLabelColor case1:true, case2:false
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, d.myConst.items.resetZoomLabelColor.default ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "#000000" ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "#FFFFFF" ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "#AAAAAA" ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "red" ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "mediumslateblue" ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "black" ,TEST_CASE_OK);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "" ,TEST_CASE_NG);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, null ,TEST_CASE_NG);
+      basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, undefined ,TEST_CASE_NG);
 
-  //   describe("test case: error", function () {
+    });
 
-  //     it('should call `error` with "Error: command not found." case:Search mode: device IP, node.error, command:2', function (done) {
-  //       this.timeout(5000);
-  //       const command = 2;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: tapoAccountSettings.deviceIp,
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode
-  //         }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         n1.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true();  /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('command not found.');            
-  //             n1.error.should.be.calledWithExactly(msg.payload.errorInf);
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
+  }
 
-  //     it('should call `error` with "Error: getaddrinfo ENOTFOUND 192.168.0.999" case:Search mode: device IP, node.error, command:0(out of ip address)', function (done) {
-  //       this.timeout(5000);
-  //       const command = 0;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: "192.168.0.999",
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode,
-  //           wires:[["n2"]]
-  //         },
-  //         { id: "n2", type: "helper" }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         const n2 = helper.getNode("n2");
-  //         n2.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('getaddrinfo ENOTFOUND 192.168.0.999');
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
+  /* --------------------------------------------------------------------------------------- */
+  // start: basic test datetime
+  /* --------------------------------------------------------------------------------------- */
+  if( BASIC_TEST_DATETIME ){
+    // startDateTime, endDateTime
+    function basicTestDateTime(_valueName, _testValue, _testCase){
+      it(`${_valueName} test case: ${_testCase} value:"${_testValue}"`, function (done) {
+        let _flow = defaultFlow;
+        _flow[0][_valueName] = _testValue;
+        helper.load(tagetNode, _flow, function () {
+          const _n1 = helper.getNode("n1");
+          try {
+            const _warnText = `Incorrect ${_valueName} value :"${_testValue}".`;
+            switch(_testCase){
+              case TEST_CASE_OK: /* case: TEST_CASE_OK */
+                _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                _n1.error.should.be.not.calledWithExactly(_warnText); /* not error */
+                break;
+              case TEST_CASE_NG: /* case: TEST_CASE_NG */
+                switch(_testValue){
+                  case undefined:
+                  case null:
+                    if( _testValue !== _n1._flow.flow.configs.n1[_valueName]) throw new Error("test ng.");
+                    break;
+                  default:
+                    _n1._flow.flow.configs.n1[_valueName].should.have.equal(_testValue);
+                    break;
+                }
+                _n1.error.should.be.calledWithExactly(_warnText);  /* error */
+                break;
+              default:
+                throw new Error("test case no not found.");
+              }
+            done();
+          } catch(err) {
+            // console.log(err);
+            done(err);
+          }
+        });
+      });
+    }
 
-  //     it('should call `error` with "Error: Invalid request or credentials" case:Search mode: device IP, node.error, command:0(invalid email)', function (done) {
-  //       this.timeout(5000);
-  //       const command = 0;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: "foo",
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: tapoAccountSettings.deviceIp,
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode,
-  //           wires:[["n2"]]
-  //         },
-  //         { id: "n2", type: "helper" }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         const n2 = helper.getNode("n2");
-  //         n2.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('Invalid request or credentials');
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
+    // basic test
+    describe("basic test datetime", function () {
+      this.timeout(10000);
+      // startDateTime
+      basicTestDateTime('startDateTime', "" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "1-1-1 0:0:0" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "9999-12-31 23:59:59" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "10000-12-31 23:59:59" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "9999-13-31 23:59:59" ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', "9999-12-32 23:59:59" ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', "9999-12-31 24:59:59" ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', "9999-12-31 23:60:59" ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', "9999-12-31 23:59:60" ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', "2021-09-03 12:00:00" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "2021/09/03 12:00:00" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "2021/09/03" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "12:00:00" ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', "09/03" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "09" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', "0" ,TEST_CASE_OK);
+      basicTestDateTime('startDateTime', null ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', undefined ,TEST_CASE_NG);
+      basicTestDateTime('startDateTime', d.myConst.items.startDateTime.default ,TEST_CASE_OK);
+      /* endDateTimeをチェックするにはstartDateTimeが正常である必要がある */
 
-  //     it('should call `error` with "Error: Invalid request or credentials" case:Search mode: device IP, node.error, command:0(invalid password)', function (done) {
-  //       this.timeout(5000);
-  //       const command = 0;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: "foo",
-  //           deviceIp: tapoAccountSettings.deviceIp,
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode,
-  //           wires:[["n2"]]
-  //         },
-  //         { id: "n2", type: "helper" }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         const n2 = helper.getNode("n2");
-  //         n2.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('Invalid request or credentials');
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
+      // endDateTime
+      basicTestDateTime('endDateTime', "" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "1-1-1 0:0:0" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "9999-12-31 23:59:59" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "10000-12-31 23:59:59" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "9999-13-31 23:59:59" ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', "9999-12-32 23:59:59" ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', "9999-12-31 24:59:59" ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', "9999-12-31 23:60:59" ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', "9999-12-31 23:59:60" ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', "2021-09-03 12:00:00" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "2021/09/03 12:00:00" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "2021/09/03" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "12:00:00" ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', "09/03" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "09" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', "0" ,TEST_CASE_OK);
+      basicTestDateTime('endDateTime', null ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', undefined ,TEST_CASE_NG);
+      basicTestDateTime('endDateTime', d.myConst.items.endDateTime.default ,TEST_CASE_OK);
 
-  //   });
-  // });
+      for(let _i = 0 ; _i < 128 ; ++_i){
+        let _Y = Math.floor( Math.random() * ( 2200 - 2000 ) + 2000 );
+        let _M = Math.floor( Math.random() * (   12 - 1 ) + 1 );
+        let _D = Math.floor( Math.random() * (   31 - 1 ) + 1 );
+        let _h = Math.floor( Math.random() * (   23 - 0 ) + 0 );
+        let _m = Math.floor( Math.random() * (   59 - 0 ) + 0 );
+        let _s = Math.floor( Math.random() * (   59 - 0 ) + 0 );
+        const _testValue = `${_Y}-${_M}-${_D} ${_h}:${_m}:${_s}`;
+        // console.log(_test);
+        basicTestDateTime('startDateTime', _testValue ,TEST_CASE_OK);
+        basicTestDateTime('endDateTime', _testValue ,TEST_CASE_OK);
+      }
 
-  // describe("Search mode: device alias", function () {
+    });
 
-  //   it('should result true of command 1(power on) *Search mode: device alias*', function (done) {
-  //     this.timeout(10000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: "",
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: tapoAccountSettings.mode,
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 1});
-  //     });
-  //   });
-  
-  //   it('should result true of command 0(power off) *Search mode: device alias*', function (done) {
-  //     this.timeout(10000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: "",
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: tapoAccountSettings.mode,
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 0});
-  //     });
-  //   });
-
-  //   it('should result true of toggle(off=>on) *Search mode: device alias*', function (done) {
-  //     this.timeout(20000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: "",
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: "toggle",
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 1});
-  //     });
-  //   });
-
-  //   it('should result true of toggle(on=>off) *Search mode: device alias*', function (done) {
-  //     this.timeout(20000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: "",
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: "toggle",
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 1});
-  //     });
-  //   });
-
-  //   it('should result true and device infomatiuon of command 255(status) *Search mode: device alias*', function (done) {
-  //     this.timeout(10000);
-  //     const flow = [
-  //       {
-  //         id: "n1",
-  //         type: "tplink_tapo_connect_api",
-  //         name: "test name",
-  //         email: tapoAccountSettings.email,
-  //         password: tapoAccountSettings.password,
-  //         deviceIp: "",
-  //         deviceAlias: tapoAccountSettings.deviceAlias,
-  //         deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //         mode: tapoAccountSettings.mode,
-  //         wires:[["n2"]] 
-  //       },
-  //       { id: "n2", type: "helper" }
-  //     ];
-  //     helper.load(tagetNode, flow, function () {
-  //       const n1 = helper.getNode("n1");
-  //       const n2 = helper.getNode("n2");
-  //       n2.on("input", function (msg) {
-  //         try {
-  //           msg.payload.result.should.have.true(); /* msg.payload.result === true */
-  //           msg.payload.should.have.ownProperty("tapoDeviceInfo");  /* msg.payload.hasOwnProperty('tapoDeviceInfo') */
-  //           done();
-  //         } catch(err) {
-  //           done(err);
-  //         }
-  //       });
-  //       n1.receive({ payload: 255});
-  //     });
-  //   });
-
-  //   describe("test case: error", function () {
-
-  //     it('should call `error` with "Error: command not found." case:Search mode: device alias, node.error, command:2', function (done) {
-  //       this.timeout(5000);
-  //       const command = 2;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: "",
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode
-  //         }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         n1.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true();  /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('command not found.');            
-  //             n1.error.should.be.calledWithExactly(msg.payload.errorInf);
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
-  
-  //     it('should call `error` with "Error: command not found." case:Search mode: device alias, node.error, command:256', function (done) {
-  //       this.timeout(5000);
-  //       const command = 256;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: "",
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode
-  //         }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         n1.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true();  /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('command not found.');            
-  //             n1.error.should.be.calledWithExactly(msg.payload.errorInf);
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
-  
-  //     it('should call `error` with "Error: Failed to get tapo ip address." case:Search mode: device alias, node.error, command:0(invalid device alias)', function (done) {
-  //       this.timeout(5000);
-  //       const command = 0;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: "",
-  //           deviceAlias: "foo",
-  //           deviceIpRange: tapoAccountSettings.deviceIpRange,
-  //           mode: tapoAccountSettings.mode,
-  //           wires:[["n2"]]
-  //         },
-  //         { id: "n2", type: "helper" }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         const n2 = helper.getNode("n2");
-  //         n2.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('Failed to get tapo ip address.');
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
-  
-  //     it('should call `error` with "Error: Failed to get tapo ip address." case:Search mode: device alias, node.error, command:0(out of device ip range)', function (done) {
-  //       this.timeout(5000);
-  //       const command = 0;
-  //       const flow = [
-  //         {
-  //           id: "n1",
-  //           type: "tplink_tapo_connect_api",
-  //           name: "test name",
-  //           email: tapoAccountSettings.email,
-  //           password: tapoAccountSettings.password,
-  //           deviceIp: "",
-  //           deviceAlias: tapoAccountSettings.deviceAlias,
-  //           deviceIpRange: "172.17.198.0/24",
-  //           mode: tapoAccountSettings.mode,
-  //           wires:[["n2"]]
-  //         },
-  //         { id: "n2", type: "helper" }
-  //       ];
-  //       helper.load(tagetNode, flow, function () {
-  //         const n1 = helper.getNode("n1");
-  //         const n2 = helper.getNode("n2");
-  //         n2.on("input", (msg) => {
-  //           try {
-  //             msg.payload.result.should.have.not.true(); /* msg.payload.result !== true */
-  //             msg.payload.errorInf.message.should.have.equal('Failed to get tapo ip address.');
-  //             done();
-  //           } catch(err) {
-  //             done(err);
-  //           }
-  //         });
-  //         n1.receive({ payload: command });
-  //       });
-  //     });
-  //   });
-
-  // });
+  }
 
 });

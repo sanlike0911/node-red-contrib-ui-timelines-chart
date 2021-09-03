@@ -2,49 +2,28 @@ import { NodeInitializer, Node } from "node-red";
 import statusChart from "./type";
 import path from "path";
 import util from "./util";
-// import moment from 'moment';
-// import TimelinesChart from 'timelines-chart';
+import { myConst } from "./define";
 
 const nodeInit: NodeInitializer = (RED): void => {
-
-    // const parameters
-    const DEFAULT_WIDGET_WIDTH: number = 6;
-    const DEFAULT_WIDGET_HEIGHT: number = 8;
-    const DEFAULT_EMIT_ONLY_NEW_VALUES: boolean = false;
-    const DEFAULT_FWD_IN_MESSAGES: boolean = false;
-    const DEFAULT_STORE_OUT_MESSAGES: boolean = false;
-
-    const BLANK_STRING: string = '';
-    const DEFAULT_X_TICK_FORMAT: string = 'YYYY-MM-DD HH:mm:ss';
-    const DEFAULT_LINE_HEIGHT: number = 60;
-    const DEFALUT_ENABLE_ANIMATIONS: boolean = true;
-    const DEFALUT_ENABLE_DATE_MARKER: boolean = false;
-    const DEFALUT_X_AXIS_LABELS_FONT_SIZE = 16;
-    const DEFALUT_X_AXIS_LABELS_COLOR: string = "lightslategray";
-    const DEFALUT_Y_AXIS_LABELS_FONT_SIZE: number = 12;
-    const DEFALUT_Y_AXIS_LABELS_COLOR: string = "lightslategray";
-    const DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE: number = 24;
-    const DEFALUT_RESET_ZOOM_LABEL_COLOR: string = "bule";
-    const DEFAULT_LINE_CORLOS: object[] = [];
 
     const DEFALUT_MAKE_GRAPH_BASE: statusChart.makeGraphBase = {
         result: false,
         id: "",
         data: [],
         configs: {
-            xTickFormat: DEFAULT_X_TICK_FORMAT,
-            maxLineHeight: DEFAULT_LINE_HEIGHT,
-            startDateTime: BLANK_STRING,
-            endDateTime: BLANK_STRING,
-            zColorScale: { range:[], domain:[] },
-            enableAnimations: DEFALUT_ENABLE_ANIMATIONS,
-            enableDateMarker: DEFALUT_ENABLE_DATE_MARKER,
-            xAxisLabelsFontSize: DEFALUT_X_AXIS_LABELS_FONT_SIZE,
-            xAxisLabelslColor: DEFALUT_X_AXIS_LABELS_COLOR,
-            yAxisLabelsFontSize: DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
-            yAxisLabelslColor: DEFALUT_Y_AXIS_LABELS_COLOR,
-            resetZoomLabelFontSize: DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
-            resetZoomLabelColor: DEFALUT_RESET_ZOOM_LABEL_COLOR
+            xTickFormat: myConst.items.xTickFormat.default,
+            maxLineHeight: myConst.items.maxLineHeight.default,
+            startDateTime: myConst.items.startDateTime.default,
+            endDateTime: myConst.items.endDateTime.default,
+            zColorScale: myConst.items.zColorScale.default,
+            enableAnimations: myConst.items.enableAnimations.default,
+            enableDateMarker: myConst.items.enableDateMarker.default,
+            xAxisLabelsFontSize: myConst.items.xAxisLabelsFontSize.default,
+            xAxisLabelslColor: myConst.items.xAxisLabelslColor.default,
+            yAxisLabelsFontSize: myConst.items.yAxisLabelsFontSize.default,
+            yAxisLabelslColor: myConst.items.yAxisLabelslColor.default,
+            resetZoomLabelFontSize: myConst.items.resetZoomLabelFontSize.default,
+            resetZoomLabelColor: myConst.items.resetZoomLabelColor.default
         }
     };
 
@@ -68,81 +47,111 @@ const nodeInit: NodeInitializer = (RED): void => {
             return false;
         }
 
-        // [xAxis]tick format
+        // [xAxis]tick format, string
         {
             const _propertyName: string = "xTickFormat";
-            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xTickFormat?.toLowerCase(), _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY)) {
-                _node.warn(`Incorrect ${_propertyName} value :"${_config.xTickFormat}". This ${_propertyName} was corrected with the default value. "${DEFAULT_X_TICK_FORMAT}".`);
-                _config.xTickFormat = DEFAULT_X_TICK_FORMAT;
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xTickFormat, _util.REG_EXPRESSTION_TO_MATCH_ONLY.DATETIME_FORMAT_AND_NOT_EMPTY) || (myConst.items.xTickFormat.maxLen < _config.xTickFormat?.length)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.xTickFormat}". This ${_propertyName} was corrected with the default value: "${myConst.items.xTickFormat.default}".`);
+                _config.xTickFormat = myConst.items.xTickFormat.default;
             }
         }
 
-        // [xAxis]start date time
+        // [xAxis]start date time, string
         {
             const _propertyName: string = "startDateTime";
-            if (!_config.hasOwnProperty(_propertyName) || (BLANK_STRING !== _config.startDateTime && !_util.isRegExp(_config.startDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))) {
+            if ((!_config.hasOwnProperty(_propertyName) || !_util.isDateTime(_config.startDateTime) || (myConst.items.startDateTime.maxLen < _config.startDateTime?.length)) && ( "" !== _config.startDateTime )) {
                 _node.error(`Incorrect ${_propertyName} value :"${_config.startDateTime}".`);
                 return false;
             }
         }
 
-        // [xAxis]end date time
+        // [xAxis]end date time, string
         {
             const _propertyName: string = "endDateTime";
-            if (!_config.hasOwnProperty(_propertyName) || (BLANK_STRING !== _config.endDateTime && !_util.isRegExp(_config.endDateTime, _util.REG_EXPRESSTION_TO_MATCH_ONLY.ISO8601_AND_NOT_EMPTY))) {
+            if ((!_config.hasOwnProperty(_propertyName) || !_util.isDateTime(_config.endDateTime) || (myConst.items.endDateTime.maxLen < _config.endDateTime?.length)) && ( "" !== _config.endDateTime )) {
                 _node.error(`Incorrect ${_propertyName} value :"${_config.endDateTime}".`);
                 return false;
             }
         }
 
-        // [xAxis]labels font size
+        // [xAxis]labels font size, number
         {
             const _propertyName: string = "xAxisLabelsFontSize";
-            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-                _node.warn(`Incorrect ${_propertyName} value :"${_config.xAxisLabelsFontSize}". This ${_propertyName} was corrected with the default value. "${DEFALUT_X_AXIS_LABELS_FONT_SIZE}".`);
-                _config.xAxisLabelsFontSize = DEFALUT_X_AXIS_LABELS_FONT_SIZE;
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.xAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.xAxisLabelsFontSize.minNum > _config.xAxisLabelsFontSize || myConst.items.xAxisLabelsFontSize.maxNum < _config.xAxisLabelsFontSize)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.xAxisLabelsFontSize}". This ${_propertyName} was corrected with the default value: "${myConst.items.xAxisLabelsFontSize.default}".`);
+                _config.xAxisLabelsFontSize = myConst.items.xAxisLabelsFontSize.default;
             }
         }
 
-        // [xAxis]labels color
-        if (!_config.hasOwnProperty("xAxisLabelslColor")) _config.xAxisLabelslColor = DEFALUT_X_AXIS_LABELS_COLOR;
+        // [xAxis]labels color, string
+        {
+            const _propertyName: string = "xAxisLabelslColor";
+            if (!_config.hasOwnProperty(_propertyName) || (myConst.items.xAxisLabelslColor.maxLen < _config.xAxisLabelslColor?.length) || ("" === _config.xAxisLabelslColor) || (_config.xAxisLabelslColor == null) ){
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.xAxisLabelslColor}". This ${_propertyName} was corrected with the default value: "${myConst.items.xAxisLabelslColor.default}".`);
+                _config.xAxisLabelslColor = myConst.items.xAxisLabelslColor.default;
+            }
+        }
 
-        // [yAxis]labels font size
+        // [yAxis]labels font size, number
         {
             const _propertyName: string = "yAxisLabelsFontSize";
-            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-                _node.warn(`Incorrect ${_propertyName} value :"${_config.yAxisLabelsFontSize}". This ${_propertyName} was corrected with the default value. "${DEFALUT_Y_AXIS_LABELS_FONT_SIZE}".`);
-                _config.yAxisLabelsFontSize = DEFALUT_Y_AXIS_LABELS_FONT_SIZE;
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.yAxisLabelsFontSize.minNum > _config.yAxisLabelsFontSize || myConst.items.yAxisLabelsFontSize.maxNum < _config.yAxisLabelsFontSize)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.yAxisLabelsFontSize}". This ${_propertyName} was corrected with the default value: "${myConst.items.yAxisLabelsFontSize.default}".`);
+                _config.yAxisLabelsFontSize = myConst.items.yAxisLabelsFontSize.default;
             }
         }
 
-        // [yAxis]labels color
-        if (!_config.hasOwnProperty("yAxisLabelslColor")) _config.yAxisLabelslColor = DEFALUT_Y_AXIS_LABELS_COLOR;
+        // [yAxis]labels color, string
+        {
+            const _propertyName: string = "yAxisLabelslColor";
+            if (!_config.hasOwnProperty(_propertyName) || (myConst.items.yAxisLabelslColor.maxLen < _config.yAxisLabelslColor?.length) || ("" === _config.yAxisLabelslColor) || (_config.yAxisLabelslColor == null) ){
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.yAxisLabelslColor}". This ${_propertyName} was corrected with the default value: "${myConst.items.yAxisLabelslColor.default}".`);
+                _config.yAxisLabelslColor = myConst.items.yAxisLabelslColor.default;
+            }
+        }
 
-        // [reset zoom]label font size
+        // [reset zoom]label font size, number
         {
             const _propertyName: string = "resetZoomLabelFontSize";
-            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-                _node.warn(`Incorrect ${_propertyName} value :"${_config.resetZoomLabelFontSize}". This ${_propertyName} was corrected with the default value. "${DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE}".`);
-                _config.resetZoomLabelFontSize = DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE;
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.resetZoomLabelFontSize.minNum > _config.resetZoomLabelFontSize || myConst.items.resetZoomLabelFontSize.maxNum < _config.resetZoomLabelFontSize)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.resetZoomLabelFontSize}". This ${_propertyName} was corrected with the default value: "${myConst.items.resetZoomLabelFontSize.default}".`);
+                _config.resetZoomLabelFontSize = myConst.items.resetZoomLabelFontSize.default;
             }
         }
 
-        // [reset zoom]label color
-        if (!_config.hasOwnProperty("resetZoomLabelColor")) _config.resetZoomLabelColor = DEFALUT_RESET_ZOOM_LABEL_COLOR;
+        // [reset zoom]label color, string
+        {
+            const _propertyName: string = "resetZoomLabelColor";
+            if (!_config.hasOwnProperty(_propertyName) || (myConst.items.resetZoomLabelColor.maxLen < _config.resetZoomLabelColor?.length) || ("" === _config.resetZoomLabelColor) || (_config.resetZoomLabelColor == null) ){
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.resetZoomLabelColor}". This ${_propertyName} was corrected with the default value: "${myConst.items.resetZoomLabelColor.default}".`);
+                _config.resetZoomLabelColor = myConst.items.resetZoomLabelColor.default;
+            }
+        }
 
-        // [options]enable animations
-        if (!_config.hasOwnProperty("enableAnimations")) _config.enableAnimations = DEFALUT_ENABLE_ANIMATIONS;
+        // [options]enable animations,boolean
+        {
+            const _propertyName: string = "enableAnimations";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.enableAnimations, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_BOOLEAN_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.enableAnimations}". This ${_propertyName} was corrected with the default value: "${myConst.items.enableAnimations.default}".`);
+                _config.enableAnimations = myConst.items.enableAnimations.default;
+            }
+        }
 
         // [options]enable date marker
-        if (!_config.hasOwnProperty("enableDateMarker")) _config.enableDateMarker = DEFALUT_ENABLE_DATE_MARKER;
+        {
+            const _propertyName: string = "enableDateMarker";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.enableDateMarker, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_BOOLEAN_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.enableDateMarker}". This ${_propertyName} was corrected with the default value: "${myConst.items.enableDateMarker.default}".`);
+                _config.enableDateMarker = myConst.items.enableDateMarker.default;
+            }
+        }
 
-        // line height
+        // line height, number
         {
             const _propertyName: string = "maxLineHeight";
-            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY)) {
-                _node.warn(`Incorrect ${_propertyName} value :"${_config.maxLineHeight}". This ${_propertyName} was corrected with the default value. "${DEFAULT_LINE_HEIGHT}".`);
-                _config.maxLineHeight = DEFAULT_LINE_HEIGHT;
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.maxLineHeight.minNum > _config.maxLineHeight || myConst.items.maxLineHeight.maxNum < _config.maxLineHeight)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.maxLineHeight}". This ${_propertyName} was corrected with the default value: "${myConst.items.maxLineHeight.default}".`);
+                _config.maxLineHeight = myConst.items.maxLineHeight.default;
             }
         }
 
@@ -254,7 +263,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 // console.log(`config.width: ${config.width}, config.height: ${config.height}`);
 
                 // widget width
-                let _width: number = DEFAULT_WIDGET_WIDTH;  //default
+                let _width: number = myConst.items.widgetWidth.default;  //default
                 if(0 < Number(_config?.width)) {
                     _width = Number(_config.width);
                 } else if(0 < Number(_group?.config?.width)) {
@@ -262,7 +271,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 }
 
                 // widget height
-                let _height: number = DEFAULT_WIDGET_HEIGHT;  //default
+                let _height: number = myConst.items.widgetWidth.default;  //default
                 if(0 < Number(_config?.height)) {
                     _height = Number(_config.height);
                 }
@@ -301,9 +310,9 @@ const nodeInit: NodeInitializer = (RED): void => {
                     height: _height,          // height of widget
                     templateScope: "local",   // scope of HTML/Angular(local/global)*
                     order: _config.order,      // order
-                    emitOnlyNewValues: DEFAULT_EMIT_ONLY_NEW_VALUES,  // send message if changed
-                    forwardInputMessages: DEFAULT_FWD_IN_MESSAGES,    // forward input messages to output
-                    storeFrontEndInputAsState: DEFAULT_STORE_OUT_MESSAGES,    // store received message
+                    emitOnlyNewValues: myConst.items.emitOnlyNewValues.default,  // send message if changed
+                    forwardInputMessages: myConst.items.forwardInputMessages.default,    // forward input messages to output
+                    storeFrontEndInputAsState: myConst.items.storeFrontEndInputAsState.default,    // store received message
                     convertBack: function (_value: statusChart.graphData) { // callback to convert value to front-end
                         return _value;
                     },
@@ -508,7 +517,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 // finalize widget on close
                 _done();
             }
-        });        
+        });
     }
     
     /**
@@ -534,19 +543,19 @@ const nodeInit: NodeInitializer = (RED): void => {
             // configs(priority: input > node property)
             const _createConf = {
             /*  values                  node-in: msg.payload.settings                          node-property                       default                          */
-                xTickFormat:            _msg.payload?.settings?.xAxis?.xTickFormat          ?? _config.xTickFormat              ?? DEFAULT_X_TICK_FORMAT,
-                xAxisLabelsFontSize:    _msg.payload?.settings?.xAxis?.labelsFontSize       ?? _config.xAxisLabelsFontSize      ?? DEFALUT_X_AXIS_LABELS_FONT_SIZE,
-                xAxisLabelslColor:      _msg.payload?.settings?.xAxis?.labelsColor          ?? _config.xAxisLabelslColor        ?? DEFALUT_X_AXIS_LABELS_COLOR,
-                startDateTime:          _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.startDateTime            ?? BLANK_STRING,
-                endDateTime:            _msg.payload?.settings?.xAxis?.endDateTime          ?? _config.endDateTime              ?? BLANK_STRING,
-                yAxisLabelsFontSize:    _msg.payload?.settings?.yAxis?.labelsFontSize       ?? _config.yAxisLabelsFontSize      ?? DEFALUT_Y_AXIS_LABELS_FONT_SIZE,
-                yAxisLabelslColor:      _msg.payload?.settings?.yAxis?.labelsColor          ?? _config.yAxisLabelslColor        ?? DEFALUT_Y_AXIS_LABELS_COLOR,
-                resetZoomLabelFontSize: _msg.payload?.settings?.resetZoom?.labelFontSize    ?? _config.resetZoomLabelFontSize   ?? DEFALUT_RESET_ZOOM_LABEL_FONT_SIZE,
-                resetZoomLabelColor:    _msg.payload?.settings?.resetZoom?.labelColor       ?? _config.resetZoomLabelColor      ?? DEFALUT_RESET_ZOOM_LABEL_COLOR,
-                maxLineHeight:          _msg.payload?.settings?.chart?.height               ?? _config.maxLineHeight            ?? DEFAULT_LINE_HEIGHT,
-                lineColors:             _msg.payload?.settings?.chart?.lineColors           ?? _config.lineColors               ?? DEFAULT_LINE_CORLOS,
-                enableAnimations:       _msg.payload?.settings?.options?.enableAnimations   ?? _config.enableAnimations         ?? DEFALUT_ENABLE_ANIMATIONS,
-                enableDateMarker:       _msg.payload?.settings?.options?.enableDateMarker   ?? _config.enableDateMarker         ?? DEFALUT_ENABLE_DATE_MARKER,
+                xTickFormat:            _msg.payload?.settings?.xAxis?.xTickFormat          ?? _config.xTickFormat              ?? myConst.items.xTickFormat.default,
+                xAxisLabelsFontSize:    _msg.payload?.settings?.xAxis?.labelsFontSize       ?? _config.xAxisLabelsFontSize      ?? myConst.items.xAxisLabelsFontSize.default,
+                xAxisLabelslColor:      _msg.payload?.settings?.xAxis?.labelsColor          ?? _config.xAxisLabelslColor        ?? myConst.items.xAxisLabelslColor.default,
+                startDateTime:          _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.startDateTime            ?? myConst.items.startDateTime.default,
+                endDateTime:            _msg.payload?.settings?.xAxis?.endDateTime          ?? _config.endDateTime              ?? myConst.items.endDateTime.default,
+                yAxisLabelsFontSize:    _msg.payload?.settings?.yAxis?.labelsFontSize       ?? _config.yAxisLabelsFontSize      ?? myConst.items.yAxisLabelsFontSize.default,
+                yAxisLabelslColor:      _msg.payload?.settings?.yAxis?.labelsColor          ?? _config.yAxisLabelslColor        ?? myConst.items.yAxisLabelslColor.default,
+                resetZoomLabelFontSize: _msg.payload?.settings?.resetZoom?.labelFontSize    ?? _config.resetZoomLabelFontSize   ?? myConst.items.resetZoomLabelFontSize.default,
+                resetZoomLabelColor:    _msg.payload?.settings?.resetZoom?.labelColor       ?? _config.resetZoomLabelColor      ?? myConst.items.resetZoomLabelColor.default,
+                maxLineHeight:          _msg.payload?.settings?.chart?.height               ?? _config.maxLineHeight            ?? myConst.items.maxLineHeight.default,
+                lineColors:             _msg.payload?.settings?.chart?.lineColors           ?? _config.lineColors               ?? myConst.items.lineColors.default,
+                enableAnimations:       _msg.payload?.settings?.options?.enableAnimations   ?? _config.enableAnimations         ?? myConst.items.enableAnimations.default,
+                enableDateMarker:       _msg.payload?.settings?.options?.enableDateMarker   ?? _config.enableDateMarker         ?? myConst.items.enableDateMarker.default,
             }
             /* debug */
             // for (const [key, value] of Object.entries(_createConf)) {
@@ -556,7 +565,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
             // 設定：開始日時(X軸)
             let _startDateTime:string = _createConf.startDateTime;
-            if( BLANK_STRING === _startDateTime ){
+            if( myConst.items.startDateTime.default === _startDateTime ){
                 let _min = "";
                 _graphData.forEach((_ele, _idx) => {
                     _ele.data.forEach((_ele, _idx) => {
@@ -570,7 +579,7 @@ const nodeInit: NodeInitializer = (RED): void => {
 
             // 設定： 終了日時(X軸)
             let _endDateTime:string = _createConf.endDateTime;
-            if( BLANK_STRING === _endDateTime ){
+            if( myConst.items.endDateTime.default === _endDateTime ){
                 let _max = "";
                 _graphData.forEach((_ele, _idx) => {
                     _ele.data.forEach((_ele, _idx) => {
