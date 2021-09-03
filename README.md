@@ -39,6 +39,7 @@ root
 │  │     └─utility.js
 │  │
 │  ├─ type.ts
+│  ├─ define.ts
 │  ├─ ui_timelines_chart.html
 │  ├─ ui_timelines_chart.ts
 │  └─ util.ts
@@ -129,11 +130,15 @@ npm install node-red-contrib-ui-timelines-chart
 
   - enable animations
 
-    Set for whether to animate transitions.
+    Set whether to animate transitions.
 
   - enable date marker(now)
 
     Set whether to display the current date of the vertical line.
+
+  - enable forward input messages
+
+    Set whether to forward input messages to output.
 
   - legends
 
