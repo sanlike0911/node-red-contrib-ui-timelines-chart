@@ -1,6 +1,6 @@
 # node-red-contrib-ui-timelines-chart
 
-A Node-RED widget node for showing the chart of status.
+A Node-RED widget node for showing the timelines chart.
 
 ![ui-timelines-chart](./figs/sample00.png)
 
@@ -9,47 +9,6 @@ A Node-RED widget node for showing the chart of status.
 ## Pre-requisites
 
 The node-red-contrib-ui-timelines-chart requires `Node-RED Dashboard 2.10` to be installed.
-
-## Folder structure
-
-```cmd
-root
-│
-├─data  -> node-RED work folder
-│
-├─dist  -> Build output folder
-│
-├─examples
-│
-├─figs
-│
-├─node_modules
-│
-├─src
-│  │
-│  ├─icons
-│  │
-│  ├─locales
-│  │  ├─en-US
-│  │  └─ja
-│  │
-│  ├─lib/js
-│  │     ├─moment.min.js
-│  │     ├─timelines-chart.min.js
-│  │     └─utility.js
-│  │
-│  ├─ type.ts
-│  ├─ define.ts
-│  ├─ ui_timelines_chart.html
-│  ├─ ui_timelines_chart.ts
-│  └─ util.ts
-│
-├─.gitignore
-├─.npmignore
-├─build-exclude-filelist
-├─build.bat  -> windows only
-│
-```
 
 ## Install
 
@@ -61,7 +20,9 @@ npm install node-red-contrib-ui-timelines-chart
 
 ## Usage
 
-"ui-timelines-chart" node is a UI widget that can be used to display the chart of status in the Node-RED dashboard.
+"ui-timelines-chart" node is a UI widget that can be used to display the timelines chart in the Node-RED dashboard.
+
+This Node-Red module can not directly connect to Database.
 
 - Widget properties
 
@@ -212,36 +173,3 @@ npm install node-red-contrib-ui-timelines-chart
     ```
 
     **priority: (msg.payload.settings > node property settings)**
-
-- Build and install
-
-    You can use this command to build and install.
-
-    ```cmd
-    .\build.bat
-    ```
-
-    ※windows only.
-
-- Run node-red
-
-    ```cmd
-    npm run start
-    ```
-
-- Debug
-
-    You can use this command to debug.
-
-    ```cmd
-    npm run debug
-    ```
-
-    ```cmd
-    > node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js
-
-    Debugger listening on ws://0.0.0.0:9229/{guid}
-    For help, see: https://nodejs.org/en/docs/inspector
-    ```
-
-    Use VS Code's built-in debugger.
