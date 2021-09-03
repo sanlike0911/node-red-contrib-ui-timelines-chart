@@ -146,6 +146,15 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
+        // [options]forward input messages
+        {
+            const _propertyName: string = "forwardInputMessages";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.forwardInputMessages, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_BOOLEAN_AND_NOT_EMPTY)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.forwardInputMessages}". This ${_propertyName} was corrected with the default value: "${myConst.items.forwardInputMessages.default}".`);
+                _config.forwardInputMessages = myConst.items.forwardInputMessages.default;
+            }
+        }
+
         // line height, number
         {
             const _propertyName: string = "maxLineHeight";
@@ -311,7 +320,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                     templateScope: "local",   // scope of HTML/Angular(local/global)*
                     order: _config.order,      // order
                     emitOnlyNewValues: myConst.items.emitOnlyNewValues.default,  // send message if changed
-                    forwardInputMessages: myConst.items.forwardInputMessages.default,    // forward input messages to output
+                    forwardInputMessages: _config.forwardInputMessages,    // forward input messages to output
                     storeFrontEndInputAsState: myConst.items.storeFrontEndInputAsState.default,    // store received message
                     convertBack: function (_value: statusChart.graphData) { // callback to convert value to front-end
                         return _value;

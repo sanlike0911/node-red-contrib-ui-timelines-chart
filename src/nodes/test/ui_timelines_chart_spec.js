@@ -32,11 +32,11 @@ describe("ui_timelines_chart Node", function () {
   const TEST_CASE_OK = "TEST_CASE_OK";
 
   // enable tests
-  const BASIC_TEST_PROPERTY = 0;
-  const BASIC_TEST_BOOLEAN = 0;
-  const BASIC_TEST_NUMBER = 0;
-  const BASIC_TEST_STRING = 0;
-  const BASIC_TEST_DATETIME = 0;
+  const BASIC_TEST_PROPERTY = 1;
+  const BASIC_TEST_BOOLEAN = 1;
+  const BASIC_TEST_NUMBER = 1;
+  const BASIC_TEST_STRING = 1;
+  const BASIC_TEST_DATETIME = 1;
 
   const defaultFlow = [
     {
@@ -134,6 +134,16 @@ describe("ui_timelines_chart Node", function () {
       basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, 0, TEST_CASE_NG);
       basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, undefined, TEST_CASE_NG);
       basicTestBoolean('enableDateMarker', d.myConst.items.enableDateMarker.default, null, TEST_CASE_NG);
+
+      // forwardInputMessages
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, true, TEST_CASE_OK);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, false, TEST_CASE_OK);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, "true", TEST_CASE_OK);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, "false", TEST_CASE_OK);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, "", TEST_CASE_NG);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, 0, TEST_CASE_NG);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, undefined, TEST_CASE_NG);
+      basicTestBoolean('forwardInputMessages', d.myConst.items.forwardInputMessages.default, null, TEST_CASE_NG);
     });
   }
 
