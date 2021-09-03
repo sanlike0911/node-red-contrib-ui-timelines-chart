@@ -4,13 +4,13 @@
         "nodeProperties": {
             "labels": {
                 "group": {
-                    "title": "グループ"
+                    "title": "Group"
                 },
                 "size": {
-                    "title": "サイズ"
+                    "title": "Size"
                 },
                 "label": {
-                    "title": "ラベル"
+                    "title": "Label"
                 },
                 "graphSettings": {
                     "xAxis": {
@@ -37,36 +37,39 @@
                             "title": "reset zoom size[px]/color"
                         }
                     },
-                    "maxLineHeight": {
-                        "title": "chart's height[px]"
-                    },
-                    "options": {
+                        "maxLineHeight": {
+                            "title": "chart's height[px]"
+                        },
+                    "options":{
                         "title": "options",
                         "enableAnimations": {
                             "title": "enable animations"
                         },
                         "enableDateMarker": {
                             "title": "enable date marker(now)"
+                        },
+                        "forwardInputMessages": {
+                            "title": "enable forward input messages to output"
                         }
                     }
                 },
                 "graphColorSettings": {
                     "title": "legends",
-                    "add": "追加",
-                    "delete": "削除",
+                    "add": "add",
+                    "delete": "delete",
                     "number": "No.",
                     "statusColor": "color",
                     "statusValue": "value"
                 },
                 "name": {
-                    "title": "名前"
+                    "title": "name"
                 }
             }
         },
         "message": {
-            "complete": "表示完了",
-            "connect": "処理中",
-            "error": "エラー発生"
+            "complete": "Completed.",
+            "connect": "Processing.",
+            "error": "Error."
         }
     }
 }

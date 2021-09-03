@@ -70,6 +70,40 @@ export default class util implements utilClass {
         return typeof obj === 'undefined';
     }
 
+    /**
+     * null, undefined判定
+     *
+     * @param {*} obj
+     * @returns {boolean}
+     * @memberof util
+     */
+    public isNullUndefined(obj: any): boolean {
+        return (obj === undefined || obj === null);
+    }
+
+
+    /**
+     * 日時型判定処理
+     *
+     * @param {string} _dateTimeText
+     * @returns {boolean}
+     * @memberof util
+     */
+    public isDateTime(_dateTimeText: string): boolean {
+        let _result = false;
+        try {
+            if( !this.isNullUndefined(_dateTimeText) ){
+                let _dateObject = new Date(_dateTimeText);
+                if( _dateObject.toString() !== "Invalid Date" ){
+                    _result = true;
+                }
+            }
+            return _result;
+        } catch (error) {
+            return _result;
+        }
+    }
+
     /* 正規表現判定用 */
     public REG_EXPRESSTION_TO_MATCH_ONLY = {
         /* ブランク判定 */
@@ -100,8 +134,8 @@ export default class util implements utilClass {
         DATE_FORMT_YYYY_MM_DD_AND_NOT_EMPTY: /^[0-9]{1,4}[\/-]+(0[1-9]|1[0-2]|[1-9])[\/-]+(0[1-9]|[12][0-9]|3[01]|[1-9])$/,
         /* 時間のみ[hh:mm:ss, h:m]（空文字NG) */
         TIME_FORMT_HH_MM_SS_AND_HH_MM_NOT_EMPTY: /^([0-1][0-9]|[2][0-3]|[0-9]):([0-5][0-9]|[0-9])$|^([0-1][0-9]|2[0-3]|[0-9]):([0-5][0-9]|[0-9]):([0-5][0-9]|[0-9])$/,
-        /* 日時フォーマット（空文字NG）※大文字と小文字判別なしの為「toLowerCase()」必須 */
-        DATETIME_FORMAT_AND_NOT_EMPTY: /^(((yyyy-mm-dd|yyyy-mm|mm-dd|yyyy|mm|dd)[ t]+(hh:mm:ss|hh:mm|mm:ss|hh|mm|ss))|(yyyy-mm-dd|yyyy-mm|mm-dd|yyyy|mm|dd)|(hh:mm:ss|hh:mm|mm:ss|hh|mm|ss))$/,
+        /* 日時フォーマット（空文字NG）*/
+        DATETIME_FORMAT_AND_NOT_EMPTY: /^(((YYYY-MM-DD|YYYY-MM|MM-DD|YYYY|MM|DD)[ t]+((hh|HH):mm:ss|(hh|HH):mm|mm:ss|(hh|HH)|mm|ss))|(YYYY-MM-DD|YYYY-MM|MM-DD|YYYY|MM|DD)|((hh|HH):mm:ss|(hh|HH):mm|mm:ss|(hh|HH)|mm|ss))$/,
     }
     /*
     [examples]

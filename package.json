@@ -14,14 +14,14 @@
   ],
   "main": "none",
   "scripts": {
-    "test": "mocha \"src/test/*_spec.js\"",
-    "dev": "ts-node src/ui_timelines_chart.ts",
-    "dev:watch": "ts-node-dev --respawn src/ui_timelines_chart.ts",
+    "test": "mocha \"src/nodes/test/*_spec.js\"",
+    "dev": "ts-node src/nodes/ui_timelines_chart.ts",
+    "dev:watch": "ts-node-dev --respawn src/nodes/ui_timelines_chart.ts",
     "clean": "rimraf dist/*",
     "tsc": "tsc",
     "build": "npm-run-all clean tsc",
     "start": "node ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js",
-    "debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js"
+    "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js"
   },
   "node-red": {
     "version": ">=1.0.0",

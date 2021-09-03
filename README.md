@@ -1,6 +1,6 @@
 # node-red-contrib-ui-timelines-chart
 
-A Node-RED widget node for showing the chart of status.
+A Node-RED widget node for showing the timelines chart.
 
 ![ui-timelines-chart](./figs/sample00.png)
 
@@ -9,41 +9,6 @@ A Node-RED widget node for showing the chart of status.
 ## Pre-requisites
 
 The node-red-contrib-ui-timelines-chart requires `Node-RED Dashboard 2.10` to be installed.
-
-## Folder structure
-
-```cmd
-root
-│
-├─data  -> node-RED work folder
-│
-├─dist  -> Build output folder
-│
-├─figs
-│
-├─node_modules
-│
-├─nodes
-│  ├─icons
-│  ├─lib
-│  ├─locales
-│
-├─src
-│  │
-│  ├─locales
-│  │  ├─en-US
-│  │  └─ja
-│  │
-│  ├─ type.ts
-│  ├─ ui_timelines_chart.html
-│  ├─ ui_timelines_chart.ts
-│  └─ util.ts
-│
-├─.gitignore
-├─.npmignore
-├─build.bat  -> windows only
-│
-```
 
 ## Install
 
@@ -55,7 +20,9 @@ npm install node-red-contrib-ui-timelines-chart
 
 ## Usage
 
-"ui-timelines-chart" node is a UI widget that can be used to display the chart of status in the Node-RED dashboard.
+"ui-timelines-chart" node is a UI widget that can be used to display the timelines chart in the Node-RED dashboard.
+
+This Node-Red module can not directly connect to Database.
 
 - Widget properties
 
@@ -124,11 +91,15 @@ npm install node-red-contrib-ui-timelines-chart
 
   - enable animations
 
-    Set for whether to animate transitions.
+    Set whether to animate transitions.
 
   - enable date marker(now)
 
     Set whether to display the current date of the vertical line.
+
+  - enable forward input messages
+
+    Set whether to forward input messages to output.
 
   - legends
 
@@ -176,8 +147,8 @@ npm install node-red-contrib-ui-timelines-chart
         settings:{
             xAxis:{
                 tickFormat: <val: string (YYYY-MM-DD HH:mm:ss)>,
-                startDate: <date>,
-                endDate: <date>,
+                startDateTime: <date>,
+                endDateTime: <date>,
                 labelsFontSize: <val: number (from 0 to 64[default:16])>
                 labelsColor: <val: string (from #000000 to #ffffff[default:#000000])>
             },
@@ -202,36 +173,3 @@ npm install node-red-contrib-ui-timelines-chart
     ```
 
     **priority: (msg.payload.settings > node property settings)**
-
-- Build and install
-
-    You can use this command to build and install.
-
-    ```cmd
-    .\build.bat
-    ```
-
-    ※windows only.
-
-- Run node-red
-
-    ```cmd
-    npm run start
-    ```
-
-- Debug
-
-    You can use this command to debug.
-
-    ```cmd
-    npm run debug
-    ```
-
-    ```cmd
-    > node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js
-
-    Debugger listening on ws://0.0.0.0:9229/{guid}
-    For help, see: https://nodejs.org/en/docs/inspector
-    ```
-
-    Use VS Code's built-in debugger.

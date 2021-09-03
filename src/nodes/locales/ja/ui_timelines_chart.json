@@ -47,6 +47,9 @@
                         },
                         "enableDateMarker": {
                             "title": "enable date marker(now)"
+                        },
+                        "forwardInputMessages": {
+                            "title": "enable forward input messages to output"
                         }
                     }
                 },

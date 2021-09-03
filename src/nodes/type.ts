@@ -20,6 +20,7 @@ declare namespace statusChart {
         maxLineHeight: number;
         enableAnimations: boolean;
         enableDateMarker: boolean;
+        forwardInputMessages: boolean;
         xAxisLabelsFontSize: number;
         xAxisLabelslColor: string;
         yAxisLabelsFontSize: number;
