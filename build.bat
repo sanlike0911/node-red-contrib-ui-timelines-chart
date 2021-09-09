@@ -7,6 +7,7 @@ npm run build & ^
 xcopy /Y /S /E /I /EXCLUDE:build-exclude-filelist src\nodes\* dist\* & ^
 xcopy /Y /S /E /I dist\* data\your-node\nodes\* & ^
 xcopy /Y /I package.json data\your-node\* & ^
+xcopy /Y /S /E /I dist\* nodes\* & ^
 cd data/ & ^
 npm install .\your-node & ^
 cd .. & ^
