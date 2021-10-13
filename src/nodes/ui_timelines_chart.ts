@@ -8,7 +8,6 @@ const nodeInit: NodeInitializer = (RED): void => {
 
     const DEFALUT_MAKE_GRAPH_BASE: statusChart.makeGraphBase = {
         result: false,
-        id: "",
         data: [],
         configs: {
             xTickFormat: myConst.items.xTickFormat.default,
@@ -192,9 +191,9 @@ const nodeInit: NodeInitializer = (RED): void => {
         const _configAsJson = JSON.stringify(_config);
 
         // const _loadScripts = String.raw`
-        // <script src='http://localhost:1880/libs/timelines-chart.min.js'></script>
-        // <script src='http://localhost:1880/libs/moment.js'></script>
-        // <script src='http://localhost:1880/libs/locale/ja.js'></script>
+        // <script src='ui-timelines-chart/js/timelines-chart.min.js'></script>
+        // <script src='ui-timelines-chart/js/moment.min.js'></script>
+        // <script src='ui-timelines-chart/js/utility.js'></script>
         // `;
 
         const _html = String.raw`
@@ -340,8 +339,29 @@ const nodeInit: NodeInitializer = (RED): void => {
                         // Remark: all client-side functions should be added here!  
                         // If added above, it will be server-side functions which are not available at the client-side ...
                         // console.log('initController');
-                        $scope.flag = true;
 
+                        const loadScripts: { name: string, path: string}[] = [
+                            {
+                                name: 'timelines-chart',
+                                path: 'ui-timelines-chart/js/timelines-chart.min.js'
+                            },
+                            {
+                                name: 'moment',
+                                path: 'ui-timelines-chart/js/moment.min.js'
+                            },
+                            {
+                                name: 'utility',
+                                path: 'ui-timelines-chart/js/utility.js'
+                            }
+                        ];
+
+                        $scope.loadedScripts = false;
+                        $scope.staticScriptId = "";
+                        $scope.dynamicScriptId = "";
+                        $scope.elementDynamicScriptId = null;
+                        $scope.elementStaticScriptId = null;
+                        $scope.valueId = Date.now().toString(16) + Math.floor(1000 * Math.random()).toString(16);
+ 
                         /**
                          * update: chart
                          *
@@ -352,100 +372,12 @@ const nodeInit: NodeInitializer = (RED): void => {
                             // console.log('update');
                             try {
 
-                                // Script load completed
-                                const _scriptTimelinesChart = document.getElementById('timelines-chart')?.getAttribute('data-inited') || "false";
-                                const _scriptMomentChart = document.getElementById('moment')?.getAttribute('data-inited') || "false";
-                                if( "true" !== _scriptTimelinesChart || "true" !== _scriptMomentChart ){
-                                    // console.log(`script not loaded. id:${msg.id}`);
-                                    // console.log(`_scriptTimelinesChart: ${_scriptTimelinesChart}`);
-                                    // console.log(`_scriptMomentChart: ${_scriptMomentChart}`);
-                                    return false;
-                                }
+                                // timelines chart: static script
+                                loadStaticScript();
 
-                                if( undefined !== msg ) {
-                                    const _uniqueId = msg.id;
+                                // timelines chart: dynamic script
+                                loadDynamicScript(msg);
 
-                                    // get: parent div(timelines chart)
-                                    const _parent: HTMLElement | null = document.getElementById(_uniqueId);
-                                    if( null === _parent ){
-                                        return false;
-                                    }
-
-                                    // timelines chart: static script
-                                    {
-                                        const _staticScriptID: string = "script_static_" + _uniqueId;
-                                        const _staticScript = document.getElementById(_staticScriptID);
-                                        if( null === _staticScript ){
-                                            // console.log(`create static timelines-chart id:${_staticScriptID}`);
-                                            const _createStatcScript = document.createElement('script');
-                                            _createStatcScript.type = 'text/javascript';
-                                            _createStatcScript.id = _staticScriptID;
-                                            _createStatcScript.innerHTML = String.raw`
-                                            // const styleSheet${_uniqueId} = utility.getStyleSheet('${_uniqueId}');
-                                            const timelinesChart${_uniqueId} = {
-                                                instance: TimelinesChart()(document.getElementById('${_uniqueId}')),
-                                                currentZoomX: [],
-                                                currentZoomY: [],
-                                                ruleStylexAxisLabels: utility.getStyleRule('.container-${_uniqueId} .timelines-chart .axises .x-axis text, .container-${_uniqueId} .brusher .tick text'),
-                                                ruleStyleyAxisLabels: utility.getStyleRule('.container-${_uniqueId} .timelines-chart .axises .y-axis text, .container-${_uniqueId} .timelines-chart .axises .grp-axis text'),
-                                                ruleStyleResetZoomLabel: utility.getStyleRule('.container-${_uniqueId} .timelines-chart .reset-zoom-btn')
-                                            }
-                                            // console.log("styleSheet${_uniqueId}:", styleSheet${_uniqueId});
-                                            // console.log("timelinesChart${_uniqueId}.ruleStylexAxisLabels :", timelinesChart${_uniqueId}.ruleStylexAxisLabels);
-                                            // console.log("timelinesChart${_uniqueId}.ruleStyleyAxisLabels :", timelinesChart${_uniqueId}.ruleStyleyAxisLabels);
-                                            // console.log("timelinesChart${_uniqueId}.ruleStyleResetZoomLabel :", timelinesChart${_uniqueId}.ruleStyleResetZoomLabel);
-                                            `;
-                                            _parent.appendChild(_createStatcScript);
-                                        }
-                                    }
-
-                                    // timelines chart: dynamic script
-                                    {
-                                        const _dynamicScriptID: string ="script_dynamic_" + _uniqueId;
-                                        const _dynamicScript = document.getElementById(_dynamicScriptID);
-                                        if( null !== _dynamicScript ){
-                                            // console.log(`update dynamic timelines-chart id:${_dynamicScriptID}`);
-                                            _dynamicScript.remove();
-                                        }
-                                        const _createDynamicScript = document.createElement('script');
-                                        _createDynamicScript.type = 'text/javascript';
-                                        _createDynamicScript.id = _dynamicScriptID;
-                                        _createDynamicScript.innerHTML = String.raw`
-                                        {
-                                            const _chartobj = timelinesChart${_uniqueId}
-                                            if(_chartobj){
-                                                /* css */
-                                                _chartobj.ruleStylexAxisLabels.style.cssText    = 'font-size: ${msg.configs.xAxisLabelsFontSize}px !important; fill: ${msg.configs.xAxisLabelslColor} !important';
-                                                _chartobj.ruleStyleyAxisLabels.style.cssText    = 'font-size: ${msg.configs.yAxisLabelsFontSize}px !important; fill: ${msg.configs.yAxisLabelslColor} !important';
-                                                _chartobj.ruleStyleResetZoomLabel.style.cssText = 'font-size: ${msg.configs.resetZoomLabelFontSize}px !important; fill: ${msg.configs.resetZoomLabelColor} !important';
-    
-                                                /* chart */
-                                                _chartobj.instance
-                                                    .data(${JSON.stringify(msg.data)})
-                                                    .width(${_parent.clientWidth})
-                                                    // .maxHeight(${_parent.clientHeight})
-                                                    .maxLineHeight(${msg.configs.maxLineHeight.toString()})
-                                                    .topMargin(60)
-                                                    .rightMargin(90)
-                                                    .leftMargin(90)
-                                                    .bottomMargin(40)
-                                                    .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
-                                                    .timeFormat('%Y-%m-%d %H:%M:%S')
-                                                    .zQualitative(true)
-                                                    .enableOverview(true)
-                                                    .enableAnimations(${msg.configs.enableAnimations})
-                                                    .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
-                                                    .zoomX((_chartobj.currentZoomX?.length) ? _chartobj.currentZoomX : [moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                                    .zoomY((_chartobj.currentZoomY?.length) ? _chartobj.currentZoomY : [])
-                                                    .onZoom((x,y)=>{ _chartobj.currentZoomX=x; _chartobj.currentZoomY=y; })
-                                                    .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
-                                                    .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
-                                            }
-                                        }
-                                        `;
-                                        _parent.appendChild(_createDynamicScript);
-                                    }
-                                }
                                 return true;
                             } catch (error) {
                                 console.log(error);
@@ -453,6 +385,101 @@ const nodeInit: NodeInitializer = (RED): void => {
                             }
                         }
 
+                        /**
+                         * loadStaticScript()
+                         *
+                         * @returns {void}
+                         */
+                        function loadStaticScript(): void {
+                            // console.log('timelines chart: static script $scope.uniqueId:' + String($scope.uniqueId));
+
+                            const _staticScript: HTMLElement | null = document.getElementById($scope.staticScriptId);
+                            if( null === _staticScript ){
+                                // console.log(`create static timelines-chart $scope.staticScriptId:${$scope.staticScriptId}`);
+
+                                const _createStatcScript = document.createElement('script');
+                                _createStatcScript.type = 'text/javascript';
+                                _createStatcScript.id = $scope.staticScriptId;
+                                _createStatcScript.innerHTML = String.raw`
+                                // const styleSheet${$scope.valueId} = utility.getStyleSheet('${$scope.uniqueId}');
+                                const timelinesChart${$scope.valueId} = {
+                                    instance: TimelinesChart()(document.getElementById('${$scope.uniqueId}')),
+                                    currentZoomX: [],
+                                    currentZoomY: [],
+                                    ruleStylexAxisLabels: utility.getStyleRule('.container-${$scope.uniqueId} .timelines-chart .axises .x-axis text, .container-${$scope.uniqueId} .brusher .tick text'),
+                                    ruleStyleyAxisLabels: utility.getStyleRule('.container-${$scope.uniqueId} .timelines-chart .axises .y-axis text, .container-${$scope.uniqueId} .timelines-chart .axises .grp-axis text'),
+                                    ruleStyleResetZoomLabel: utility.getStyleRule('.container-${$scope.uniqueId} .timelines-chart .reset-zoom-btn')
+                                }
+                                // console.log("styleSheet${$scope.uniqueId}:", styleSheet${$scope.uniqueId});
+                                // console.log("timelinesChart${$scope.uniqueId}.ruleStylexAxisLabels :", timelinesChart${$scope.uniqueId}.ruleStylexAxisLabels);
+                                // console.log("timelinesChart${$scope.uniqueId}.ruleStyleyAxisLabels :", timelinesChart${$scope.uniqueId}.ruleStyleyAxisLabels);
+                                // console.log("timelinesChart${$scope.uniqueId}.ruleStyleResetZoomLabel :", timelinesChart${$scope.uniqueId}.ruleStyleResetZoomLabel);
+                                `;
+                                $scope.parent.appendChild(_createStatcScript);
+                                $scope.elementStaticScriptId = _createStatcScript;
+                            }
+                        }
+
+                        /**
+                         * loadDynamicScript()
+                         *
+                         * @param {statusChart.makeGraphBase} msg
+                         */
+                        function loadDynamicScript(msg: statusChart.makeGraphBase): void {
+                            // console.log('timelines chart: dynamic script $scope.uniqueId:' + String($scope.uniqueId));
+
+                            const _dynamicScript: HTMLElement | null = document.getElementById($scope.dynamicScriptId);
+                            if( null !== _dynamicScript ){
+                                // console.log(`update dynamic timelines-chart $scope.dynamicScriptId:${$scope.dynamicScriptId}`);
+                                _dynamicScript.remove();
+                            }
+
+                            const _createDynamicScript = document.createElement('script');
+                            _createDynamicScript.type = 'text/javascript';
+                            _createDynamicScript.id = $scope.dynamicScriptId;
+                            _createDynamicScript.innerHTML = String.raw`
+                            {
+                                const _chartobj = timelinesChart${$scope.valueId};
+                                if(_chartobj){
+                                    /* css */
+                                    _chartobj.ruleStylexAxisLabels.style.cssText    = 'font-size: ${msg.configs.xAxisLabelsFontSize}px !important; fill: ${msg.configs.xAxisLabelslColor} !important';
+                                    _chartobj.ruleStyleyAxisLabels.style.cssText    = 'font-size: ${msg.configs.yAxisLabelsFontSize}px !important; fill: ${msg.configs.yAxisLabelslColor} !important';
+                                    _chartobj.ruleStyleResetZoomLabel.style.cssText = 'font-size: ${msg.configs.resetZoomLabelFontSize}px !important; fill: ${msg.configs.resetZoomLabelColor} !important';
+
+                                    /* chart */
+                                    _chartobj.instance
+                                        .data(${JSON.stringify(msg.data)})
+                                        .width(${$scope.parent.clientWidth})
+                                        // .maxHeight(${$scope.parent.clientHeight})
+                                        .maxLineHeight(${msg.configs.maxLineHeight.toString()})
+                                        .topMargin(60)
+                                        .rightMargin(90)
+                                        .leftMargin(90)
+                                        .bottomMargin(40)
+                                        .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
+                                        .timeFormat('%Y-%m-%d %H:%M:%S')
+                                        .zQualitative(true)
+                                        .enableOverview(true)
+                                        .enableAnimations(${msg.configs.enableAnimations})
+                                        .dateMarker(${msg.configs.enableDateMarker ? 'new Date()' : 'null'})
+                                        .zoomX((_chartobj.currentZoomX?.length) ? _chartobj.currentZoomX : [moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                        .zoomY((_chartobj.currentZoomY?.length) ? _chartobj.currentZoomY : [])
+                                        .onZoom((x,y)=>{ _chartobj.currentZoomX=x; _chartobj.currentZoomY=y; })
+                                        .overviewDomain([moment('${msg.configs.startDateTime}'), moment('${msg.configs.endDateTime}')])
+                                        .zColorScale().range(${JSON.stringify(msg.configs.zColorScale.range)}).domain(${JSON.stringify(msg.configs.zColorScale.domain)})
+                                }
+                            }
+                            `;
+                            $scope.parent.appendChild(_createDynamicScript);
+                            $scope.elementDynamicScriptId = _createDynamicScript;
+                        }
+
+                        /**
+                         * loadScript
+                         *
+                         * @param {string} _id
+                         * @param {string} _path
+                         */
                         function loadScript(_id: string, _path: string): void {
                             // console.log('loadscript', _path);
 
@@ -473,43 +500,90 @@ const nodeInit: NodeInitializer = (RED): void => {
                             }
                         }
 
+                        /**
+                         * isLoadedScript
+                         *
+                         * @returns {boolean}
+                         */
+                        function isLoadedScript(): boolean {
+                            let _result: boolean = true;
+                            for( let _idx = 0; _idx < loadScripts.length ; _idx++ ) {
+                                let _attribute = document.getElementById(loadScripts[_idx].name)?.getAttribute('data-inited') || "false";
+                                if ("true" !== _attribute) {
+                                    // console.log(`script not loaded. name:${loadScripts[_idx].name}`);
+                                    _result = false;
+                                    break;
+                                }
+                            }
+                            return _result;
+                        }
+
+                        /**
+                         * $scope.init
+                         *
+                         * @param {statusChart.nodeConf} config
+                         * @returns void
+                         */
                         $scope.init = function (config: statusChart.nodeConf): void {
                             // console.log('$scope.init');
                             $scope.config = config;
+                            $scope.uniqueId = config.uniqueId;
 
-                            // timelines-chart
-                            if (!document.getElementById('timelines-chart')) {
-                                // console.log(`loadScript timelines-chart id:${config.uniqueId}`);
-                                loadScript('timelines-chart', 'ui-timelines-chart/js/timelines-chart.min.js');
-                            }
+                            loadScripts.forEach(function(_elem: { name:string, path:string }, _index: number) {
+                                if (!document.getElementById(_elem.name)) {
+                                    // console.log(`loadScript index:${_index} name:${_elem.name} id:${$scope.uniqueId}`);
+                                    loadScript(_elem.name, _elem.path);
+                                }
+                            });
 
-                            // moment
-                            if (!document.getElementById('moment')) {
-                                // console.log(`loadScript moment id:${config.uniqueId}`);
-                                loadScript('moment', 'ui-timelines-chart/js/moment.min.js');
-                            }
+                            $scope.parent = document.getElementById($scope.uniqueId);
+                            $scope.staticScriptId = "script_static_" + $scope.uniqueId;
+                            $scope.dynamicScriptId = "script_dynamic_" + $scope.uniqueId;
 
-                            // utility
-                            if (!document.getElementById('utility')) {
-                                // console.log(`loadScript moment id:${config.uniqueId}`);
-                                loadScript('utility', 'ui-timelines-chart/js/utility.js');
-                            }
-
+                            // console.log(`$scope.uniqueId: ${$scope.uniqueId}`);
+                            // console.log(`$scope.parent: ${$scope.parent}`);
+                            // console.log(`$scope.staticScriptId: ${$scope.staticScriptId}`);
+                            // console.log(`$scope.dynamicScriptId: ${$scope.dynamicScriptId}`);
                         }
 
+                        /**
+                         * $scope.$watch
+                         *
+                         * @param {statusChart.makeGraphBase} msg
+                         * @returns void
+                         */
                         $scope.$watch('msg', function (msg: statusChart.makeGraphBase): void {
                             // console.log('$scope.$watch');
                             if (!msg) {
                                 return
                             }
+
+                            if (false === $scope.loadedScripts){
+                                if(true !== isLoadedScript()){
+                                    return;
+                                }
+                                $scope.loadedScripts = true;
+                            }
+
                             if (msg.result === true) {
-                                update(msg)
+                                setTimeout( function() { update(msg) }, 100 );
+                                // update(msg)
                             }
                         })
 
                         $scope.$on('$destroy', function () {
-                            if ($scope.hold) {
+                            // console.log('$scope.$on $destroy');
+
+                            if(null !== $scope.elementDynamicScriptId){
+                                // console.log(`destroy: element dynamicScript id:${$scope.uniqueId}`);
+                                $scope.elementDynamicScriptId.remove();
                             }
+
+                            if(null !== $scope.elementStaticScriptId){
+                                // console.log(`destroy: element staticScript id:${$scope.uniqueId}`);
+                                $scope.elementStaticScriptId.remove();
+                            }
+
                         })
                     }
                 });
@@ -614,7 +688,6 @@ const nodeInit: NodeInitializer = (RED): void => {
 
             return {
                 result : true,
-                id : _config.uniqueId,
                 data : _graphData,
                 configs:{
                     xTickFormat:            _createConf.xTickFormat,

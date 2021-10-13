@@ -61,7 +61,6 @@ declare namespace statusChart {
     // base: graph object
     type makeGraphBase = {
         result: boolean;
-        id: string;
         data: graphData[];
         configs: graphConfigsObject;
     }
