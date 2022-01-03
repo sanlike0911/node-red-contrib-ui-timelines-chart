@@ -164,6 +164,15 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
+        // top margin
+        {
+            const _propertyName: string = "topMargin";
+            if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.topMargin, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.topMargin.minNum > _config.topMargin || myConst.items.topMargin.maxNum < _config.topMargin)) {
+                _node.warn(`Incorrect ${_propertyName} value :"${_config.topMargin}". This ${_propertyName} was corrected with the default value: "${myConst.items.topMargin.default}".`);
+                _config.topMargin = myConst.items.topMargin.default;
+            }
+        }
+
         return true;
     }
 

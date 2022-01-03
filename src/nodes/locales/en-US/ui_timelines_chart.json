@@ -37,9 +37,12 @@
                             "title": "reset zoom size[px]/color"
                         }
                     },
-                        "maxLineHeight": {
-                            "title": "chart's height[px]"
-                        },
+                    "topMargin": {
+                        "title": "chart top margin[px]"
+                    },
+                    "maxLineHeight": {
+                        "title": "chart height[px]"
+                    },                 
                     "options":{
                         "title": "options",
                         "enableAnimations": {

@@ -84,7 +84,12 @@ This Node-Red module can not directly connect to Database.
     Set font size[px] and font color to reset zoom label.
     size: from 0 to 64(default:24)
 
-  - chart's height[px]
+  - chart top margin[px]
+
+    Set the top margin of the chart in pixels.
+    height: from 0 to 255(default:60)
+
+  - chart height[px]
 
     Set for the maximum height of each line, in px.
     height: from 1 to 255(default:60)
@@ -161,6 +166,7 @@ This Node-Red module can not directly connect to Database.
                 labelColor: <val: string (from #000000 to #ffffff[default:#000000])>
             },
             chart:{
+              topMargin: <val: number (from 0 to 255[default:60])>
               height: <val: number (from 1 to 255[default:60])>
               lineColors <{val: string (from #000000 to #ffffff[default:#000000]), val: string (label name)}>,
             },

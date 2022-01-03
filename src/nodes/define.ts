@@ -48,7 +48,7 @@ export module myConst {
         topMargin: {
             type: "number",
             default: 60,
-            minNum : 1,
+            minNum : 0,
             maxNum : 255,
         },
         enableAnimations: {
