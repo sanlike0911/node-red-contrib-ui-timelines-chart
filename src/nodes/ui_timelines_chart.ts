@@ -12,6 +12,7 @@ const nodeInit: NodeInitializer = (RED): void => {
         configs: {
             xTickFormat: myConst.items.xTickFormat.default,
             maxLineHeight: myConst.items.maxLineHeight.default,
+            topMargin: myConst.items.topMargin.default,
             startDateTime: myConst.items.startDateTime.default,
             endDateTime: myConst.items.endDateTime.default,
             zColorScale: myConst.items.zColorScale.default,
@@ -452,7 +453,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                                         .width(${$scope.parent.clientWidth})
                                         // .maxHeight(${$scope.parent.clientHeight})
                                         .maxLineHeight(${msg.configs.maxLineHeight.toString()})
-                                        .topMargin(60)
+                                        .topMargin(${msg.configs.topMargin.toString()})
                                         .rightMargin(90)
                                         .leftMargin(90)
                                         .bottomMargin(40)
@@ -636,6 +637,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                 resetZoomLabelFontSize: _msg.payload?.settings?.resetZoom?.labelFontSize    ?? _config.resetZoomLabelFontSize   ?? myConst.items.resetZoomLabelFontSize.default,
                 resetZoomLabelColor:    _msg.payload?.settings?.resetZoom?.labelColor       ?? _config.resetZoomLabelColor      ?? myConst.items.resetZoomLabelColor.default,
                 maxLineHeight:          _msg.payload?.settings?.chart?.height               ?? _config.maxLineHeight            ?? myConst.items.maxLineHeight.default,
+                topMargin:              _msg.payload?.settings?.chart?.topMargin            ?? _config.topMargin                ?? myConst.items.topMargin.default,
                 lineColors:             _msg.payload?.settings?.chart?.lineColors           ?? _config.lineColors               ?? myConst.items.lineColors.default,
                 enableAnimations:       _msg.payload?.settings?.options?.enableAnimations   ?? _config.enableAnimations         ?? myConst.items.enableAnimations.default,
                 enableDateMarker:       _msg.payload?.settings?.options?.enableDateMarker   ?? _config.enableDateMarker         ?? myConst.items.enableDateMarker.default,
@@ -700,6 +702,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                     resetZoomLabelFontSize: _createConf.resetZoomLabelFontSize,
                     resetZoomLabelColor:    _createConf.resetZoomLabelColor,
                     maxLineHeight:          _createConf.maxLineHeight,
+                    topMargin:              _createConf.topMargin,
                     zColorScale:            _zColorScale,
                     enableAnimations:       _createConf.enableAnimations,
                     enableDateMarker:       _createConf.enableDateMarker,

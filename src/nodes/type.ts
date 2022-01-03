@@ -18,6 +18,7 @@ declare namespace statusChart {
         startDateTime: string;
         endDateTime: string;
         maxLineHeight: number;
+        topMargin: number;
         enableAnimations: boolean;
         enableDateMarker: boolean;
         forwardInputMessages: boolean;
@@ -45,6 +46,7 @@ declare namespace statusChart {
     type graphConfigsObject = {
         xTickFormat: string;
         maxLineHeight: number;
+        topMargin: number;
         startDateTime: string;
         endDateTime: string;
         zColorScale: zColorScaleObject;
@@ -84,6 +86,7 @@ declare namespace statusChart {
         };
         chart:{
             height: number;
+            topMargin: number;
             lineColors: lineColorsObject[];
         };
         options:{
