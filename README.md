@@ -179,3 +179,11 @@ This Node-Red module can not directly connect to Database.
     ```
 
     **priority: (msg.payload.settings > node property settings)**
+
+## npm-scripts
+
+There are some npm-scripts to help developments.
+
+- npm install - Install the testing environment in your project.
+- npm run build - Make `./data/my-node` directory from the `src` directory and Install the my-node in Node-RED.
+- npm run start - Start Node-RED. `"http://localhost:1880"`
