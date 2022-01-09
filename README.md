@@ -187,3 +187,35 @@ There are some npm-scripts to help developments.
 - npm install - Install the testing environment in your project.
 - npm run build - Make `./data/my-node` directory from the `src` directory and Install the my-node in Node-RED.
 - npm run start - Start Node-RED. `"http://localhost:1880"`
+
+## file list
+
+  ```json
+  [root]
+  │  package.json
+  │  README.md
+  │  tsconfig.json
+  │
+  ├─data -> `Node-Red work files`
+  │  │  
+  │  ├─my-node -> `ui_timelines_chart files` The resource files and built files should be placed here.
+  │  │  │  package.json
+  │  │  │
+  │  │  └─nodes -> The resource files and built files should be placed here.
+  │  │     └─...
+  │  │
+  │  └─node_modules
+  │     └─...
+  │
+  ├─dist -> `The ui_timelines_chart built files`
+  ├─examples -> `node-RED flow files`
+  ├─figs
+  └─src
+      └─nodes -> ui_timelines_chart files
+          ├─icons
+          ├─lib
+          ├─locales
+          │  ├─en-US
+          │  └─ja
+          └─test
+  ```
