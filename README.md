@@ -190,7 +190,7 @@ There are some npm-scripts to help developments.
 
 ## file list
 
-  ```json
+  ```text
   [root]
   │  package.json
   │  README.md
@@ -198,7 +198,7 @@ There are some npm-scripts to help developments.
   │
   ├─data -> `Node-Red work files`
   │  │  
-  │  ├─my-node -> `ui_timelines_chart files` The resource files and built files should be placed here.
+  │  ├─my-node -> `project files` The resource files and built files should be placed here.
   │  │  │  package.json
   │  │  │
   │  │  └─nodes -> The resource files and built files should be placed here.
@@ -207,11 +207,11 @@ There are some npm-scripts to help developments.
   │  └─node_modules
   │     └─...
   │
-  ├─dist -> `The ui_timelines_chart built files`
+  ├─dist -> `The project built files`
   ├─examples -> `node-RED flow files`
   ├─figs
   └─src
-      └─nodes -> ui_timelines_chart files
+      └─nodes -> project files
           ├─icons
           ├─lib
           ├─locales
