@@ -24,8 +24,8 @@
     "build:copy-dist": "cpx \"./dist/*\" \"./data/my-node/nodes\"",
     "build:copy-package": "cpx \"./package.json\" \"./data/my-node\"",
     "build:install-node": "npm install ./data/my-node --prefix ./data",
-    "start": "node ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js",
-    "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data --settings ./data/settings.js"
+    "start": "node ./node_modules/node-red/red.js --userDir ./data",
+    "start:debug": "node --inspect-brk=0.0.0.0:9229 ./node_modules/node-red/red.js --userDir ./data"
   },
   "node-red": {
     "version": ">=1.0.0",
