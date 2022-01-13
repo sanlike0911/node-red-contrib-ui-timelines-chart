@@ -14,36 +14,47 @@
                 },
                 "graphSettings": {
                     "xAxis": {
+                        "title": "xAxis",
                         "tickFormat": {
-                            "title": "xAxis tick format"
+                            "title": "tick format"
                         },
                         "startDateTime": {
-                            "title": "xAxis start datetime"
+                            "title": "start datetime"
                         },
                         "endDateTime": {
-                            "title": "xAxis end datetime"
+                            "title": "end datetime"
                         },
                         "labels": {
-                            "title": "xAxis labels size[px]/color"
+                            "title": "labels size[px]/color"
                         }
                     },
                     "yAxis": {
+                        "title": "yAxis",
                         "labels": {
-                            "title": "yAxis labels size[px]/color"
+                            "title": "labels size[px]/color"
                         }
                     },
-                    "resetZoom": {
-                        "label": {
-                            "title": "reset zoom size[px]/color"
+                    "tooltips": {
+                        "title": "tooltips",
+                        "timeFormat": {
+                            "title": "time format"
                         }
                     },
-                    "topMargin": {
-                        "title": "chart top margin[px]"
+                    "chart": {
+                        "title": "format chart area",
+                        "topMargin": {
+                            "title": "top margin[px]"
+                        },
+                        "maxLineHeight": {
+                            "title": "line height[px]"
+                        },
+                        "resetZoom": {
+                            "label": {
+                                "title": "reset zoom size[px]/color"
+                            }
+                        }
                     },
-                    "maxLineHeight": {
-                        "title": "chart height[px]"
-                    },                 
-                    "options":{
+                    "options": {
                         "title": "options",
                         "enableAnimations": {
                             "title": "enable animations"

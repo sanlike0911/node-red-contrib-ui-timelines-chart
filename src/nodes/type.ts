@@ -28,6 +28,8 @@ declare namespace statusChart {
         yAxisLabelslColor: string;
         resetZoomLabelFontSize: number;
         resetZoomLabelColor: string;
+        timeFormat: string;
+        segmentTooltipContent: string;
     }
 
     // グラフ凡例設定
@@ -44,20 +46,27 @@ declare namespace statusChart {
 
     // graph configs
     type graphConfigsObject = {
+        /* xAxis */
         xTickFormat: string;
-        maxLineHeight: number;
-        topMargin: number;
         startDateTime: string;
         endDateTime: string;
-        zColorScale: zColorScaleObject;
-        enableAnimations: boolean;
-        enableDateMarker: boolean;
         xAxisLabelsFontSize: number;
         xAxisLabelslColor: string;
+        /* yAxis */
         yAxisLabelsFontSize: number;
         yAxisLabelslColor: string;
+        /* tooltips */
+        timeFormat: string;
+        segmentTooltipContent: string;
+        /* chart */
+        topMargin: number;
+        maxLineHeight: number;
         resetZoomLabelFontSize: number;
         resetZoomLabelColor: string;
+        zColorScale: zColorScaleObject;
+        /* options */
+        enableAnimations: boolean;
+        enableDateMarker: boolean;
     }
 
     // base: graph object
@@ -80,18 +89,23 @@ declare namespace statusChart {
             labelsFontSize: number;
             labelsColor: string;
         };
-        resetZoom:{
-            labelFontSize: number;
-            labelColor: string;
-        };
+        tooltips:{
+            timeFormat: string;
+            segmentTooltipContent: string;
+        }
         chart:{
-            height: number;
             topMargin: number;
+            height: number;
+            resetZoom:{
+                labelFontSize: number;
+                labelColor: string;
+            };
             lineColors: lineColorsObject[];
         };
         options:{
             enableAnimations: boolean;
             enableDateMarker: boolean;
+            forwardInputMessages: boolean;
         };
     }
     

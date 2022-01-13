@@ -3,14 +3,14 @@ export module myConst {
         widgetWidth: {
             type: "number",
             default: 6,
-            minNum : 0,
-            maxNum : 16,
+            minNum: 0,
+            maxNum: 16,
         },
         widgetHeight: {
             type: "number",
             default: 6,
-            minNum : 0,
-            maxNum : 16,
+            minNum: 0,
+            maxNum: 16,
         },
         emitOnlyNewValues: {
             type: "boolean",
@@ -27,29 +27,29 @@ export module myConst {
         xTickFormat: {
             type: "string",
             default: 'YYYY-MM-DD HH:mm:ss',
-            maxLen : 32,
+            maxLen: 32,
         },
         startDateTime: {
             type: "string",
             default: '',
-            maxLen : 32,
+            maxLen: 32,
         },
         endDateTime: {
             type: "string",
             default: '',
-            maxLen : 32,
+            maxLen: 32,
         },
         maxLineHeight: {
             type: "number",
             default: 60,
-            minNum : 1,
-            maxNum : 255,
+            minNum: 1,
+            maxNum: 255,
         },
         topMargin: {
             type: "number",
             default: 60,
-            minNum : 0,
-            maxNum : 255,
+            minNum: 0,
+            maxNum: 255,
         },
         enableAnimations: {
             type: "boolean",
@@ -62,35 +62,35 @@ export module myConst {
         xAxisLabelsFontSize: {
             type: "number",
             default: 16,
-            minNum : 0,
-            maxNum : 64,
+            minNum: 0,
+            maxNum: 64,
         },
         xAxisLabelslColor: {
             type: "string",
             default: "lightslategray",
-            maxLen : 32,
+            maxLen: 32,
         },
         yAxisLabelsFontSize: {
             type: "number",
             default: 16,
-            minNum : 0,
-            maxNum : 64,
+            minNum: 0,
+            maxNum: 64,
         },
         yAxisLabelslColor: {
             type: "string",
             default: "lightslategray",
-            maxLen : 32,
+            maxLen: 32,
         },
         resetZoomLabelFontSize: {
             type: "number",
             default: 24,
-            minNum : 0,
-            maxNum : 64,
+            minNum: 0,
+            maxNum: 64,
         },
         resetZoomLabelColor: {
             type: "string",
             default: "blue",
-            maxLen : 32,
+            maxLen: 32,
         },
         lineColors: {
             type: "object",
@@ -103,11 +103,21 @@ export module myConst {
         },
         zColorScale: {
             type: "object",
-            default :{
-                range:[],
-                domain:[],
+            default: {
+                range: [],
+                domain: [],
             }
         },
+        timeFormat: {
+            type: "string",
+            default: '%Y-%m-%d %H:%M:%S',
+            maxLen: 32,
+        },
+        segmentTooltipContent: {
+            type: "string",
+            default: '',
+            maxLen: 256,
+        }
     }
 }
 // export default myConst;

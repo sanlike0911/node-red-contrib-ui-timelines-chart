@@ -10,20 +10,27 @@ const nodeInit: NodeInitializer = (RED): void => {
         result: false,
         data: [],
         configs: {
-            xTickFormat: myConst.items.xTickFormat.default,
-            maxLineHeight: myConst.items.maxLineHeight.default,
-            topMargin: myConst.items.topMargin.default,
-            startDateTime: myConst.items.startDateTime.default,
-            endDateTime: myConst.items.endDateTime.default,
-            zColorScale: myConst.items.zColorScale.default,
-            enableAnimations: myConst.items.enableAnimations.default,
-            enableDateMarker: myConst.items.enableDateMarker.default,
-            xAxisLabelsFontSize: myConst.items.xAxisLabelsFontSize.default,
-            xAxisLabelslColor: myConst.items.xAxisLabelslColor.default,
-            yAxisLabelsFontSize: myConst.items.yAxisLabelsFontSize.default,
-            yAxisLabelslColor: myConst.items.yAxisLabelslColor.default,
+            /* xAxis */
+            xTickFormat:            myConst.items.xTickFormat.default,
+            startDateTime:          myConst.items.startDateTime.default,
+            endDateTime:            myConst.items.endDateTime.default,
+            xAxisLabelsFontSize:    myConst.items.xAxisLabelsFontSize.default,
+            xAxisLabelslColor:      myConst.items.xAxisLabelslColor.default,
+            /* yAxis */
+            yAxisLabelsFontSize:    myConst.items.yAxisLabelsFontSize.default,
+            yAxisLabelslColor:      myConst.items.yAxisLabelslColor.default,
+            /* tooltips */
+            timeFormat:             myConst.items.timeFormat.default,
+            segmentTooltipContent:  myConst.items.segmentTooltipContent.default,
+            /* chart */
+            topMargin:              myConst.items.topMargin.default,
+            maxLineHeight:          myConst.items.maxLineHeight.default,
             resetZoomLabelFontSize: myConst.items.resetZoomLabelFontSize.default,
-            resetZoomLabelColor: myConst.items.resetZoomLabelColor.default
+            resetZoomLabelColor:    myConst.items.resetZoomLabelColor.default,
+            zColorScale:            myConst.items.zColorScale.default,
+            /* options */
+            enableAnimations:       myConst.items.enableAnimations.default,
+            enableDateMarker:       myConst.items.enableDateMarker.default,
         }
     };
 
@@ -92,7 +99,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [yAxis]labels font size, number
+        // [yAxis]labels font size: number
         {
             const _propertyName: string = "yAxisLabelsFontSize";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.yAxisLabelsFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.yAxisLabelsFontSize.minNum > _config.yAxisLabelsFontSize || myConst.items.yAxisLabelsFontSize.maxNum < _config.yAxisLabelsFontSize)) {
@@ -101,7 +108,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [yAxis]labels color, string
+        // [yAxis]labels color: string
         {
             const _propertyName: string = "yAxisLabelslColor";
             if (!_config.hasOwnProperty(_propertyName) || (myConst.items.yAxisLabelslColor.maxLen < _config.yAxisLabelslColor?.length) || ("" === _config.yAxisLabelslColor) || (_config.yAxisLabelslColor == null) ){
@@ -110,7 +117,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [reset zoom]label font size, number
+        // [chart]reset zoom label font size: number
         {
             const _propertyName: string = "resetZoomLabelFontSize";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.resetZoomLabelFontSize, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.resetZoomLabelFontSize.minNum > _config.resetZoomLabelFontSize || myConst.items.resetZoomLabelFontSize.maxNum < _config.resetZoomLabelFontSize)) {
@@ -119,7 +126,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [reset zoom]label color, string
+        // [chart]reset zoom label color: string
         {
             const _propertyName: string = "resetZoomLabelColor";
             if (!_config.hasOwnProperty(_propertyName) || (myConst.items.resetZoomLabelColor.maxLen < _config.resetZoomLabelColor?.length) || ("" === _config.resetZoomLabelColor) || (_config.resetZoomLabelColor == null) ){
@@ -128,7 +135,26 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [options]enable animations,boolean
+
+        // [tooltips]time format: string
+        {
+            const _propertyName: string = "timeFormat";
+            if (!_config.hasOwnProperty(_propertyName) || (myConst.items.timeFormat.maxLen < _config.timeFormat?.length) || ("" === _config.timeFormat) || (_config.timeFormat == null) ){
+                    _node.warn(`Incorrect ${_propertyName} value :"${_config.timeFormat}". This ${_propertyName} was corrected with the default value: "${myConst.items.timeFormat.default}".`);
+                _config.timeFormat = myConst.items.timeFormat.default;
+            }
+        }
+
+        // [tooltips]segment tooltip content: string
+        {
+            const _propertyName: string = "segmentTooltipContent";
+            if (!_config.hasOwnProperty(_propertyName) || (myConst.items.segmentTooltipContent.maxLen < _config.segmentTooltipContent?.length) || ("" === _config.segmentTooltipContent) || (_config.segmentTooltipContent == null) ){
+                // _node.warn(`Incorrect ${_propertyName} value :"${_config.segmentTooltipContent}". This ${_propertyName} was corrected with the default value: "${myConst.items.segmentTooltipContent.default}".`);
+                _config.segmentTooltipContent = myConst.items.segmentTooltipContent.default;
+            }
+        }
+
+        // [options]enable animations: boolean
         {
             const _propertyName: string = "enableAnimations";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.enableAnimations, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_BOOLEAN_AND_NOT_EMPTY)) {
@@ -137,7 +163,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [options]enable date marker
+        // [options]enable date marker: boolean
         {
             const _propertyName: string = "enableDateMarker";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.enableDateMarker, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_BOOLEAN_AND_NOT_EMPTY)) {
@@ -146,7 +172,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // [options]forward input messages
+        // [options]forward input messages: boolean
         {
             const _propertyName: string = "forwardInputMessages";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.forwardInputMessages, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_BOOLEAN_AND_NOT_EMPTY)) {
@@ -155,7 +181,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // line height, number
+        // [chart]line height: number
         {
             const _propertyName: string = "maxLineHeight";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.maxLineHeight, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.maxLineHeight.minNum > _config.maxLineHeight || myConst.items.maxLineHeight.maxNum < _config.maxLineHeight)) {
@@ -164,7 +190,7 @@ const nodeInit: NodeInitializer = (RED): void => {
             }
         }
 
-        // top margin
+        // [chart]top margin: number
         {
             const _propertyName: string = "topMargin";
             if (!_config.hasOwnProperty(_propertyName) || !_util.isRegExp(_config.topMargin, _util.REG_EXPRESSTION_TO_MATCH_ONLY.HALF_NUMBER_AND_NOT_EMPTY) || (myConst.items.topMargin.minNum > _config.topMargin || myConst.items.topMargin.maxNum < _config.topMargin)) {
@@ -327,7 +353,7 @@ const nodeInit: NodeInitializer = (RED): void => {
                     width: _width,            // width of widget
                     height: _height,          // height of widget
                     templateScope: "local",   // scope of HTML/Angular(local/global)*
-                    order: _config.order,      // order
+                    order: _config.order,     // order
                     emitOnlyNewValues: myConst.items.emitOnlyNewValues.default,  // send message if changed
                     forwardInputMessages: _config.forwardInputMessages,    // forward input messages to output
                     storeFrontEndInputAsState: myConst.items.storeFrontEndInputAsState.default,    // store received message
@@ -336,6 +362,10 @@ const nodeInit: NodeInitializer = (RED): void => {
                     },
                     beforeEmit: function(_msg: statusChart.inputNodeMsg, _value: statusChart.graphData): { msg: statusChart.makeGraphBase } {
                         _graphObjects = makeGraph(_node, _config, _msg);
+                        /* debug */
+                        // console.log(_config);
+                        // console.log(_graphObjects);
+                        /* debug */
                         return { msg: _graphObjects };
                     },
                     beforeSend: function (_msg: statusChart.inputNodeMsg, _original: {msg:statusChart.inputNodeMsg}) {
@@ -467,7 +497,8 @@ const nodeInit: NodeInitializer = (RED): void => {
                                         .leftMargin(90)
                                         .bottomMargin(40)
                                         .xTickFormat(n => moment(n).format('${msg.configs.xTickFormat}'))
-                                        .timeFormat('%Y-%m-%d %H:%M:%S')
+                                        .timeFormat('${msg.configs.timeFormat}')
+                                        .segmentTooltipContent('${msg.configs.segmentTooltipContent}')
                                         .zQualitative(true)
                                         .enableOverview(true)
                                         .enableAnimations(${msg.configs.enableAnimations})
@@ -635,27 +666,24 @@ const nodeInit: NodeInitializer = (RED): void => {
 
             // configs(priority: input > node property)
             const _createConf = {
-            /*  values                  node-in: msg.payload.settings                          node-property                       default                          */
-                xTickFormat:            _msg.payload?.settings?.xAxis?.xTickFormat          ?? _config.xTickFormat              ?? myConst.items.xTickFormat.default,
-                xAxisLabelsFontSize:    _msg.payload?.settings?.xAxis?.labelsFontSize       ?? _config.xAxisLabelsFontSize      ?? myConst.items.xAxisLabelsFontSize.default,
-                xAxisLabelslColor:      _msg.payload?.settings?.xAxis?.labelsColor          ?? _config.xAxisLabelslColor        ?? myConst.items.xAxisLabelslColor.default,
-                startDateTime:          _msg.payload?.settings?.xAxis?.startDateTime        ?? _config.startDateTime            ?? myConst.items.startDateTime.default,
-                endDateTime:            _msg.payload?.settings?.xAxis?.endDateTime          ?? _config.endDateTime              ?? myConst.items.endDateTime.default,
-                yAxisLabelsFontSize:    _msg.payload?.settings?.yAxis?.labelsFontSize       ?? _config.yAxisLabelsFontSize      ?? myConst.items.yAxisLabelsFontSize.default,
-                yAxisLabelslColor:      _msg.payload?.settings?.yAxis?.labelsColor          ?? _config.yAxisLabelslColor        ?? myConst.items.yAxisLabelslColor.default,
-                resetZoomLabelFontSize: _msg.payload?.settings?.resetZoom?.labelFontSize    ?? _config.resetZoomLabelFontSize   ?? myConst.items.resetZoomLabelFontSize.default,
-                resetZoomLabelColor:    _msg.payload?.settings?.resetZoom?.labelColor       ?? _config.resetZoomLabelColor      ?? myConst.items.resetZoomLabelColor.default,
-                maxLineHeight:          _msg.payload?.settings?.chart?.height               ?? _config.maxLineHeight            ?? myConst.items.maxLineHeight.default,
-                topMargin:              _msg.payload?.settings?.chart?.topMargin            ?? _config.topMargin                ?? myConst.items.topMargin.default,
-                lineColors:             _msg.payload?.settings?.chart?.lineColors           ?? _config.lineColors               ?? myConst.items.lineColors.default,
-                enableAnimations:       _msg.payload?.settings?.options?.enableAnimations   ?? _config.enableAnimations         ?? myConst.items.enableAnimations.default,
-                enableDateMarker:       _msg.payload?.settings?.options?.enableDateMarker   ?? _config.enableDateMarker         ?? myConst.items.enableDateMarker.default,
+            /*  values                  node-in: msg.payload.settings                           node-property                             default                          */
+                xTickFormat:            _msg.payload?.settings?.xAxis?.xTickFormat              ?? _config.xTickFormat              ?? myConst.items.xTickFormat.default,
+                xAxisLabelsFontSize:    _msg.payload?.settings?.xAxis?.labelsFontSize           ?? _config.xAxisLabelsFontSize      ?? myConst.items.xAxisLabelsFontSize.default,
+                xAxisLabelslColor:      _msg.payload?.settings?.xAxis?.labelsColor              ?? _config.xAxisLabelslColor        ?? myConst.items.xAxisLabelslColor.default,
+                startDateTime:          _msg.payload?.settings?.xAxis?.startDateTime            ?? _config.startDateTime            ?? myConst.items.startDateTime.default,
+                endDateTime:            _msg.payload?.settings?.xAxis?.endDateTime              ?? _config.endDateTime              ?? myConst.items.endDateTime.default,
+                yAxisLabelsFontSize:    _msg.payload?.settings?.yAxis?.labelsFontSize           ?? _config.yAxisLabelsFontSize      ?? myConst.items.yAxisLabelsFontSize.default,
+                yAxisLabelslColor:      _msg.payload?.settings?.yAxis?.labelsColor              ?? _config.yAxisLabelslColor        ?? myConst.items.yAxisLabelslColor.default,
+                timeFormat:             _msg.payload?.settings?.tooltips?.timeFormat            ?? _config.timeFormat               ?? myConst.items.timeFormat,
+                segmentTooltipContent:  _msg.payload?.settings?.tooltips?.segmentTooltipContent ?? _config.segmentTooltipContent    ?? myConst.items.segmentTooltipContent,
+                resetZoomLabelFontSize: _msg.payload?.settings?.chart.resetZoom?.labelFontSize  ?? _config.resetZoomLabelFontSize   ?? myConst.items.resetZoomLabelFontSize.default,
+                resetZoomLabelColor:    _msg.payload?.settings?.chart.resetZoom?.labelColor     ?? _config.resetZoomLabelColor      ?? myConst.items.resetZoomLabelColor.default,
+                maxLineHeight:          _msg.payload?.settings?.chart?.height                   ?? _config.maxLineHeight            ?? myConst.items.maxLineHeight.default,
+                topMargin:              _msg.payload?.settings?.chart?.topMargin                ?? _config.topMargin                ?? myConst.items.topMargin.default,
+                lineColors:             _msg.payload?.settings?.chart?.lineColors               ?? _config.lineColors               ?? myConst.items.lineColors.default,
+                enableAnimations:       _msg.payload?.settings?.options?.enableAnimations       ?? _config.enableAnimations         ?? myConst.items.enableAnimations.default,
+                enableDateMarker:       _msg.payload?.settings?.options?.enableDateMarker       ?? _config.enableDateMarker         ?? myConst.items.enableDateMarker.default,
             }
-            /* debug */
-            // for (const [key, value] of Object.entries(_createConf)) {
-            //     console.log(`[config] ${key}: ${value}`);
-            // }
-            /* debug */
 
             // 設定：開始日時(X軸)
             let _startDateTime:string = _createConf.startDateTime;
@@ -701,18 +729,25 @@ const nodeInit: NodeInitializer = (RED): void => {
                 result : true,
                 data : _graphData,
                 configs:{
+                    /* xAxis */
                     xTickFormat:            _createConf.xTickFormat,
                     xAxisLabelsFontSize:    _createConf.xAxisLabelsFontSize,
                     xAxisLabelslColor:      _createConf.xAxisLabelslColor,
                     startDateTime:          _startDateTime,
                     endDateTime:            _endDateTime,
+                    /* yAxis */
                     yAxisLabelsFontSize:    _createConf.yAxisLabelsFontSize,
                     yAxisLabelslColor:      _createConf.yAxisLabelslColor,
+                    /* tooltips */
+                    timeFormat:             _createConf.timeFormat,
+                    segmentTooltipContent:  _createConf.segmentTooltipContent,
+                    /* chart */
                     resetZoomLabelFontSize: _createConf.resetZoomLabelFontSize,
                     resetZoomLabelColor:    _createConf.resetZoomLabelColor,
                     maxLineHeight:          _createConf.maxLineHeight,
                     topMargin:              _createConf.topMargin,
                     zColorScale:            _zColorScale,
+                    /* options */
                     enableAnimations:       _createConf.enableAnimations,
                     enableDateMarker:       _createConf.enableDateMarker,
                 }

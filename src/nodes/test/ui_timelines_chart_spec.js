@@ -275,7 +275,7 @@ describe("ui_timelines_chart Node", function () {
     // basic test
     describe("basic test string", function () {
       this.timeout(10000);
-      // xTickFormat case1:true, case2:false
+      // xTickFormat
       basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, d.myConst.items.xTickFormat.default ,TEST_CASE_OK);
       basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "ss" ,TEST_CASE_OK);
       basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, "s" ,TEST_CASE_NG);
@@ -319,7 +319,7 @@ describe("ui_timelines_chart Node", function () {
       basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, null ,TEST_CASE_NG);
       basicTestString('xTickFormat', d.myConst.items.xTickFormat.default, undefined ,TEST_CASE_NG);
 
-      // xAxisLabelslColor case1:true, case2:false
+      // xAxisLabelslColor
       basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, d.myConst.items.xAxisLabelslColor.default ,TEST_CASE_OK);
       basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "#000000" ,TEST_CASE_OK);
       basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, "#FFFFFF" ,TEST_CASE_OK);
@@ -331,7 +331,7 @@ describe("ui_timelines_chart Node", function () {
       basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, null ,TEST_CASE_NG);
       basicTestString('xAxisLabelslColor', d.myConst.items.xAxisLabelslColor.default, undefined ,TEST_CASE_NG);
 
-      // yAxisLabelslColor case1:true, case2:false
+      // yAxisLabelslColor
       basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, d.myConst.items.yAxisLabelslColor.default ,TEST_CASE_OK);
       basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "#000000" ,TEST_CASE_OK);
       basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, "#FFFFFF" ,TEST_CASE_OK);
@@ -343,7 +343,7 @@ describe("ui_timelines_chart Node", function () {
       basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, null ,TEST_CASE_NG);
       basicTestString('yAxisLabelslColor', d.myConst.items.yAxisLabelslColor.default, undefined ,TEST_CASE_NG);
 
-      // resetZoomLabelColor case1:true, case2:false
+      // resetZoomLabelColor
       basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, d.myConst.items.resetZoomLabelColor.default ,TEST_CASE_OK);
       basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "#000000" ,TEST_CASE_OK);
       basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "#FFFFFF" ,TEST_CASE_OK);
@@ -354,6 +354,21 @@ describe("ui_timelines_chart Node", function () {
       basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, "" ,TEST_CASE_NG);
       basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, null ,TEST_CASE_NG);
       basicTestString('resetZoomLabelColor', d.myConst.items.resetZoomLabelColor.default, undefined ,TEST_CASE_NG);
+
+      // timeFormat https://github.com/d3/d3-time-format#locale_format
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, d.myConst.items.timeFormat.default ,TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%Y-%m-%d %H:%M:%S", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%Y-%m-%d", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%H", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%H:%M", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%H:%M:%S", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%M", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%M:%S", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%S", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "%Y-%m-%d %-I:%M:%S %p", TEST_CASE_OK);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, "", TEST_CASE_NG);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, null ,TEST_CASE_NG);
+      basicTestString('timeFormat', d.myConst.items.timeFormat.default, undefined ,TEST_CASE_NG);
 
     });
 

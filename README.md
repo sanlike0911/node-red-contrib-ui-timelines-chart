@@ -30,11 +30,11 @@ This Node-Red module can not directly connect to Database.
 
   - name
 
-    Set for the node name to be displayed in flow.
+    Set the node name to be displayed in flow.
 
   - group
 
-    Set for the group to be displayed on the dashboard.
+    Set the group to be displayed on the dashboard.
 
   - size
 
@@ -44,67 +44,82 @@ This Node-Red module can not directly connect to Database.
 
     Set for the name to be displayed on the dashboard.
 
-  - xAxis tick format
+  - xAxis
 
-    Set for the x-axis tick format.
+    - tick format
 
-    ```cmd
-    - YYYY-MM-DD HH:mm:ss
-    - YYYY-MM-DD
-    - HH:mm:ss
-    - HH:mm
-    - HH
-    ....
-    ```
+      Set the tick format of the X-Axis.
 
-    **ISO 8601 format*
+      ```cmd
+      - YYYY-MM-DD HH:mm:ss
+      - YYYY-MM-DD
+      - HH:mm:ss
+      - HH:mm
+      - HH
+      ....
+      ```
 
-  - xAxis start date
+      **ISO 8601 format*
 
-    Set for the start time for the X axis.
-    If not set, select the first data.
+    - start date
 
-  - xAxis end date
+      Set the start time of the X-Axis.
+      If not set, select the first data.
 
-    Set for the end time for the X axis.
-    If not set, select the last data.
+    - end date
 
-  - xAxis labels size[px]/color
+      Set the end time of the X-Axis.
+      If not set, select the last data.
 
-    Set font size[px] and font color to X-axis label.
-    size: from 0 to 64(default:16)
+    - labels size[px]/color
 
-  - yAxis labels size[px]/color
+      Set the font size[in pixels] and font color to X-Axis label.
+      size: from 0 to 64(default:16)
 
-    Set font size[px] and font color to Y-axis label.
-    size: from 0 to 64(default:16)
+  - yAxis
 
-  - reset zoom label size[px]/color
+    - labels size[px]/color
 
-    Set font size[px] and font color to reset zoom label.
-    size: from 0 to 64(default:24)
+      Set the font size[in pixels] and font color to Y-Axis label.
+      size: from 0 to 64(default:16)
 
-  - chart top margin[px]
+  - tooltips
 
-    Set the top margin of the chart in pixels.
-    height: from 0 to 255(default:60)
+    - time format
 
-  - chart height[px]
+      Set the time format of tooltips.
+      See [d3-time-format](https://github.com/d3/d3-time-format#locale_format) for available options.
 
-    Set for the maximum height of each line, in px.
-    height: from 1 to 255(default:60)
+  - format chart area
 
-  - enable animations
+    - chart top margin[px]
 
-    Set whether to animate transitions.
+      Set the top margin of the chart, in pixels.
+      height: from 0 to 255(default:60)
 
-  - enable date marker(now)
+    - chart height[px]
 
-    Set whether to display the current date of the vertical line.
+      Set the chart maximum height of each line, in pixels.
+      height: from 1 to 255(default:60)
 
-  - enable forward input messages
+    - reset zoom label size[px]/color
 
-    Set whether to forward input messages to output.
+      Set the font size[in pixels] and font color to reset zoom label.
+      size: from 0 to 64(default:24)
+
+  - options
+
+    - enable animations
+
+      Set whether to animate transitions.
+
+    - enable date marker(now)
+
+      Set whether to display the current date of the vertical line.
+
+    - enable forward input messages
+
+      Set whether to forward input messages to output.
 
   - legends
 
@@ -151,7 +166,7 @@ This Node-Red module can not directly connect to Database.
         ],
         settings:{
             xAxis:{
-                tickFormat: <val: string (YYYY-MM-DD HH:mm:ss)>,
+                tickFormat: <val: string (date time[default:YYYY-MM-DD HH:mm:ss])>,
                 startDateTime: <date>,
                 endDateTime: <date>,
                 labelsFontSize: <val: number (from 0 to 64[default:16])>
@@ -161,18 +176,22 @@ This Node-Red module can not directly connect to Database.
                 labelsFontSize: <val: number (from 0 to 64[default:16])>
                 labelsColor: <val: string (from #000000 to #ffffff[default:#000000])>
             },
-            resetZoom:{
-                labelFontSize: <val: number (from 0 to 64[default:24])>
-                labelColor: <val: string (from #000000 to #ffffff[default:#000000])>
-            },
+            tooltips:{
+              timeFormat: <val: string (d3-time-format[default:%Y-%m-%d %H:%M:%S])>,
+            }
             chart:{
               topMargin: <val: number (from 0 to 255[default:60])>
               height: <val: number (from 1 to 255[default:60])>
+              resetZoom:{
+                  labelFontSize: <val: number (from 0 to 64[default:24])>
+                  labelColor: <val: string (from #000000 to #ffffff[default:#000000])>
+              },
               lineColors <{val: string (from #000000 to #ffffff[default:#000000]), val: string (label name)}>,
             },
             options:{
               enableAnimations: <boolean>,
-              enableDateMarker: <boolean>
+              enableDateMarker: <boolean>,
+              forwardInputMessages: <boolean>
             }
         }
     }
