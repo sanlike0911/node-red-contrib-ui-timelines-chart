@@ -10,6 +10,14 @@ A Node-RED widget node for showing the timelines chart.
 
 The node-red-contrib-ui-timelines-chart requires `Node-RED Dashboard 2.10` to be installed.
 
+## Quick Start
+
+To pull from docker hub:
+
+```cmd
+docker pull sanlike0911/node-red-contrib-ui-timelines-chart:latest
+```
+
 ## Install
 
 ```cmd
